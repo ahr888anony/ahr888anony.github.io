@@ -15,7 +15,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/2023/08/31/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/%E7%94%A8%E6%88%B7%E4%BF%AE%E5%A4%8D.png">
 <meta property="article:published_time" content="2023-08-31T07:40:29.000Z">
-<meta property="article:modified_time" content="2023-08-31T11:47:09.814Z">
+<meta property="article:modified_time" content="2023-09-01T09:21:25.914Z">
 <meta property="article:author" content="雨师">
 <meta property="article:tag" content="hexo">
 <meta property="article:tag" content="技术">
@@ -88,6 +88,12 @@
     <a href="/2023/08/31/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" class="article-date">
   <time class="dt-published" datetime="2023-08-31T07:40:29.000Z" itemprop="datePublished">2023-08-31</time>
 </a>
+ 
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
+
     
   </div>
   <div class="article-inner">
@@ -110,14 +116,14 @@
 
 <h2 id="1-git提交用户与git登陆用户不一致问题"><a href="#1-git提交用户与git登陆用户不一致问题" class="headerlink" title="1. git提交用户与git登陆用户不一致问题"></a>1. git提交用户与git登陆用户不一致问题</h2><p>在实际操作时，发现GitHub提交项目的用户仍为之前<code>git config --global</code>设置的用户及邮箱，并没有采用<code>git config --local</code>设置或<code>_config.yml</code>文件中配置的参数，实际登陆用户为<code>--local</code>设置的那个，采用的ssh密钥也是这个用户。</p>
 <p>其中<code>_config.yml</code>的相关配置如下：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repository:</span> <span class="string">git@xxx.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">user01</span></span><br><span class="line">  <span class="attr">email:</span> <span class="string">email01@xxx.com</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repository:</span> <span class="string">git@xxx.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">user01</span></span><br><span class="line">  <span class="attr">email:</span> <span class="string">email01@xxx.com</span></span><br></pre></td></tr></table></figure>
 
 <p>出现的问题如图：</p>
 <p><img src="%E7%94%A8%E6%88%B7%E4%BF%AE%E5%A4%8D.png"></p>
 <p>上图框中的用户名是问题修复后的，修复前为其他用户。</p>
 <p>问题产生的原因是hexo在第一次部署后会记录用户相关参数，保存在了<code>.deploy_git</code>文件中，之后一直延续之，故不论后续怎么修正都仍然采用的之前保留的用户。</p>
 <p>解决办法是在添加局域用户名后，删除本项目的<code>.deploy_git</code>文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">rm</span> -rf .deploy_git</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">rm</span> -rf .deploy_git</span><br></pre></td></tr></table></figure>
 
 <p>然后重新部署即可。</p>
 <h2 id="2-typora与hexo的图片引用地址不一致问题"><a href="#2-typora与hexo的图片引用地址不一致问题" class="headerlink" title="2. typora与hexo的图片引用地址不一致问题"></a>2. typora与hexo的图片引用地址不一致问题</h2><p>在显示上面那张图片时存在hexo图片不显示的问题：</p>
@@ -130,33 +136,49 @@
 <p>在知乎上找到了<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/542101567">解决方案</a>。需要更改</p>
 <p><code>node_modules</code> –&gt; <code>hexo-asset-image</code> –&gt; <code>index.js</code></p>
 <p>第58行的代码：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, config.<span class="property">root</span> + link + src);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">$(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, config.<span class="property">root</span> + link + src);</span><br></pre></td></tr></table></figure>
 
 <p>改为：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, src);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">$(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, src);</span><br></pre></td></tr></table></figure>
 
 <p>最后在<code>*.md</code>文件中引用图片时还是需要指定没有<code>.md</code>文件名命名的文件夹作为索引路径，即：</p>
 <p><code>![](&#123;文件名&#125;/&#123;图片&#125;)</code></p>
 <p>然后执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
 
 <p>即可在本地浏览器看到正确的图片。</p>
 <h2 id="3-hexo每次部署后均需要重新配置自定义域名"><a href="#3-hexo每次部署后均需要重新配置自定义域名" class="headerlink" title="3. hexo每次部署后均需要重新配置自定义域名"></a>3. hexo每次部署后均需要重新配置自定义域名</h2><p>在每次新写文章之后，执行了：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
 
 <p>结果发现GitHub上的项目历史commit记录丢失，且在<code>Settings -&gt; Pages -&gt; Custom domain</code>中配置的自定义域名也丢失，需要再次配置才能访问。</p>
 <p>估计是先执行了<code>clean</code>操作的原因。</p>
 <p>本文完成后，再次尝试部署，这回在部署前不<code>clean</code>:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d -g</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo d -g</span><br></pre></td></tr></table></figure>
 
 <p>访问网页发现仍然出现域名解析丢失的问题，GitHub上的用户自定义域名又变为了空白。</p>
 <p>出现该问题的原因是域名解析的操作是在GitHub上进行的，在<code>Custom domain</code>中绑定用户自定义域名后，会在GitHub项目库根目录上生成一个名为<code>CNAME </code>的文件，该文件中有域名信息、本地没有。如果在本地执行部署，自然不会有该文件、从而强制推送到远端时会导致远端的该文件丢失。</p>
 <p>解决办法为在本地hexo博客的<code>source</code>文件夹下新建一个<code>CNAME </code>文件，写入自己的域名，再次部署即可。</p>
+<h2 id="4-更改主题"><a href="#4-更改主题" class="headerlink" title="4. 更改主题"></a>4. 更改主题</h2><p>由于想给hexo博客增加一个访问量统计功能，找到的介绍均提到主题目录下还存在其他文件，但是我上面根据官网默认安装的在<code>themes</code>文件夹下是没有东西的，故需要安装以进一步增加统计功能。</p>
+<p>查询到更改（或沿用默认的<code>landscape</code>）主题的方法很简单，直接在官网<a target="_blank" rel="noopener" href="https://hexo.io/themes/">主题</a>页面上查找到自己喜欢的，进入其GitHub项目直接克隆到本地的<code>blog/themes/</code>文件夹下即可，即：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/blog/themes</span><br><span class="line">$ git <span class="built_in">clone</span> xxx</span><br></pre></td></tr></table></figure>
+
+<p>由于本地采用了多个git账户，为了进行区分，在<code>~/.ssh/config</code>文件中分别配置了不同用户的ssh密钥，在克隆项目时需要指定用户，假定配置的为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Host git_a</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa_a</span><br><span class="line">  IdentitiesOnly <span class="built_in">yes</span></span><br><span class="line">  ProxyCommand nc -X 5 -x 127.0.0.1:port_a %h %p</span><br><span class="line"></span><br><span class="line">Host git_b</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa_b</span><br><span class="line">  IdentitiesOnly <span class="built_in">yes</span></span><br><span class="line">  ProxyCommand nc -X 5 -x 127.0.0.1:port_b %h %p</span><br></pre></td></tr></table></figure>
+
+<p>上述的代理端口有差别是为了区分两个用户的流量。假定我们使用的是<code>git_b</code>账户，克隆的是<a target="_blank" rel="noopener" href="https://github.com/hpcslag/hexo-theme-morgan">Morgan</a>主题，则需要对地址进行修正，先进入<code>~/blog</code>目录（即博客根目录），执行如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@git_b:hpcslag/hexo-theme-morgan.git themes/tocas-ui-morgan</span><br></pre></td></tr></table></figure>
+
+<p>即将<code>hexo-theme-morgan.git</code>克隆到<code>~/blog/themes/tocas-ui-morgan</code>文件夹。</p>
+<p>在实际使用的时候发现该主题不是很好看，且对不蒜子统计不是很友好，决定改为使用最广泛的<a target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next">nexT</a>主题，当然个人感觉默认的<a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-theme-landscape">landscape</a>也挺不错。鉴于很多人说<code>netT</code>功能多、可拓展性强、对搜索引擎的支持更好，且其GitHub的star数量为hexo主题类最多的，故采用之。</p>
+<p>执行克隆操作安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@git_b:iissnan/hexo-theme-next.git themes/next</span><br></pre></td></tr></table></figure>
+
+<p>考虑到next使用有点复杂，考虑后续使用之。暂时仍然使用默认的landscape主题。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/08/31/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" data-id="cllz1n9jb0000wg9ygqp45miu" data-title="使用hexo遇到的坑" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      <a data-url="http://example.com/2023/08/31/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/" data-id="clm0aijb80000of9y7obfgf8s" data-title="使用hexo遇到的坑" class="article-share-link"><span class="fa fa-share">分享</span></a>
       
       
       
@@ -233,6 +255,17 @@
       Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
+
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_site_pv">
+                本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        </span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv" style='display:none'>
+                本站访客数<span id="busuanzi_value_site_uv"></span>人
+        </span>
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
 </footer>
 
     </div>
