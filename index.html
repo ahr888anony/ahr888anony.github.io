@@ -103,21 +103,11 @@
     <div class="e-content article-entry" itemprop="articleBody">
       
         <p>安装过<code>BetterIntelliJ</code>插件破解插件，使用的mac m1电脑，重装最新版pycharm专业版后不能打开。</p>
-<!---more--->
-
-<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统购买正版的证书。</p>
-<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装pycharm最新专业版后，mac m1始终不能正常打开该软件，弹出一个带有脏字的错误的弹窗。</p>
-<p>网上找了很久，才最终解决该问题。</p>
-<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
-<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
-
-<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
-
-<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
-<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
-
+        
+          <p class="article-more-link">
+            <a href="/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
