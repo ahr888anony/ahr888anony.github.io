@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>由比特币已实现价格进行的一些推理 | 雨师的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="本文首先介绍了一些比特币早期价格的历史；然后分析了比特币对数价格（$logP$）与对数供给量（$logS$）可能的一些回归关系；接着分析了历史上的3次减半；最后根据总结的规律，对之后的减半周期几个极值（最低价、减半价、最高价）及对应时间范围进行一些推测。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="由比特币已实现价格进行的一些推理">
+<meta property="og:url" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/index.html">
+<meta property="og:site_name" content="雨师的博客">
+<meta property="og:description" content="本文首先介绍了一些比特币早期价格的历史；然后分析了比特币对数价格（$logP$）与对数供给量（$logS$）可能的一些回归关系；接着分析了历史上的3次减半；最后根据总结的规律，对之后的减半周期几个极值（最低价、减半价、最高价）及对应时间范围进行一些推测。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/20100713-20230924%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC%E6%97%B6%E5%BA%8F%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/20100713-20230924%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BE%9B%E7%BB%99%E9%87%8F%E6%97%B6%E5%BA%8F%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/230924-%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC1%E9%98%B6%E6%8B%9F%E5%90%88.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/230924-%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC2%E9%98%B6%E6%8B%9F%E5%90%88.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/230924-%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC3%E9%98%B6%E6%8B%9F%E5%90%88.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/230924-%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC6%E9%98%B6%E6%8B%9F%E5%90%88.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/230924%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC6%E9%98%B6%E6%8B%9F%E5%90%88%E6%9C%AA%E6%9D%A5%E8%B5%B0%E5%8A%BF.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/20100713-20121231_btc_price.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/20130101-20151231_btc_price.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/20160101-20181231_btc_price.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/20190101-20211231_btc_price.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/20220101-20230916_btc_price.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E7%AC%AC%E4%B8%80%E8%BD%AE%E7%89%9B%E7%86%8A%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E7%AC%AC%E4%BA%8C%E8%BD%AE%E7%89%9B%E7%86%8A%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E7%AC%AC%E4%B8%89%E8%BD%AE%E7%89%9B%E7%86%8A%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E7%AC%AC%E5%9B%9B%E8%BD%AE%E7%89%9B%E7%86%8A%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E6%AF%94%E7%89%B9%E5%B8%8190%E6%97%A5%E6%BB%9A%E5%8A%A8%E5%B9%B4%E5%8C%96%E6%B3%A2%E5%8A%A8%E7%8E%87.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E5%8E%86%E5%8F%B2%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E8%B6%8B%E4%BA%8E%E7%A8%B3%E5%AE%9A%E7%9A%84%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E6%8C%87%E6%95%B0%E8%A1%B0%E5%87%8F%E6%8B%9F%E5%90%88.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E5%AF%B9%E6%95%B0%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E5%AF%B9%E6%95%B0%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E6%8C%87%E6%95%B0%E8%A1%B0%E5%87%8F%E6%8B%9F%E5%90%88.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E5%AF%B9%E6%95%B0%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E5%AF%B9%E6%95%B0%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.jpg">
+<meta property="og:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%9C%80%E5%A4%A7%E5%9B%9E%E6%92%A4%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg">
+<meta property="article:published_time" content="2023-09-25T04:13:51.000Z">
+<meta property="article:modified_time" content="2023-10-08T14:11:23.662Z">
+<meta property="article:author" content="雨师">
+<meta property="article:tag" content="比特币">
+<meta property="article:tag" content="早期比特币交易历史">
+<meta property="article:tag" content="减半">
+<meta property="article:tag" content="回归">
+<meta property="article:tag" content="预测">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/20100713-20230924%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC%E6%97%B6%E5%BA%8F%E5%9B%BE.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="雨师的博客" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">雨师的博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">信马由缰，记录思考</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-由比特币已实现价格进行的一些推理" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/" class="article-date">
+  <time class="dt-published" datetime="2023-09-25T04:13:51.000Z" itemprop="datePublished">2023-09-25</time>
+</a>
+ 
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_page_pv" style='display:none' class="article-date">
+              <i class="icon-smile icon"></i> 阅读数：<span id="busuanzi_value_page_pv"></span>次
+        </span>
+
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      由比特币已实现价格进行的一些推理
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>本文首先介绍了一些比特币早期价格的历史；然后分析了比特币对数价格（$logP$）与对数供给量（$logS$）可能的一些回归关系；接着分析了历史上的3次减半；最后根据总结的规律，对之后的减半周期几个极值（最低价、减半价、最高价）及对应时间范围进行一些推测。</p>
+<span id="more"></span>
+
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>比特币神话般的价格涨幅，一直是投资界引人入胜的故事。那么，比特币早期价格是怎样的呢？本文第一部分简要回顾了一些btc交易的早期历史。</p>
+<p>在做出比特币历史对数价格曲线后，忍不住会有对它进行回归建模的冲动，本文第二部分即尝试了这方面的工作。</p>
+<p>4年的减半周期，对比特币价格有很重大的影响，这似乎成了加密投资圈的共识。那么，减半是否有某些定量的规律呢？本文第三部分分析了过去3次减半，并总结汇总了一些重要的统计值，并进行了一些极值的建模验证。</p>
+<p>在有了价格拟合和减半规律后，本文在第四部分对即将到来的新减半周期进行一些合理的推测，描述了比特币价格经过多次减半周期，不断走向稳定的动态过程。</p>
+<p>当然，限于样本量少及其他随机因素，本文只是对可能存在的一些规律的简单猜测，动机仅为了好玩，不构成投资建议。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><p>[toc]</p>
+<h2 id="1-比特币早期价格"><a href="#1-比特币早期价格" class="headerlink" title="1. 比特币早期价格"></a>1. 比特币早期价格</h2><p>本文先从比特币交易价格说起。</p>
+<p>比特币诞生于2009-01-03，已知最早的价格，是由比特币第二位开发者<a target="_blank" rel="noopener" href="https://twitter.com/marttimalmi?s=21&t=r1CX6-KmGvZWwI5I3aeLNQ">Martti Malmi</a>（网名Sirius）在2009-10-12发起的，他用5050个比特币换到了$5.02，每个比特币价格约为$0.000994，不足十分之一美分。可以参见推特（<a target="_blank" rel="noopener" href="https://twitter.com/marttimalmi/status/423455561703624704?s=61&t=jVERnELxYp8IK7gfE_8KnA">Martti Malmi发起第一笔比特币兑美元交易</a>），对应的区块链交易记录（<a target="_blank" rel="noopener" href="https://www.blockchain.com/explorer/transactions/btc/7dff938918f07619abd38e4510890396b1cef4fbeca154fb7aafba8843295ea2">首个价格交易记录</a>）。</p>
+<p>不过这个事件知道的人不太多，更广为人知的是<a target="_blank" rel="noopener" href="https://en.bitcoinwiki.org/wiki/Laszlo_Hanyecz">比特币披萨事件</a>。</p>
+<p>2010-05-18，美国弗罗里达州的程序员Laszlo Hanyecz在<a target="_blank" rel="noopener" href="https://bitcointalk.org/">比特币论坛</a>上发布了一篇名为<a target="_blank" rel="noopener" href="https://bitcointalk.org/index.php?topic=137.0"><code>Pizza for bitcoins?</code></a>的帖子，他想用1万个比特币购买价值约25美元的2个披萨，折合每个比特币$0.0025。经过4天多的时间，他证实了该交易已经顺利完成。这是人们第一次可以用比特币购买真实商品，这个事件被比特币爱好者纪念，从此每年的5月22日成为“比特币披萨节”。</p>
+<p>其实在比特币披萨事件之前，已经有了一个名为<a target="_blank" rel="noopener" href="https://en.bitcoin.it/wiki/Bitcoin_Market"><code>bitcoinmarket.com</code></a>的比特币交易网站。</p>
+<p>该网站由<a target="_blank" rel="noopener" href="https://bitcointalk.org/index.php?action=profile;u=24">dwdollar</a>开发建立，参见比特币论坛<a target="_blank" rel="noopener" href="https://bitcointalk.org/index.php?topic=20.0">相关帖子</a>。2010-03-16，该网站开始用真实的美元交易比特币，dwdollar将比特币的初始价格定在$0.0067&#x2F;BC。次日（2010-03-17）正式上线，有4人开始在线交易比特币，开始交易的价格大概为<a target="_blank" rel="noopener" href="https://www.cryptohopper.com/blog/what-was-the-first-crypto-exchange-449">$0.003</a>。该网站主要利用PayPal进行交易，由于欺诈的盛行，Paypal于2011-06-04停止了对<code>bitcoinmarket</code>的支持，导致了用户转向其他交易所，其中最著名的就是<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Mt._Gox"><code>Mt.Gox</code></a>，该网站于2010-07-18出现在比特币论坛，<a target="_blank" rel="noopener" href="https://bitcointalk.org/index.php?topic=444.0">见此处</a>。</p>
+<p>关于早期价格的情况不太好追溯，好在<a target="_blank" rel="noopener" href="https://coinmarketcap.com/currencies/bitcoin/">coinmarketcap</a>上收录了自2010-07-13日以来的比特币价格数据，本篇文章的讨论便是基于这些数据进行。</p>
+<p>本文重点讨论的是比特币的价格及周期，首先讨论比特币价格的某种可能回归。</p>
+<blockquote>
+<p>说明：本文数据截止到2023-09-24日。</p>
+</blockquote>
+<h2 id="2-比特币的价格"><a href="#2-比特币的价格" class="headerlink" title="2. 比特币的价格"></a>2. 比特币的价格</h2><p>比特币价格的波动范围很大，为了直观全面的观察其趋势，可以采用对数价格作图，如下：</p>
+<p><img src="20100713-20230924%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC%E6%97%B6%E5%BA%8F%E5%9B%BE.jpg" alt="比特币对数价格时序图"></p>
+<p>直观上，比特币对数价格似乎符合某种函数的拟合。<a target="_blank" rel="noopener" href="https://www.lookintobitcoin.com/charts/bitcoin-rainbow-chart/">比特币彩虹图</a>就是比特币对数价格与上线天数的某种回归。</p>
+<p>比特币先后经历了3次减半，分别是2012-11-28、2016-07-09、2020-05-11。<a target="_blank" rel="noopener" href="https://buybitcoinworldwide.com/halving/">据预测</a>，下一次减半日期大概在2024-04-16。</p>
+<p>比特币每次减半，每个区块的产量会减半，最终比特币的数量为21,000,000。比特币历史总产量对数图如下：</p>
+<p><img src="20100713-20230924%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BE%9B%E7%BB%99%E9%87%8F%E6%97%B6%E5%BA%8F%E5%9B%BE.jpg" alt="比特币对数供给量图"></p>
+<p>直观上比特币的对数价格与对数总供给量之间具有相似的趋势，可以猜测比特币对数价格（$logP$）是对数总供给量（$logS$）的某种可解析函数。</p>
+<p>本文在拟合前，有一个期望的极限，即：</p>
+<blockquote>
+<p>如比特币最终趋于稳定，并取代了美元成为本位币。则按照目前美元m2总量约<a target="_blank" rel="noopener" href="https://zh.tradingeconomics.com/united-states/money-supply-m2">20.9万亿</a>折算，比特币的价格将接近100万美元&#x2F;BTC。</p>
+</blockquote>
+<p>符合上述预期的拟合才是合理的。</p>
+<p>由于可解析函数可以进行泰勒展开，故可用$logS$的多项式展开来拟合$logP$：<br>$$<br>logP&#x3D;\sum_{i&#x3D;0}^{n}\alpha_i(logS)^i<br>$$<br>其中n为多项式的最高阶，是待定参数。毫无疑问随着n的增大，可以拟合的越好，本文假定n为较小的整数（n&#x3D;1, 2, 3）。</p>
+<p>n&#x3D;1的拟合情况如下：</p>
+<p><img src="230924-%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC1%E9%98%B6%E6%8B%9F%E5%90%88.jpg" alt="比特币对数价格1阶拟合"></p>
+<p>可见拟合的效果很好，$R^2$达到0.91，其中$R^2$的定义如下：<br>$$<br>R^2&#x3D;1-\frac{SS_{res}}{SS_{tot}}<br>$$</p>
+<p>$$<br>SS_{tot}&#x3D;\sum_i(y_i-\bar{y})^2<br>$$</p>
+<p>$$<br>SS_{res}&#x3D;\sum_i(y_i-f_i)^2<br>$$</p>
+<p>$f_i$为函数拟合的相应值。</p>
+<p>由上图可知，一阶拟合下的回归关系为：<br>$$<br>logP&#x3D;-131.5+8.4*logS<br>$$<br>如果比特币对数价格与对数供给量符合上述的1阶拟合，则根据拟合，最终比特币价格约为$$26,974.33$，这似乎不让人满意。</p>
+<p>n&#x3D;2的拟合如下：</p>
+<p><img src="230924-%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC2%E9%98%B6%E6%8B%9F%E5%90%88.jpg" alt="比特币对数价格2阶拟合"></p>
+<p>$R^2$高达0.94，拟合结果如下：<br>$$<br>logP&#x3D;750.85-101.07<em>logS+3.39</em>logS^2<br>$$</p>
+<p>如果2阶拟合满足，则比特币最终价格约为$$70,070.92$。</p>
+<p>n&#x3D;3时，拟合效果如下：</p>
+<p><img src="230924-%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC3%E9%98%B6%E6%8B%9F%E5%90%88.jpg" alt="比特币对数价格3阶拟合"></p>
+<p>$R^2$为0.95，此时的拟合关系为：<br>$$<br>logP&#x3D;-16643.2+3153.22<em>logS-199.43</em>logS^2+4.21*logS^3<br>$$</p>
+<p>3阶的比特币最终预测价格为$$151235.78$。</p>
+<p>可见参数越多，$R^2$越高，拟合效果越好，但也越可能是过拟合。</p>
+<p>尝试到6阶，发现这种情况下的比特币最终价格预测最高，为$$954,987.44$，接近1百万美元。如果比特币能够替换美元的地位，其理论价格应该差不多为1百万美元。</p>
+<p>6阶拟合的曲线如下：</p>
+<p><img src="230924-%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC6%E9%98%B6%E6%8B%9F%E5%90%88.jpg" alt="比特币对数价格6阶拟合"></p>
+<p>上图中的拟合公式如下：<br>$$<br>logP&#x3D;&amp;26.27<em>logS^6-2517.02</em>logS^5+100443.36<em>logS^4-2137177.39</em>logS^3+\&amp;25572181.2<em>logS^2-163146593.88</em>logS+433571085.45  \label{eq-logP-logS-6-deg-01}<br>$$</p>
+<p>采用最理想的6阶拟合，我们可以做出未来的价格预期曲线，如下：</p>
+<p><img src="230924%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC6%E9%98%B6%E6%8B%9F%E5%90%88%E6%9C%AA%E6%9D%A5%E8%B5%B0%E5%8A%BF.jpg" alt="比特币对数价格6阶拟合未来走势"></p>
+<p>由上述拟合可见，目前比特币还处于很早期的阶段，其价格尚未到达趋于稳定的阶段。大约在2042年之后，比特币价格会开始逐渐趋于稳定。</p>
+<p>需要指出的是：</p>
+<blockquote>
+<ol>
+<li>影响比特币价格的因素可能有很多，本文只是对其中可能的一种进行了回归分析，可能有失偏颇；</li>
+<li>多项式拟合的参数会对样本很敏感，随着未来价格的大幅变大或变小，再次拟合的曲线肯定会相应的变化。</li>
+</ol>
+</blockquote>
+<p><strong>值得一提的是，按照对数供给量的多项式拟合，随着时间推移，比特币的供给量会趋于定值（具体为自2140年后不再减半），从而价格也会趋于某个定值。这与比特币创始的初衷相吻合，即按照当前价值不变的美元（实质上就是总美元M2量限定在约20万亿水平上）计算，最终比特币的价格会收敛，正如比特币的热爱者预期该价格会收敛于1百万美元&#x2F;BTC那样。</strong></p>
+<p><strong>之前的模型，如<a target="_blank" rel="noopener" href="https://bitcointalk.org/index.php?topic=831547.0">彩虹图</a>所预言的价格（或对数价格）会以某种形式单调增长、直至永远，又如<a target="_blank" rel="noopener" href="https://twitter.com/100trillionusd?s=21&t=I28yqKWNbjQZue_4ZlkrLw">planB</a>的<a target="_blank" rel="noopener" href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F</a>预言的每轮减半价格涨幅约10倍。这些理论，均认为比特币价格会近乎无限上涨，显然与实际情况有悖。</strong></p>
+<p><strong>本文与他们的结论不同，按照本文的拟合，比特币按当前美元价值计算，是存在极限价格的</strong>。</p>
+<p>由于比特币的总供给量随着时间推移基本上是确定的，上述回归自然是对未来价格的一种预测。</p>
+<p>更详细的推测需要参考重要的时间节点及牛熊涨跌幅等规律，故本文接下来分析比特币减半周期，再进行价格区间及时间跨度相关的推测。</p>
+<h2 id="3-比特币周期"><a href="#3-比特币周期" class="headerlink" title="3. 比特币周期"></a>3. 比特币周期</h2><p>为了划分出减半周期的阶段，需要先观察价格在逐年的表现，再根据表现划分出牛熊周期。</p>
+<h3 id="3-1-逐年走势"><a href="#3-1-逐年走势" class="headerlink" title="3.1 逐年走势"></a>3.1 逐年走势</h3><blockquote>
+<p><font color="red">注：本小节只是想从价格逐年走势图分析牛熊大致区间，读者可以选择跳过，不影响后续阅读。后续需要对照行情可参考此节。</font></p>
+</blockquote>
+<p>每3年汇在一张图中，做出逐年的价格走势及基本统计指标，如下：</p>
+<p>2010.7.13–2012.12.31价格走势：</p>
+<p><img src="20100713-20121231_btc_price.jpg" alt="10-12年BTC价格走势"></p>
+<blockquote>
+<p><font size="2"><em>注意上图中左上第一张为全3年时间段的价格走势，后续3张为逐年走势，下同。</em></font></p>
+</blockquote>
+<p>2013.01.01-2015.12.31价格走势：</p>
+<p><img src="20130101-20151231_btc_price.jpg" alt="13-16年btc价格"></p>
+<p>2016.01.01-2018.12.31价格走势：</p>
+<p><img src="20160101-20181231_btc_price.jpg" alt="16-18年btc走势"></p>
+<p>2019.01.01-2021.12.31走势：</p>
+<p><img src="20190101-20211231_btc_price.jpg" alt="19-21年btc价格走势"></p>
+<p>2022.01.01-2023.09.16走势：</p>
+<p><img src="20220101-20230916_btc_price.jpg" alt="22-23年btc价格走势"></p>
+<p>牛熊一般需要经历完整的<code>盘整 -&gt; 启动 -&gt; 牛市 -&gt; 崩盘 -&gt; 熊市 -&gt; 盘整</code>的周期可见，依照大约4年的周期，比特币历史牛熊可如下划分：</p>
+<blockquote>
+<ol start="2">
+<li>2010.07.13 - 2015.05.01，对应2012.11.28日第一次减半的行情；</li>
+<li>2015.01.01 - 2019.05.01，对应2016.07.09日第二次减半的行情；</li>
+<li>2018.11.01 - 2023.03.01，对应2020.05.11日第三次减半的行情；</li>
+<li>2022.10.01 - 今，对应约2024.04.16日第四次减半的行情，持续时间未知。</li>
+</ol>
+</blockquote>
+<p>上述划分有重叠，是为了观察牛市启动前的最低价前和本轮周期最大回撤后的情况。</p>
+<p>当然，上述划分不一定合理，毕竟23年之后的行情还没结束。</p>
+<h3 id="3-2-牛熊周期"><a href="#3-2-牛熊周期" class="headerlink" title="3.2 牛熊周期"></a>3.2 牛熊周期</h3><p>有了上面的划分，可以对应的做出每轮牛熊走势的图。</p>
+<p>2010.07.13 - 2015.05.01第一轮走势：</p>
+<p><img src="%E7%AC%AC%E4%B8%80%E8%BD%AE%E7%89%9B%E7%86%8A%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg" alt="第一轮牛熊比特币价格走势图"></p>
+<blockquote>
+<p><font size="2" color="red"><em>注意：上图中的最大回撤出现在减半之前，不是后续讨论的减半后最大回撤。</em></font></p>
+</blockquote>
+<p>2015.01.01 - 2019.05.01第二轮走势：</p>
+<p><img src="%E7%AC%AC%E4%BA%8C%E8%BD%AE%E7%89%9B%E7%86%8A%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg" alt="第二轮牛熊比特币价格走势图"></p>
+<p>2018.11.01 - 2023.03.01第三轮走势：</p>
+<p><img src="%E7%AC%AC%E4%B8%89%E8%BD%AE%E7%89%9B%E7%86%8A%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg" alt="第三轮牛熊比特币价格走势图"></p>
+<p>2022.10.01 - 今第四轮走势：</p>
+<p><img src="%E7%AC%AC%E5%9B%9B%E8%BD%AE%E7%89%9B%E7%86%8A%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg" alt="第四轮牛熊比特币价格走势图"></p>
+<p>本文定义如下一些概念：</p>
+<blockquote>
+<ul>
+<li>行情启动：上一轮回撤的最低价格为行情启动价，该日为行情启动日，第一次减半也采用减半前的最大回撤作为行情启动点；</li>
+<li>最高涨幅：本轮减半之后的最高价与行情启动价之比；</li>
+<li>盘整期：在上一轮牛市结束后的最低价到本轮减半的最高价之间，持续时间最长的回视最高价（阻力位）对应的时间段；</li>
+<li>牛市：衡量的为减半行情中的牛市，定义为盘整期结束到本轮最高价之间的时间段，类似2011年的上涨不在本定义内；</li>
+<li>熊市：衡量的减半行情后的熊市，定义为本轮减半后，最高价到最大回撤之间的时间段；</li>
+<li>最大回撤：指的是本轮减半后的最大回撤，即从减半后最高价到最低价的跌幅。</li>
+</ul>
+</blockquote>
+<p>可以总结每轮牛熊的统计值，如下表：</p>
+<blockquote>
+<p><font size="2"><em>各减半周期统计总结表</em></font></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">第一轮减半</th>
+<th align="center">第二轮减半</th>
+<th align="center">第三轮减半</th>
+<th align="center">第四轮减半</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">减半日</td>
+<td align="center">2012-11-28</td>
+<td align="center">2016-07-09</td>
+<td align="center">2020-05-11</td>
+<td align="center">2024-04-16</td>
+</tr>
+<tr>
+<td align="center">减半价</td>
+<td align="center">12.377</td>
+<td align="center">650.96</td>
+<td align="center">8601.796</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">减半预测价</td>
+<td align="center">33.736</td>
+<td align="center">1399.326</td>
+<td align="center">12895.33</td>
+<td align="center">76458.321</td>
+</tr>
+<tr>
+<td align="center">减半预测真实价格比</td>
+<td align="center">2.726</td>
+<td align="center">2.15</td>
+<td align="center">1.499</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">行情启动日</td>
+<td align="center">2011-11-18</td>
+<td align="center">2015-01-14</td>
+<td align="center">2018-12-15</td>
+<td align="center">2022-11-21</td>
+</tr>
+<tr>
+<td align="center">启动时距减半天数</td>
+<td align="center">376</td>
+<td align="center">542</td>
+<td align="center">513</td>
+<td align="center">512</td>
+</tr>
+<tr>
+<td align="center">启动价格</td>
+<td align="center">2.051</td>
+<td align="center">178.103</td>
+<td align="center">3236.762</td>
+<td align="center">15787.284</td>
+</tr>
+<tr>
+<td align="center">盘整开始日</td>
+<td align="center">2011-12-05</td>
+<td align="center">2016-06-04</td>
+<td align="center">2019-05-14</td>
+<td align="center">NaT</td>
+</tr>
+<tr>
+<td align="center">盘整结束日</td>
+<td align="center">2012-06-29</td>
+<td align="center">2016-11-19</td>
+<td align="center">2020-09-10</td>
+<td align="center">NaT</td>
+</tr>
+<tr>
+<td align="center">盘整最高价</td>
+<td align="center">228.199</td>
+<td align="center">766.308</td>
+<td align="center">13016.232</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">最高价格日</td>
+<td align="center">2013-12-04</td>
+<td align="center">2017-12-16</td>
+<td align="center">2021-11-08</td>
+<td align="center">NaT</td>
+</tr>
+<tr>
+<td align="center">最高价格</td>
+<td align="center">1151.17</td>
+<td align="center">19497.4</td>
+<td align="center">67566.83</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">最高涨幅</td>
+<td align="center">561.261</td>
+<td align="center">109.473</td>
+<td align="center">20.875</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">最大回撤日</td>
+<td align="center">2015-01-14</td>
+<td align="center">2018-12-15</td>
+<td align="center">2022-11-21</td>
+<td align="center">NaT</td>
+</tr>
+<tr>
+<td align="center">最大回撤价</td>
+<td align="center">178.103</td>
+<td align="center">3236.762</td>
+<td align="center">15787.284</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">最大回撤</td>
+<td align="center">-0.845</td>
+<td align="center">-0.834</td>
+<td align="center">-0.766</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">启动到盘整结束天数</td>
+<td align="center">224</td>
+<td align="center">675</td>
+<td align="center">635</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">启动到最高价天数</td>
+<td align="center">747</td>
+<td align="center">1067</td>
+<td align="center">1059</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">盘整结束距减半天数</td>
+<td align="center">-152</td>
+<td align="center">133</td>
+<td align="center">122</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">盘整持续天数</td>
+<td align="center">207</td>
+<td align="center">168</td>
+<td align="center">485</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">牛市持续天数</td>
+<td align="center">523</td>
+<td align="center">392</td>
+<td align="center">424</td>
+<td align="center">nan</td>
+</tr>
+<tr>
+<td align="center">熊市持续天数</td>
+<td align="center">406</td>
+<td align="center">364</td>
+<td align="center">378</td>
+<td align="center">nan</td>
+</tr>
+</tbody></table>
+<p>关于上表的一些说明：</p>
+<blockquote>
+<ol>
+<li>第四轮周期尚在进行中，没有完结，故数据有空缺。</li>
+<li>减半预测值是根据第二部分的6阶模拟值计算所得，历史已发生的减半日价格低于该值。</li>
+</ol>
+</blockquote>
+<p>从上表中可见如下有意思的结论（主要考虑最近两次已完成的减半周期）：</p>
+<blockquote>
+<ol>
+<li><strong>行情在减半前1年半（500多天）左右启动；</strong></li>
+<li><strong>每轮减半的最高涨幅呈衰减的特点；</strong></li>
+<li><strong>减半价格与预测价之间的差异越来越小；</strong></li>
+<li><strong>每轮最大回撤呈现出变小的趋势；</strong></li>
+<li>**从行情启动到减半后的最高值大约需要1000天（近3年）左右； **</li>
+<li><strong>行情启动到盘整结束需要600天左右；</strong></li>
+<li><strong>最近两次减半，盘整结束于减半后约4个月之后；</strong></li>
+<li><strong>牛市持续时间在1年以上；</strong></li>
+<li><strong>熊市大约持续1年左右；</strong></li>
+<li><strong>盘整持续时间至少在半年左右，可以长达1年以上。</strong></li>
+</ol>
+</blockquote>
+<p>如上总结，比特币每轮周期都有很多相似的行情规律，且每轮的最高最低比、最大回撤均呈现减小趋势。不过，也需要指出的是，牛熊的划分方法有主观性、可以有很多种，周期本身也带有主观性。</p>
+<p>为了验证比特币波动性确实是呈下降趋势的，可以做出比特币90日滚动年化波动率时序图，如下：</p>
+<p><img src="%E6%AF%94%E7%89%B9%E5%B8%8190%E6%97%A5%E6%BB%9A%E5%8A%A8%E5%B9%B4%E5%8C%96%E6%B3%A2%E5%8A%A8%E7%8E%87.jpg" alt="比特币90日滚动年化波动率"></p>
+<p>从上图可见，<strong>若按照减半周期来看，比特币的波动是呈减小趋势的</strong>，这与Nassim Taleb所质疑的比特币波动性没有变小的结论不同（<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2106.14204.pdf">参见此处</a>）。<strong>由此分析，我们可以合理的假定比特币价格最终会趋于稳定。</strong></p>
+<p>上图还有一个有意思的现象：比特币90日滚动年化波动率多次下降到0.23附近的位置，随着时间的推移，波动率纵然有所下降，但似乎始终没有低于此值。附带一提，0.23的年化波动率水平是低于大多数股票波动率的。</p>
+<h3 id="3-3-减半行情的极值规律"><a href="#3-3-减半行情的极值规律" class="headerlink" title="3.3 减半行情的极值规律"></a>3.3 减半行情的极值规律</h3><p>上一小节总结了一些减半的规律，本节将对减半的两个极值（最高涨幅、最大回撤）进行分析。</p>
+<p>当然，我们还可以对减半日价格、每轮周期的最高价、最低价进行建模。</p>
+<p>但是，最高价与最低价实际上是可以用历史价格、最高涨幅和最大回撤递推；随着减半次数的增加，第二部分预测的价格与减半价格之间的差距缩小，可以用其（对数总供给量6阶拟合函数）对减半价进行预测。</p>
+<p>故而，本小节只讨论2个极值。</p>
+<h4 id="3-3-1-最高涨幅拟合"><a href="#3-3-1-最高涨幅拟合" class="headerlink" title="3.3.1 最高涨幅拟合"></a>3.3.1 最高涨幅拟合</h4><p>中文比特币社区著名的九神（ahr999），曾撰写过《囤比特币》系列文章，在其“<a target="_blank" rel="noopener" href="https://coxxa.github.io/bitcoin-ahr999-HODL/#/di-san-zhang?id=%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%9B%A4%E6%AF%94%E7%89%B9%E5%B8%81%EF%BC%9A%E4%BD%A0%E7%A6%BB%E8%B4%A2%E5%AF%8C%E8%87%AA%E7%94%B1%E8%BF%98%E6%9C%89%E5%A4%9A%E8%BF%9C%EF%BC%9F">囤比特币：你离财富自由还有多远？</a>”一章中，提出一个很有意思的假设，即比特币每轮减半增长倍数呈线性或“指数递减”方式变化。</p>
+<p>如减半周期与最高涨幅之间呈线性关系，则应满足如下关系：<br>$$<br>h_n&#x3D;a+b*n,\ \ (n&#x3D;1,2,3,…,33)<br>$$<br>其中h代表本轮减半行情的最高涨幅，n为减半周期数。</p>
+<p>历史上发生过的3次减半行情最高涨幅与周期的线性拟合如下：</p>
+<p><img src="%E5%8E%86%E5%8F%B2%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.jpg" alt="历史减半周期与最高涨幅线性回归"></p>
+<p>上图中x轴被替换成了日期，因为每个减半周期对应唯一的日期。虽然上图中的$R^2$较好，因为样本太少，很难说周期与涨幅是否符合线性关系。</p>
+<p>如认可比特币2140年之后趋于稳定，则减半周期与减半行情最高涨幅的线性拟合如下：</p>
+<p><img src="%E8%B6%8B%E4%BA%8E%E7%A8%B3%E5%AE%9A%E7%9A%84%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.jpg" alt="趋于稳定的减半周期与最高涨幅线性回归"></p>
+<p>可见此时线性拟合不是很合适。</p>
+<p>下面考虑最高涨幅与周期呈指数衰减关系，即：<br>$$<br>h_n&#x3D;a+b<em>e^{-c</em>n}\ \ \ (n&#x3D;1,2,3,…,33)<br>$$<br>拟合效果如下：</p>
+<p><img src="%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E6%8C%87%E6%95%B0%E8%A1%B0%E5%87%8F%E6%8B%9F%E5%90%88.jpg" alt="减半周期与最高涨幅指数衰减拟合"></p>
+<p>图中的x轴也从周期被替换成了日期，这样方便对照日期。</p>
+<p>上图$R^2$接近1的原因在于：</p>
+<ol>
+<li>样本太少，3参数的指数衰减可以很好的拟合4个最高涨幅；</li>
+<li>样本的量级差异很大，作为分子的样本方差远远大于拟合值与真实值偏差的方差。</li>
+</ol>
+<p>指数衰减拟合结果显示，比特币价格趋于稳定后，最高涨幅小于1，这不合理，主要原因是样本太少。</p>
+<p>为了避免量级引起的误判，可采用对数最高涨幅拟合。对数最高涨幅与减半周期的线性回归关系如下：<br>$$<br>ln(h_n)&#x3D;a+b*n,\ \ \ (n&#x3D;1,2,3,…,33)<br>$$<br>这一拟合的结果如下：</p>
+<p><img src="%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E5%AF%B9%E6%95%B0%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.jpg" alt="减半周期与对数最高涨幅线性回归"></p>
+<p>可见对数涨幅与周期之间的线性拟合的效果有所下降。由上图，直观感觉对数最高涨幅是随着周期增大指数衰减的，即有如下关系：<br>$$<br>ln(h_n)&#x3D;a+b<em>e^{-c</em>n}\ \ \ (n&#x3D;1,2,3,…,33)  \label{eq-lnh-n-01}<br>$$<br>拟合效果如下：</p>
+<p><img src="%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E5%AF%B9%E6%95%B0%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E6%8C%87%E6%95%B0%E8%A1%B0%E5%87%8F%E6%8B%9F%E5%90%88.jpg" alt="减半周期与对数最高涨幅指数衰减拟合"></p>
+<p>可见这一拟合效果非常好，不过原因也是用了3个参数来模拟4个样本。该拟合是否符合实际，有待未来的行情进行验证。</p>
+<p>如将周期改为对数周期，进行如下关系的拟合：<br>$$<br>ln(h_n)&#x3D;a+b*ln(n)\ \ \ (n&#x3D;1,2,3,…,33)  \label{eq-lnh-lnn-01}<br>$$<br>拟合结果如下：</p>
+<p><img src="%E5%AF%B9%E6%95%B0%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E5%AF%B9%E6%95%B0%E6%9C%80%E9%AB%98%E6%B6%A8%E5%B9%85%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92.jpg" alt="对数减半周期与对数最高涨幅线性回归"></p>
+<p>可见对数最高涨幅与对数周期之间的线性回归效果很好，在压低了量级影响后，线性关系（2参数拟合4个样本）仍然很显著。</p>
+<p>上述$\eqref{eq-lnh-n-01}$和$\eqref{eq-lnh-lnn-01}$的拟合都可以作为减半周期最高涨幅的模型，第四部分中我们选定对数最高涨幅与周期呈指数衰减的$\eqref{eq-lnh-n-01}$模型进行讨论。</p>
+<p>下面拟合每轮周期的最大回撤。</p>
+<h4 id="3-3-2-最大回撤拟合"><a href="#3-3-2-最大回撤拟合" class="headerlink" title="3.3.2 最大回撤拟合"></a>3.3.2 最大回撤拟合</h4><p>仍然假定比特币价格最终会趋于稳定，即2140年之后的最大回撤接近1。</p>
+<p>做出周期-最大回撤（绝对值）的附带线性回归的散点图，如下：</p>
+<p><img src="%E5%87%8F%E5%8D%8A%E5%91%A8%E6%9C%9F%E4%B8%8E%E6%9C%80%E5%A4%A7%E5%9B%9E%E6%92%A4%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg" alt="减半周期与最大回撤线性回归图"></p>
+<p>可见2参数的最大回撤线性拟合效果很好，我们可以将其作为最大回撤的拟合模型，即：<br>$$<br>mdd_n&#x3D;0.87-0.026*n\ \ \ (n&#x3D;1,2,3,…,33) \label{eq-mdd-n-01}<br>$$<br>如上式，预期减半周期的最大回撤线性减小，每一轮比上一轮减小0.026。</p>
+<p>当然，随着未来样本量的增加，可进一步拟合模型参数，或更换其他函数进行拟合。</p>
+<h2 id="4-关于下一次减半的推测"><a href="#4-关于下一次减半的推测" class="headerlink" title="4. 关于下一次减半的推测"></a>4. 关于下一次减半的推测</h2><p>由于已经发生的减半次数过少，本文的模型不可能太精确。故本节仅粗略的预测下一轮减半日的价格、减半后的最高价、最高价后出现最大回撤的价格等。</p>
+<p>在本节的叙述中会对下一轮减半周期的过程进行部分推测性描述。</p>
+<h3 id="4-1-减半日价格预测"><a href="#4-1-减半日价格预测" class="headerlink" title="4.1 减半日价格预测"></a>4.1 减半日价格预测</h3><p>我们在上面第2部分详细讨论了价格模型，并采用$\eqref{eq-logP-logS-6-deg-01}$进行价格模拟，在第3部分的减半总结中利用该拟合进行第四次减半价的预测。</p>
+<p>由于过去3次减半的价格均低于预测价格，且预测价与实际价的比值呈减小趋势，最近的预测真实价格比为1.499，故可推测下次减半日（2024-04-16左右），价格会高于76,458.321&#x2F;1.499，低于76,458.321，即：<br>$$<br>P_{2024-04-16}\in[51006.21, 76458.321]<br>$$<br>这是纯粹按照上述逻辑预测的结果，当然这个预测值可能会有很大的误差，因为这一结论的得出有如下几个前提：</p>
+<blockquote>
+<ol>
+<li>价格模型在一定时间内符合真实情况，且下一轮减半日的随机效应不太大、不至于抵消掉价格模型预期的减半上涨；</li>
+<li>预测值略高于真实值的效应仍然存在，不至于反转，且预测真实价之比仍然呈减小趋势。</li>
+</ol>
+</blockquote>
+<h3 id="4-2-减半后最高价格预测"><a href="#4-2-减半后最高价格预测" class="headerlink" title="4.2 减半后最高价格预测"></a>4.2 减半后最高价格预测</h3><p>我们采用$\eqref{eq-lnh-n-01}$进行最高涨幅的预测。由于每轮减半的行情启动均出现在减半前510天上下，故基本可以确定2024年减半行情已经于2022-11-21日左右启动了，启动价格为$15,787.284，按照最高涨幅模型，下次减半的最高涨幅将达到9.33倍左右，从而最高涨幅对应的减半行情最高价在$147,295.36左右。</p>
+<p>按照之前的减半行情启动到最高价约1050天来估计，最高价格出现在2025-10-06前后，按照6阶模型预估2025-10-06日价格在$114,395左右。</p>
+<p>过去盘整结束与行情启动间隔的天数大约在600天上下，按此规律，盘整结束的日期大约在2024-07-13左右。</p>
+<p>或者以减半后4个月（120天）来估计，大概在2024-08-14左右，盘整结束，正式进入牛市，并持续一年左右。</p>
+<h3 id="4-3-减半后最大回撤预测"><a href="#4-3-减半后最大回撤预测" class="headerlink" title="4.3 减半后最大回撤预测"></a>4.3 减半后最大回撤预测</h3><p>按照最大回撤线性模型$\eqref{eq-mdd-n-01}$，我们预期下次减半行情冲高后的最大回撤大约为0.763左右。</p>
+<p>照以往规律，最大回撤距离最高价日期大概在1年（365天）左右，如最高价（$147,295.36）出现在2025-10-06前后，则下次减半后比特币经过1年多的上涨，最终价格会持续约1年左右的下跌，跌幅76.3%左右、价格下跌到$34,909左右，日期约在2026-10-06日前后。</p>
+<p>至此，比特币的第4轮减半行情结束，开始新的一轮周期。</p>
+<h2 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h2><p>本文篇幅有些长，非常感谢你能耐心阅读到此。希望本文能或多或少对你有一些帮助，不至于辜负你认真的思考与耐心的探索。</p>
+<p>需要再次指出的是，本文中涉及的内容只是对未来的一种猜测，仅作参考，不构成投资建议，望读者自行斟酌。</p>
+<p>谢谢阅读！</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/" data-id="clnhjo3yt0000k59ydyfo3o0g" data-title="由比特币已实现价格进行的一些推理" class="article-share-link"><span class="fa fa-share">分享</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%8F%E5%8D%8A/" rel="tag">减半</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%9B%9E%E5%BD%92/" rel="tag">回归</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%97%A9%E6%9C%9F%E6%AF%94%E7%89%B9%E5%B8%81%E4%BA%A4%E6%98%93%E5%8E%86%E5%8F%B2/" rel="tag">早期比特币交易历史</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" rel="tag">比特币</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%A2%84%E6%B5%8B/" rel="tag">预测</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">后一篇</strong>
+      <div class="article-nav-title">pycharm重装打不开的问题</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PyCharm/" rel="tag">PyCharm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/" rel="tag">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%8F%E5%8D%8A/" rel="tag">减半</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/" rel="tag">加密货币</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%9E%E5%BD%92/" rel="tag">回归</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%A0%E5%AD%90%E6%8A%95%E8%B5%84/" rel="tag">因子投资</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag">技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A9%E6%9C%9F%E6%AF%94%E7%89%B9%E5%B8%81%E4%BA%A4%E6%98%93%E5%8E%86%E5%8F%B2/" rel="tag">早期比特币交易历史</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" rel="tag">比特币</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%A2%84%E6%B5%8B/" rel="tag">预测</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/PyCharm/" style="font-size: 10px;">PyCharm</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/%E5%87%8F%E5%8D%8A/" style="font-size: 10px;">减半</a> <a href="/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/" style="font-size: 10px;">加密货币</a> <a href="/tags/%E5%9B%9E%E5%BD%92/" style="font-size: 10px;">回归</a> <a href="/tags/%E5%9B%A0%E5%AD%90%E6%8A%95%E8%B5%84/" style="font-size: 10px;">因子投资</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 20px;">技术</a> <a href="/tags/%E6%97%A9%E6%9C%9F%E6%AF%94%E7%89%B9%E5%B8%81%E4%BA%A4%E6%98%93%E5%8E%86%E5%8F%B2/" style="font-size: 10px;">早期比特币交易历史</a> <a href="/tags/%E6%AF%94%E7%89%B9%E5%B8%81/" style="font-size: 20px;">比特币</a> <a href="/tags/%E9%A2%84%E6%B5%8B/" style="font-size: 10px;">预测</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">九月 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/08/">八月 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/">由比特币已实现价格进行的一些推理</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/">pycharm重装打不开的问题</a>
+          </li>
+        
+          <li>
+            <a href="/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/">加密市场的市场因子</a>
+          </li>
+        
+          <li>
+            <a href="/2023/08/31/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/">使用hexo遇到的坑</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2023 雨师<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_site_pv">
+                本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        </span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv" style='display:none'>
+                本站访客数<span id="busuanzi_value_site_uv"></span>人
+        </span>
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
