@@ -19,29 +19,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="安装过BetterIntelliJ破解插件，使用的mac m1电脑，重装最新版pycharm专业版后不能打开。">
+    <meta name="description" content="在服务器上使用了acme.sh来颁发ssl证书，按照官方指导在用户user1根目录下安装了acme.sh，并在root用户下执行如下命令（如不在root下执行，会报提醒，建议到root下执行），成功颁发了证书： &#x2F;home&#x2F;user1&#x2F;.acme.sh&#x2F;acme.sh --set-default-ca --server letsencrypt --issue -d test_domain.com">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pycharm重装打不开的问题">
-<meta property="og:url" content="http://example.com/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:title" content="acme.sh不能自动更新证书的问题">
+<meta property="og:url" content="http://example.com/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="雨师的博客">
-<meta property="og:description" content="安装过BetterIntelliJ破解插件，使用的mac m1电脑，重装最新版pycharm专业版后不能打开。">
+<meta property="og:description" content="在服务器上使用了acme.sh来颁发ssl证书，按照官方指导在用户user1根目录下安装了acme.sh，并在root用户下执行如下命令（如不在root下执行，会报提醒，建议到root下执行），成功颁发了证书： &#x2F;home&#x2F;user1&#x2F;.acme.sh&#x2F;acme.sh --set-default-ca --server letsencrypt --issue -d test_domain.com">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-09-19T08:59:19.000Z">
-<meta property="article:modified_time" content="2023-09-19T10:00:22.852Z">
+<meta property="article:published_time" content="2023-10-12T12:13:11.000Z">
+<meta property="article:modified_time" content="2023-10-12T13:11:50.762Z">
 <meta property="article:author" content="雨师">
-<meta property="article:tag" content="技术">
-<meta property="article:tag" content="PyCharm">
+<meta property="article:tag" content="acme.sh">
+<meta property="article:tag" content="证书">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/">
+<link rel="canonical" href="http://example.com/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/","path":"2023/09/19/pycharm重装打不开的问题/","title":"pycharm重装打不开的问题"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/","path":"2023/10/12/acme-sh不能自动更新证书的问题/","title":"acme.sh不能自动更新证书的问题"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>pycharm重装打不开的问题 | 雨师的博客</title>
+<title>acme.sh不能自动更新证书的问题 | 雨师的博客</title>
   
 
 
@@ -111,7 +111,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+    <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -124,7 +124,6 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">解决办法</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -174,7 +173,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -187,12 +186,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="pycharm重装打不开的问题 | 雨师的博客">
+      <meta itemprop="name" content="acme.sh不能自动更新证书的问题 | 雨师的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          pycharm重装打不开的问题
+          acme.sh不能自动更新证书的问题
         </h1>
 
         <div class="post-meta-container">
@@ -204,7 +203,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-09-19 16:59:19 / 修改时间：18:00:22" itemprop="dateCreated datePublished" datetime="2023-09-19T16:59:19+08:00">2023-09-19</time>
+      <time title="创建时间：2023-10-12 20:13:11 / 修改时间：21:11:50" itemprop="dateCreated datePublished" datetime="2023-10-12T20:13:11+08:00">2023-10-12</time>
     </span>
 
   
@@ -223,23 +222,37 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
-m1电脑，重装最新版pycharm专业版后不能打开。</p>
-<span id="more"></span>
-<h2 id="背景介绍">背景介绍</h2>
-<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
-<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
-m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
-<p>网上找了很久，才最终解决该问题。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
-<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
-<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
-<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
+    <div class="post-body" itemprop="articleBody"><p>在服务器上使用了<code>acme.sh</code>来颁发ssl证书，按照<a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/blob/master/README.md">官方指导</a>在用户<code>user1</code>根目录下安装了<code>acme.sh</code>，并在<code>root</code>用户下执行如下命令（如不在root下执行，会报提醒，建议到root下执行），成功颁发了证书：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --set-default-ca --server letsencrypt --issue -d test_domain.com --standalone --keylength ec-256 --force</span><br></pre></td></tr></table></figure>
+<p>然后在<code>root</code>下执行了将证书安装到指定目录下的操作：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --install-cert -d test_domain.com --ecc \</span><br><span class="line">                          --fullchain-file /etc/v2ray/v2ray.crt \</span><br><span class="line">                          --key-file /etc/v2ray/v2ray.key \</span><br><span class="line">                          --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure>
+<p>一切正常的话，按照官方所描述的，<code>crontab</code>中会每日自动检查证书是否需要<code>renew</code>，然后根据情况在快要到期时（<code>acme.sh</code>默认证书有效期为90天，到期前30天会自动更新。注意有效期最多只有90天，不能延长，<a target="_blank" rel="noopener" href="https://letsencrypt.org/docs/faq/">参见此处</a>）更新。</p>
+<p>但是在实际操作中，始终不能如预期正常更新证书。<code>user1</code>下检查定时任务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo crontab -l</span><br></pre></td></tr></table></figure>
+<p>查看结果：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
+<p>由于一直没找到原因，故每次到期后都需要手动更新证书：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ~/.acme.sh/acme.sh --renew -d test_domain.com --force --ecc --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure>
+<p>上述命令执行在用户<code>user1</code>下。最后的参数是在执行后重启<code>nginx</code>和<code>v2ray</code>。</p>
+<p>手动更新正常（这很奇怪，可能是因为在<code>root</code>与<code>user1</code>下都生成了证书，保留了两个目录下的参数与证书，并在根目录下生成证书时输入了错误的域名？检查发现<code>root</code>下也安装了<code>acme.sh</code>，将其卸载，并删除了<code>.acme.sh/</code>目录。）。</p>
+<p>一直对<code>acme.sh</code>定时更新的工作流程，特别是为什么不需要在<code>crontab</code>的定时任务里不需要传参的原因不是很理解，于是花了点时间检索，发现了<a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/issues/3981">相关解答</a>。即在执行<code>--install-cert</code>后参数会保存，自动更新时调用之，故不需要在<code>crontab</code>中传参。</p>
+<p>然后尝试直接<code>debug</code>执行更新操作：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure>
+<p>发现执行日志有如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===Starting cron===</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Using config home:/home/user1/.acme.sh</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _stopRenewOnError</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] di=<span class="string">&#x27;/home/user1/.acme.sh/*.*/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Not a directory, skip: /home/user1/.acme.sh/*.*/</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _error_level=<span class="string">&#x27;3&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===End cron===</span><br></pre></td></tr></table></figure>
+<p>从上述内容可见问题出现在参数配置文件目录出错，导致找不到<code>.acme.sh/*.*/</code>文件。这才意识到安装<code>acme.sh</code>脚本的目录是在<code>user1</code>根目录下，但是在申请证书是在<code>root</code>根目录下操作的。执行了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo su -</span><br></pre></td></tr></table></figure>
+<p>造成目录切换到了<code>root</code>根目录下，运行<code>--issue</code>域名的操作生成的文件直接保存在了<code>root</code>根目录下，即证书、配置的目录与脚本的目录不匹配。程序自动更新时在脚本目录<code>/home/user1/.acme.sh</code>下寻找不到所需的证书与参数，因而出错、忽略了。加上日志直接输到了<code>/dev/null</code>，故一直没找到原因。</p>
+<p>修改<code>--home</code>后<code>debug</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure>
+<p>发现结果显示包含如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:47:17 UTC 2023] di=<span class="string">&#x27;/root/.acme.sh/test_domain_ecc/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] d=<span class="string">&#x27;test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] DOMAIN_PATH=<span class="string">&#x27;/root/.acme.sh/test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Renew: <span class="string">&#x27;test_domain.com&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Le_API=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Skip, Next renewal time is: Mon Dec 11 09:52:50 UTC 2023</span><br></pre></td></tr></table></figure>
+<p>显然，这次脚本成功检查了证书的有效期，并跳过了不需要更新的证书。可判断这回脚本能够正确运行了。</p>
+<p>在<code>root</code>下修改<code>crontab</code>中的任务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+<p>将<code>--home</code>参数后的目录修改一下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
+<p>即可正常自动更新了。</p>
 
     </div>
 
@@ -300,22 +313,19 @@ m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗�
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"># 技术</a>
-              <a href="/tags/PyCharm/" rel="tag"># PyCharm</a>
+              <a href="/tags/acme-sh/" rel="tag"># acme.sh</a>
+              <a href="/tags/%E8%AF%81%E4%B9%A6/" rel="tag"># 证书</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/" rel="prev" title="加密市场的市场因子">
-                  <i class="fa fa-angle-left"></i> 加密市场的市场因子
+                <a href="/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/" rel="prev" title="可以在比特币上计算一切的BitVM">
+                  <i class="fa fa-angle-left"></i> 可以在比特币上计算一切的BitVM
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/" rel="next" title="由比特币已实现价格进行的一些推理">
-                  由比特币已实现价格进行的一些推理 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
