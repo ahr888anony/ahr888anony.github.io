@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在上轮比特币减半（2020-05-11减半）周期中，PlanB的S2F模型扮演了非常重要的角色，该模型预测的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于对数供给量多项式模型的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与价格的关系。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="比特币S2F模型还适用吗">
+<meta property="og:url" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/index.html">
+<meta property="og:site_name" content="雨师的博客">
+<meta property="og:description" content="在上轮比特币减半（2020-05-11减半）周期中，PlanB的S2F模型扮演了非常重要的角色，该模型预测的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于对数供给量多项式模型的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与价格的关系。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8ElogS2F%E6%9C%AA%E5%A4%84%E7%90%86%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8ElogS2F%E8%BF%9B%E8%A1%8C%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86%E5%90%8E%E7%9A%84%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8E%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86%E5%90%8E%E7%9A%84logS2F%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg">
+<meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logS%E4%B8%8ElogP%E7%9A%84%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg">
+<meta property="article:published_time" content="2023-10-17T07:56:07.000Z">
+<meta property="article:modified_time" content="2023-10-18T11:35:54.754Z">
+<meta property="article:author" content="雨师">
+<meta property="article:tag" content="bitcoin">
+<meta property="article:tag" content="减半">
+<meta property="article:tag" content="S2F模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8ElogS2F%E6%9C%AA%E5%A4%84%E7%90%86%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+
+
+<link rel="canonical" href="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/","path":"2023/10/17/比特币S2F模型还适用吗/","title":"比特币S2F模型还适用吗"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>比特币S2F模型还适用吗 | 雨师的博客</title>
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">雨师的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">信马由缰，记录思考</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#s2f%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%B8%8D%E8%B6%B3"><span class="nav-number">1.</span> <span class="nav-text">S2F模型的不足</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s2f%E7%AE%80%E5%8C%96%E6%A8%A1%E5%9E%8B%E5%BB%BA%E6%A8%A1"><span class="nav-number">2.</span> <span class="nav-text">S2F简化模型建模</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#s2f%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%A4%9A%E9%A1%B9%E5%BC%8F%E6%8B%9F%E5%90%88%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">3.</span> <span class="nav-text">S2F模型与多项式拟合的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%80%E7%BC%BA%E6%80%A7%E4%B8%8E%E5%B8%82%E5%80%BC"><span class="nav-number">4.</span> <span class="nav-text">稀缺性与市值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%B4%E8%B0%A2%E4%B8%8E%E5%A3%B0%E6%98%8E"><span class="nav-number">5.</span> <span class="nav-text">致谢与声明</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">雨师</p>
+  <div class="site-description" itemprop="description">一个为比特币摇旗呐喊的小兵</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/rainmaker23331" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;rainmaker23331" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="雨师">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雨师的博客">
+      <meta itemprop="description" content="一个为比特币摇旗呐喊的小兵">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="比特币S2F模型还适用吗 | 雨师的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          比特币S2F模型还适用吗
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-17 15:56:07" itemprop="dateCreated datePublished" datetime="2023-10-17T15:56:07+08:00">2023-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-10-18 19:35:54" itemprop="dateModified" datetime="2023-10-18T19:35:54+08:00">2023-10-18</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在上轮比特币减半（2020-05-11减半）周期中，<a target="_blank" rel="noopener" href="https://twitter.com/100trillionusd/">PlanB</a>的<a target="_blank" rel="noopener" href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F模型</a>扮演了非常重要的角色，<a target="_blank" rel="noopener" href="https://charts.bitbo.io/stock-to-flow/">该模型预测</a>的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#对数供给量多项式模型">对数供给量多项式模型</a>的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与价格的关系。</p>
+<span id="more"></span>
+<h2 id="s2f模型的不足">S2F模型的不足</h2>
+<p>正如我之前的文章所指出的（参见<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">比特币的价格模型</a>一节），按照S2F模型，比特币会无限上涨。更量化的，每4年减半一次都上涨接近10倍，没有尽头。特别是当比特币增量为0后（2140年后），按照S2F模型，<span class="math inline">\(stock/flow\)</span>会变为无穷大。按该模型预测，比特币的市值会趋于无穷大。</p>
+<p>众所周知，目前美元m2总量才21万亿左右，只要美元的计价地位不变（美元仍为本位货币），则比特币的市值不应该超过21万亿美元太多。</p>
+<p>PlanB的原始模型显然没有考虑这一限制，特别是其对涨幅衰减效应的欠考虑，引起模型与真实情况的偏离，最终导致预测上轮（对应2020-05-11减半）牛市的价格区间出错。这是该模型最大的一个不足之处。</p>
+<p>另外，该模型还进行了跨市场的验证，其中包含了黄金和白银等，得出S2F越大则市值越大的结论。照此推论，黄金的S2F值高于美元，那么为什么黄金的市值低于美元？这显然也不合理。</p>
+<p>最后，近年来大为流行的NFT产品，具有唯一性，这类产品的S2F理论上应该趋于无穷大，但现实中只有极少数NFT产品卖出了天价，这显然也与S2F模型所描述的规律不一样。</p>
+<h2 id="s2f简化模型建模">S2F简化模型建模</h2>
+<p>本节对S2F模型做了一些简化处理，得出与原始版本相当的结论。</p>
+<p>首先，与原文的方式不同，本文存量（stock）采用如下更简单的方式计算：</p>
+<p><span class="math display">\[\begin{equation}\label{eq1}
+stock_i=market\_cap_i/close_i
+\end{equation}\]</span></p>
+<p>其中i代表第i个交易日，下同。下文用<span class="math inline">\(M\)</span>代表市值、<span class="math inline">\(S\)</span>代表存量。另外，本文的数据采用日频数据，而非原本S2F模型的月度数据。</p>
+<p>流通量（flow）与PlanB的定义也不同，不采用年化的产量，而直接采用日产量（即stock的增量），计算方法如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq2}
+flow_i=\Delta S_i=S_i-S_{i-1}
+\end{equation}\]</span></p>
+<p>这种直接计算存量、流通量的方法更简单，理论上与原版模型只有常数（会略微有一点随机偏差）差异。</p>
+<p>有了存量、流通量后，自然有：</p>
+<p><span class="math display">\[\begin{equation}\label{eq3}
+S2F_i=S_i/flow_i
+\end{equation}\]</span></p>
+<p>如上计算出<span class="math inline">\(S2F\)</span>后，先观察未进行处理的对数<span class="math inline">\(S2F\)</span>值、即<span class="math inline">\(log(S2F)\)</span>（简计为<span class="math inline">\(logS2F\)</span>）与对数市值<span class="math inline">\(log(M)\)</span>（简记<span class="math inline">\(logM\)</span>）的走势图，如下：</p>
+<figure>
+<img src="logM与logS2F未处理走势图.jpg" alt="logM与logS2F未处理走势图">
+<figcaption aria-hidden="true">logM与logS2F未处理走势图</figcaption>
+</figure>
+<p>可见有不少异常数据。采用如下mad法来处理异常值：</p>
+<blockquote>
+<p>采用中位数绝对偏差法（mad法），选择1月滚动回视窗口，即<span class="math inline">\(window=30\)</span>，将与中位数（滚动median值）偏差超过3倍mad值的数值视为异常值，采用滚动<span class="math inline">\(median\pm
+3*mad\)</span>值替换异常值，即超出上限的用上限替换、超出下限的用下限替换。</p>
+</blockquote>
+<p>其中mad值的计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq4}
+mad=median(abs(X-median(X))
+\end{equation}\]</span></p>
+<p>采用上述方法、会将减半日的<span class="math inline">\(logS2F\)</span>跳跃效应延迟，在滞后约<span class="math inline">\(window/2=15\)</span>期后才会过渡到真实的<span class="math inline">\(logS2F\)</span>值。这一处理无伤大雅，不妨碍揭示出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的关系。</p>
+<p>做了异常值处理的<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>走势对比如下：</p>
+<figure>
+<img src="logM与logS2F进行异常值处理后的走势图.jpg" alt="logM与logS2F进行异常值处理后的走势图">
+<figcaption aria-hidden="true">logM与logS2F进行异常值处理后的走势图</figcaption>
+</figure>
+<p>可见减半日附近的<span class="math inline">\(logS2F\)</span>跳跃效应依然存在，曲线中的异常值被很好的处理了。下文中均采用处理过的<span class="math inline">\(logS2F\)</span>来建模及讨论。</p>
+<p>先做出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的线性回归图：</p>
+<figure>
+<img src="logM与异常值处理后的logS2F线性回归图.jpg" alt="logM与异常值处理后的logS2F线性回归图">
+<figcaption aria-hidden="true">logM与异常值处理后的logS2F线性回归图</figcaption>
+</figure>
+<p>图中的线性关系为：</p>
+<p><span class="math display">\[\begin{equation}\label{eq5}
+logM=-4.55+3.21*logS2F
+\end{equation}\]</span></p>
+<p>这一拟合结果与PlanB的结果非常相近（参见<a target="_blank" rel="noopener" href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">此处</a>），他得到的系数为3.32。故本文采用的简单计算方式与原文的计算方式区别不大。</p>
+<p>从上图可以很明显的观察到：对应3次减半形成的4个时间区域，<span class="math inline">\(logS2F\)</span>数据形成了4个区分明显的阶梯。随着<span class="math inline">\(logS2F\)</span>的增大、对应减半次数的增加，<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的波动范围在缩小，波动性呈下降趋势。</p>
+<p>不管从哪种意义上来说，上图的结果都是让人震惊的。与原文采用月频数据（111个样本）不同，本文在考虑了包含最新数据的日频数据（样本更多，共4826个样本）、且更改了计算方法后，仍可得出如下结论：</p>
+<blockquote>
+<p><font color="red"><strong>在目前阶段，线性的S2F模型依然可以作为价格规律的一个比较有效的近似。</strong></font></p>
+</blockquote>
+<p>但仍然需要指出的是，在<span class="math inline">\(logS2F\)</span>的最右侧区域（对应的是2020-05-11减半之后的数据），阶梯上升有减小的趋势，如我在2023-09-25所写的<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#引言">文章</a>所指出的那样。</p>
+<p>由于减半次数太少（只发生了3次），线性拟合可以是很多种函数在自变量较小时的近似，故并不能断言<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>两者就是线性关系。</p>
+<h2 id="s2f模型与多项式拟合的关系">S2F模型与多项式拟合的关系</h2>
+<p>下面我将讨论S2F模型与对数供给量多项式价格模型（参见<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">此处</a>）的关系，得出多项式模型是对S2F模型的批判性继承的结论。</p>
+<p>我们将<span class="math inline">\(flow\)</span>简计为<span class="math inline">\(F\)</span>，S2F模型可以一般的表达为：</p>
+<p><span class="math display">\[\begin{equation}\label{eq6}
+\begin{aligned}
+logM &amp; =a+b*logS2F\\ &amp;=a+b*(logS-logF)\\
+&amp;=a+b*(logS-log\Delta S)
+\end{aligned}
+\end{equation}\]</span></p>
+<p>其中<span class="math inline">\(\Delta S\)</span>是<span class="math inline">\(S\)</span>的一阶小量，随着减半次数的进一步增加会变得越来越小，对其取对数的绝对值会越来越大、最终趋于无穷大。该项在减半周期较小时才有意义，将其舍弃方更合理。</p>
+<p>结合市值的定义，上式可以如下转换：</p>
+<p><span class="math display">\[\begin{equation}\label{eq7}
+\begin{aligned}
+&amp;log(S*P)  &amp;=a+b*logS \\ &amp;\Rightarrow logS+logP &amp;=
+a+b*logS \\ &amp;\Rightarrow logP &amp;=a+(b-1)*logS \\ &amp;\Rightarrow
+logP&amp;=a+b&#39;*logS
+\end{aligned}
+\end{equation}\]</span></p>
+<p>即舍弃了不合理部分的S2F模型化成了多项式拟合的1阶形式。</p>
+<p>下面做出<span class="math inline">\(logS\)</span>与<span class="math inline">\(logP\)</span>的线性回归图，以验证舍去<span class="math inline">\(log\Delta S\)</span>项是否合理：</p>
+<figure>
+<img src="logS与logP的线性回归图.jpg" alt="logS与logP的线性回归图">
+<figcaption aria-hidden="true">logS与logP的线性回归图</figcaption>
+</figure>
+<p>通过上图的数据实证可见，两者效果上基本等价（1阶多项式拟合的<span class="math inline">\(R^2\)</span>为0.91，S2F模型为0.93），印证了<span class="math inline">\(log\Delta S\)</span>项实际上是冗余的。</p>
+<p>从而，得出如下结论：</p>
+<blockquote>
+<p><font color="red"><strong>对数供给量多项式拟合可以被视为S2F模型的一种更合理的、可拓展的形式，其更适用于有极限价格的实际情况</strong>。</font></p>
+</blockquote>
+<h2 id="稀缺性与市值">稀缺性与市值</h2>
+<p>稀缺性（仍可用S2F值代表）与市值，是一个很复杂的问题，本文目前仅仅只做一些逻辑上的讨论，更量化的讨论留待将来进行。</p>
+<p>到目前为止，在流通性良好且为人们普遍接受的商品中，黄金的稀缺性是公认较高的，但其并没有超过以m2衡量的美元的市值，这或许与黄金不具有本位币地位有关。金本位的崩溃促使黄金退化为了一种普通商品，相较于可以购买一切的本位币而言，人们对黄金的潜在需求下降，导致其市值相较于美元缩水。</p>
+<p>这对比特币的警示意义在于：如果其最终不能取得本位币地位，则其市值不太可能超越以m2衡量的美元，从而2140年之后btc的价格可能达不到以当前美元价值衡量的100万美元/BTC。</p>
+<p>稀缺性高于黄金S2F值的商品，如古董、艺术品、NFT产品等，由于供给量限定，S2F会很高，但其价格的差别却很大、大多市值也很有限，并不完全遵循越稀缺市值越高的规律。显然，造成这一现象的主要的原因是是否有足够的潜在的购买者为其稀缺性买单。</p>
+<p>这对于比特币的警示意义在于：虽然目前btc的流通性很好，但如果比特币不能更多的为大众所接纳，其使用场景不能更近一步增加，则人们很难会对其稀缺性买单，从而减半导致的稀缺性也不能很好的反应在市值上，即便最终其S2F趋近于无穷大，也不代表其市值就会上涨到很高的水平。</p>
+<h2 id="致谢与声明">致谢与声明</h2>
+<p>本文仅仅是在做技术上的尝试，不构成投资建议，望读者自行甄别。</p>
+<p>限于本人的水平，本文错谬之处在所难免，期待方家指正。</p>
+<p>感谢您的阅读！</p>
+<p>本文完。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer"><div class="post-widgets">
+    <div class="likely">
+        <div class="twitter">Tweet</div>
+        <div class="facebook">Share</div>
+        <div class="linkedin">Link</div>
+        <div class="gplus">Plus</div>
+        <div class="vkontakte">Share</div>
+        <div class="odnoklassniki">Class</div>
+        <div class="telegram">Send</div>
+        <div class="whatsapp">Send</div>
+        <div class="pinterest">Pin</div>
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.min.js"></script><div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div><div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="share.title"
+      
+      
+        data-wechat-qrcode-helper="share.prompt"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/rainmaker23331">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/bitcoin/" rel="tag"># bitcoin</a>
+              <a href="/tags/%E5%87%8F%E5%8D%8A/" rel="tag"># 减半</a>
+              <a href="/tags/S2F%E6%A8%A1%E5%9E%8B/" rel="tag"># S2F模型</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/" rel="prev" title="acme.sh不能自动更新证书的问题">
+                  <i class="fa fa-angle-left"></i> acme.sh不能自动更新证书的问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">雨师</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+</body>
+</html>
