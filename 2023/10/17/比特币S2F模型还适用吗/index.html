@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8E%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86%E5%90%8E%E7%9A%84logS2F%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg">
 <meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logS%E4%B8%8ElogP%E7%9A%84%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2023-10-17T07:56:07.000Z">
-<meta property="article:modified_time" content="2023-10-18T11:35:54.754Z">
+<meta property="article:modified_time" content="2023-10-19T03:10:25.270Z">
 <meta property="article:author" content="雨师">
 <meta property="article:tag" content="bitcoin">
 <meta property="article:tag" content="减半">
@@ -216,7 +216,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-10-18 19:35:54" itemprop="dateModified" datetime="2023-10-18T19:35:54+08:00">2023-10-18</time>
+      <time title="修改时间：2023-10-19 11:10:25" itemprop="dateModified" datetime="2023-10-19T11:10:25+08:00">2023-10-19</time>
     </span>
 
   
@@ -296,7 +296,7 @@ logM=-4.55+3.21*logS2F
 <p><font color="red"><strong>在目前阶段，线性的S2F模型依然可以作为价格规律的一个比较有效的近似。</strong></font></p>
 </blockquote>
 <p>但仍然需要指出的是，在<span class="math inline">\(logS2F\)</span>的最右侧区域（对应的是2020-05-11减半之后的数据），阶梯上升有减小的趋势，如我在2023-09-25所写的<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#引言">文章</a>所指出的那样。</p>
-<p>由于减半次数太少（只发生了3次），线性拟合可以是很多种函数在自变量较小时的近似，故并不能断言<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>两者就是线性关系。</p>
+<p>由于减半次数太少（只发生了3次），这意味着目前有效的自变量变化范围尚且太小，线性拟合可以是很多种函数在局部区域的近似，并不能断言<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>两者就是线性关系。</p>
 <h2 id="s2f模型与多项式拟合的关系">S2F模型与多项式拟合的关系</h2>
 <p>下面我将讨论S2F模型与对数供给量多项式价格模型（参见<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">此处</a>）的关系，得出多项式模型是对S2F模型的批判性继承的结论。</p>
 <p>我们将<span class="math inline">\(flow\)</span>简计为<span class="math inline">\(F\)</span>，S2F模型可以一般的表达为：</p>
@@ -306,7 +306,18 @@ logM &amp; =a+b*logS2F\\ &amp;=a+b*(logS-logF)\\
 &amp;=a+b*(logS-log\Delta S)
 \end{aligned}
 \end{equation}\]</span></p>
-<p>其中<span class="math inline">\(\Delta S\)</span>是<span class="math inline">\(S\)</span>的一阶小量，随着减半次数的进一步增加会变得越来越小，对其取对数的绝对值会越来越大、最终趋于无穷大。该项在减半周期较小时才有意义，将其舍弃方更合理。</p>
+<p>其中<span class="math inline">\(\Delta S\)</span>是<span class="math inline">\(S\)</span>的一阶小量，有如下特点：</p>
+<ol type="1">
+<li>随着减半次数的进一步增加<span class="math inline">\(\Delta
+S\)</span>会变得越来越小，直至减半终结而趋于0；</li>
+<li>在<span class="math inline">\(\Delta S&gt;1\)</span>时，<span class="math inline">\(log\Delta
+S\)</span>会随着减半次数增加而单调递减，对应的<span class="math inline">\(logS\)</span>项则会越来越大，此时<span class="math inline">\(log\Delta
+S\)</span>项的影响随着减半增加会越来越低，可作为微扰项，将其忽略影响不大；</li>
+<li>当<span class="math inline">\(\Delta S&lt;1\)</span>时，<span class="math inline">\(log\Delta
+S\)</span>会随着减半次数的进一步增加而变为负数、其绝对值越来越大、最终趋于无穷。此时该项的影响会超过<span class="math inline">\(logS\)</span>项，且其引入了与真实情况有悖的不可解释的效应，这些效应只在减半快要结束时才出现、并没有现实支撑。明显是不合理的，此时更应将该项舍弃；</li>
+</ol>
+<p>如上分析，<span class="math inline">\(\eqref{eq6}\)</span>最后的<span class="math inline">\(log\Delta
+S\)</span>项在减半周期较小时才有意义，将其舍弃后模型才更合理。</p>
 <p>结合市值的定义，上式可以如下转换：</p>
 <p><span class="math display">\[\begin{equation}\label{eq7}
 \begin{aligned}
@@ -330,8 +341,8 @@ logP&amp;=a+b&#39;*logS
 <p>稀缺性（仍可用S2F值代表）与市值，是一个很复杂的问题，本文目前仅仅只做一些逻辑上的讨论，更量化的讨论留待将来进行。</p>
 <p>到目前为止，在流通性良好且为人们普遍接受的商品中，黄金的稀缺性是公认较高的，但其并没有超过以m2衡量的美元的市值，这或许与黄金不具有本位币地位有关。金本位的崩溃促使黄金退化为了一种普通商品，相较于可以购买一切的本位币而言，人们对黄金的潜在需求下降，导致其市值相较于美元缩水。</p>
 <p>这对比特币的警示意义在于：如果其最终不能取得本位币地位，则其市值不太可能超越以m2衡量的美元，从而2140年之后btc的价格可能达不到以当前美元价值衡量的100万美元/BTC。</p>
-<p>稀缺性高于黄金S2F值的商品，如古董、艺术品、NFT产品等，由于供给量限定，S2F会很高，但其价格的差别却很大、大多市值也很有限，并不完全遵循越稀缺市值越高的规律。显然，造成这一现象的主要的原因是是否有足够的潜在的购买者为其稀缺性买单。</p>
-<p>这对于比特币的警示意义在于：虽然目前btc的流通性很好，但如果比特币不能更多的为大众所接纳，其使用场景不能更近一步增加，则人们很难会对其稀缺性买单，从而减半导致的稀缺性也不能很好的反应在市值上，即便最终其S2F趋近于无穷大，也不代表其市值就会上涨到很高的水平。</p>
+<p>稀缺性高于黄金S2F值的商品，如古董、艺术品、NFT产品等，由于供给量限定，S2F会很高，但其价格的差别却很大、大多市值也很有限，并不完全遵循越稀缺市值越高的规律。显然，造成这一现象的主要的原因在于是否有足够的潜在购买者为其稀缺性买单。</p>
+<p>这对于比特币的警示意义在于：虽然目前btc的流通性很好，但如果比特币不能更多的为大众所接纳，其使用场景不能更近一步增加，则人们很难会进一步为其稀缺性买单，从而减半导致的稀缺性上升也不能很好的反映在市值上，即便最终其S2F趋近于无穷大，也不代表其市值就会上涨到很高的水平。</p>
 <h2 id="致谢与声明">致谢与声明</h2>
 <p>本文仅仅是在做技术上的尝试，不构成投资建议，望读者自行甄别。</p>
 <p>限于本人的水平，本文错谬之处在所难免，期待方家指正。</p>
