@@ -17,19 +17,19 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"btcrainmaker.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="在上轮比特币减半（2020-05-11减半）周期中，PlanB的S2F模型扮演了非常重要的角色，该模型预测的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于对数供给量多项式模型的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与市值的关系。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="比特币S2F模型还适用吗">
-<meta property="og:url" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/index.html">
+<meta property="og:url" content="https://btcrainmaker.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/index.html">
 <meta property="og:site_name" content="雨师的博客">
 <meta property="og:description" content="在上轮比特币减半（2020-05-11减半）周期中，PlanB的S2F模型扮演了非常重要的角色，该模型预测的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于对数供给量多项式模型的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与市值的关系。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8ElogS2F%E6%9C%AA%E5%A4%84%E7%90%86%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
-<meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8ElogS2F%E8%BF%9B%E8%A1%8C%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86%E5%90%8E%E7%9A%84%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
-<meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8E%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86%E5%90%8E%E7%9A%84logS2F%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg">
-<meta property="og:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logS%E4%B8%8ElogP%E7%9A%84%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8ElogS2F%E6%9C%AA%E5%A4%84%E7%90%86%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8ElogS2F%E8%BF%9B%E8%A1%8C%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86%E5%90%8E%E7%9A%84%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8E%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86%E5%90%8E%E7%9A%84logS2F%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logS%E4%B8%8ElogP%E7%9A%84%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92%E5%9B%BE.jpg">
 <meta property="article:published_time" content="2023-10-17T07:56:07.000Z">
 <meta property="article:modified_time" content="2023-10-19T12:59:19.555Z">
 <meta property="article:author" content="雨师">
@@ -37,14 +37,14 @@
 <meta property="article:tag" content="减半">
 <meta property="article:tag" content="S2F模型">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8ElogS2F%E6%9C%AA%E5%A4%84%E7%90%86%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta name="twitter:image" content="https://btcrainmaker.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/logM%E4%B8%8ElogS2F%E6%9C%AA%E5%A4%84%E7%90%86%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
 
 
-<link rel="canonical" href="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/">
+<link rel="canonical" href="https://btcrainmaker.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/","path":"2023/10/17/比特币S2F模型还适用吗/","title":"比特币S2F模型还适用吗"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://btcrainmaker.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/","path":"2023/10/17/比特币S2F模型还适用吗/","title":"比特币S2F模型还适用吗"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>比特币S2F模型还适用吗 | 雨师的博客</title>
@@ -87,6 +87,9 @@
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -108,6 +111,10 @@
 
 
 
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
 
 
 
@@ -180,7 +187,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/">
+    <link itemprop="mainEntityOfPage" href="https://btcrainmaker.com/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -235,10 +242,10 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>在上轮比特币减半（2020-05-11减半）周期中，<a target="_blank" rel="noopener" href="https://twitter.com/100trillionusd/">PlanB</a>的<a target="_blank" rel="noopener" href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F模型</a>扮演了非常重要的角色，<a target="_blank" rel="noopener" href="https://charts.bitbo.io/stock-to-flow/">该模型预测</a>的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#对数供给量多项式模型">对数供给量多项式模型</a>的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与市值的关系。</p>
+    <div class="post-body" itemprop="articleBody"><p>在上轮比特币减半（2020-05-11减半）周期中，<a target="_blank" rel="noopener" href="https://twitter.com/100trillionusd/">PlanB</a>的<a target="_blank" rel="noopener" href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F模型</a>扮演了非常重要的角色，<a target="_blank" rel="noopener" href="https://charts.bitbo.io/stock-to-flow/">该模型预测</a>的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#对数供给量多项式模型">对数供给量多项式模型</a>的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与市值的关系。</p>
 <span id="more"></span>
 <h2 id="s2f模型的不足">S2F模型的不足</h2>
-<p>正如我之前的文章所指出的（参见<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">比特币的价格模型</a>一节），按照S2F模型，比特币会无限上涨。更量化的，每4年减半一次都上涨接近10倍，没有尽头。特别是当比特币增量为0后（2140年后），按照S2F模型，<span class="math inline">\(stock/flow\)</span>会变为无穷大。按该模型预测，比特币的市值会趋于无穷大。</p>
+<p>正如我之前的文章所指出的（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">比特币的价格模型</a>一节），按照S2F模型，比特币会无限上涨。更量化的，每4年减半一次都上涨接近10倍，没有尽头。特别是当比特币增量为0后（2140年后），按照S2F模型，<span class="math inline">\(stock/flow\)</span>会变为无穷大。按该模型预测，比特币的市值会趋于无穷大。</p>
 <p>众所周知，目前美元m2总量才21万亿左右，只要美元的计价地位不变（美元仍为本位货币），则比特币的市值不应该超过21万亿美元太多。</p>
 <p>PlanB的原始模型显然没有考虑这一限制，特别是其对涨幅衰减效应的欠考虑，引起模型与真实情况的偏离，最终导致预测上轮（对应2020-05-11减半）牛市的价格区间出错。这是该模型最大的一个不足之处。</p>
 <p>另外，该模型还进行了跨市场的验证，其中包含了黄金和白银等，得出S2F越大则市值越大的结论。照此推论，黄金的S2F值高于美元，那么为什么黄金的市值低于美元？这显然也不合理。</p>
@@ -295,10 +302,10 @@ logM=-4.55+3.21*logS2F
 <blockquote>
 <p><font color="red"><strong>在目前阶段，线性的S2F模型依然可以作为价格规律的一个比较有效的近似。</strong></font></p>
 </blockquote>
-<p>但仍然需要指出的是，在<span class="math inline">\(logS2F\)</span>的最右侧区域（对应的是2020-05-11减半之后的数据），阶梯上升有减小的趋势，如我在2023-09-25所写的<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#引言">文章</a>所指出的那样。</p>
+<p>但仍然需要指出的是，在<span class="math inline">\(logS2F\)</span>的最右侧区域（对应的是2020-05-11减半之后的数据），阶梯上升有减小的趋势，如我在2023-09-25所写的<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#引言">文章</a>所指出的那样。</p>
 <p>由于减半次数太少（只发生了3次），这意味着目前有效的自变量变化范围尚且太小，线性拟合可以是很多种函数在局部区域的近似，并不能断言<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>两者就是线性关系。</p>
 <h2 id="s2f模型与多项式拟合的关系">S2F模型与多项式拟合的关系</h2>
-<p>下面我将讨论S2F模型与对数供给量多项式价格模型（参见<a target="_blank" rel="noopener" href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">此处</a>）的关系，得出多项式模型是对S2F模型的批判性继承的结论。</p>
+<p>下面我将讨论S2F模型与对数供给量多项式价格模型（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">此处</a>）的关系，得出多项式模型是对S2F模型的批判性继承的结论。</p>
 <p>我们将<span class="math inline">\(flow\)</span>简计为<span class="math inline">\(F\)</span>，S2F模型可以一般的表达为：</p>
 <p><span class="math display">\[\begin{equation}\label{eq6}
 \begin{aligned}
