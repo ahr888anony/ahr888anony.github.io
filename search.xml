@@ -105,17 +105,17 @@ rtn_t=e^{logRtn_t}-1
 <blockquote>
 <p><font size="2"><em>价格涨幅收益率描述表</em></font></p>
 </blockquote>
-<table style="width:100%;">
+<table>
 <colgroup>
-<col style="width: 5%">
-<col style="width: 13%">
-<col style="width: 8%">
-<col style="width: 12%">
-<col style="width: 7%">
-<col style="width: 12%">
+<col style="width: 6%">
+<col style="width: 16%">
+<col style="width: 9%">
 <col style="width: 14%">
-<col style="width: 11%">
-<col style="width: 13%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 16%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -137,9 +137,9 @@ rtn_t=e^{logRtn_t}-1
 <td style="text-align: right;">276334</td>
 <td style="text-align: right;">5.1249e+08</td>
 <td style="text-align: right;">-1</td>
-<td style="text-align: right;">-0.0333691</td>
-<td style="text-align: right;">-0.000971782</td>
-<td style="text-align: right;">0.0239019</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.024</td>
 <td style="text-align: right;">1.26464e+12</td>
 </tr>
 </tbody>
@@ -155,17 +155,17 @@ rtn_t=e^{logRtn_t}-1
 <blockquote>
 <p><font size="2"><em>对数收益率描述表</em></font></p>
 </blockquote>
-<table>
+<table style="width:100%;">
 <colgroup>
-<col style="width: 8%">
-<col style="width: 13%">
-<col style="width: 13%">
 <col style="width: 10%">
+<col style="width: 17%">
 <col style="width: 10%">
-<col style="width: 12%">
-<col style="width: 14%">
-<col style="width: 11%">
 <col style="width: 9%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 10%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -184,13 +184,13 @@ rtn_t=e^{logRtn_t}-1
 <tr class="odd">
 <td style="text-align: left;">logRtn</td>
 <td style="text-align: right;">6.35182e+06</td>
-<td style="text-align: right;">-0.00381977</td>
-<td style="text-align: right;">0.231411</td>
-<td style="text-align: right;">-25.1988</td>
-<td style="text-align: right;">-0.0339385</td>
-<td style="text-align: right;">-0.000972255</td>
-<td style="text-align: right;">0.0236208</td>
-<td style="text-align: right;">27.8658</td>
+<td style="text-align: right;">-0.004</td>
+<td style="text-align: right;">0.231</td>
+<td style="text-align: right;">-25.199</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">27.866</td>
 </tr>
 </tbody>
 </table>
@@ -226,15 +226,15 @@ rtn_t=e^{logRtn_t}-1
 </blockquote>
 <table>
 <colgroup>
-<col style="width: 5%">
-<col style="width: 14%">
+<col style="width: 6%">
+<col style="width: 17%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 9%">
 <col style="width: 12%">
-<col style="width: 10%">
-<col style="width: 7%">
-<col style="width: 13%">
-<col style="width: 14%">
-<col style="width: 11%">
-<col style="width: 10%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -253,12 +253,12 @@ rtn_t=e^{logRtn_t}-1
 <tr class="odd">
 <td style="text-align: left;">rtn</td>
 <td style="text-align: right;">1.44167e+06</td>
-<td style="text-align: right;">0.0305863</td>
-<td style="text-align: right;">16.7628</td>
+<td style="text-align: right;">0.031</td>
+<td style="text-align: right;">16.763</td>
 <td style="text-align: right;">-1</td>
-<td style="text-align: right;">-0.0337052</td>
-<td style="text-align: right;">-0.00180506</td>
-<td style="text-align: right;">0.028485</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.028</td>
 <td style="text-align: right;">15695.5</td>
 </tr>
 </tbody>
@@ -273,15 +273,15 @@ rtn_t=e^{logRtn_t}-1
 </blockquote>
 <table style="width:100%;">
 <colgroup>
-<col style="width: 7%">
-<col style="width: 13%">
-<col style="width: 12%">
-<col style="width: 10%">
-<col style="width: 7%">
-<col style="width: 12%">
-<col style="width: 13%">
-<col style="width: 11%">
 <col style="width: 9%">
+<col style="width: 17%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 12%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -300,12 +300,12 @@ rtn_t=e^{logRtn_t}-1
 <tr class="odd">
 <td style="text-align: left;">rtn_1</td>
 <td style="text-align: right;">1.44094e+06</td>
-<td style="text-align: right;">0.00206201</td>
-<td style="text-align: right;">0.419397</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.419</td>
 <td style="text-align: right;">-1</td>
-<td style="text-align: right;">-0.0343359</td>
-<td style="text-align: right;">-0.00237246</td>
-<td style="text-align: right;">0.0269167</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
 <td style="text-align: right;">427.365</td>
 </tr>
 </tbody>
