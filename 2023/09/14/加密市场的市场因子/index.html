@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E4%B8%8D%E5%90%ABbtc%E7%9A%84%E5%90%84%E6%8E%92%E5%90%8D%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E5%8F%8Abtc%E5%87%80%E5%80%BC%E5%88%86%E6%AE%B5.jpg">
 <meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E4%B8%8D%E5%90%ABbtc%E7%9A%84%E5%90%84%E6%8E%92%E5%90%8D%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E5%8F%8Abtc%E7%9B%B8%E5%85%B3%E6%80%A7.jpg">
 <meta property="article:published_time" content="2023-09-14T02:22:48.000Z">
-<meta property="article:modified_time" content="2023-10-30T09:05:14.285Z">
+<meta property="article:modified_time" content="2023-10-30T09:23:15.423Z">
 <meta property="article:author" content="雨师">
 <meta property="article:tag" content="加密货币">
 <meta property="article:tag" content="因子投资">
@@ -268,7 +268,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-10-30 17:05:14" itemprop="dateModified" datetime="2023-10-30T17:05:14+08:00">2023-10-30</time>
+      <time title="修改时间：2023-10-30 17:23:15" itemprop="dateModified" datetime="2023-10-30T17:23:15+08:00">2023-10-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -427,7 +427,7 @@ rtn_t=e^{logRtn_t}-1
 <p>对原数据进行的任何过滤都要万分小心。</p>
 <p>在过滤数据之前，我们先阐述一下投资组合的构建方法，防止数据丢失引起的错误。</p>
 <p>过滤后真正有效的收益率是次期收益率<span class="math inline">\(rtn\_1\)</span>或次期对数收益率<span class="math inline">\(logRtn\_1\)</span>，因为我们构建投资组合时用到的筛选值为当期值、但筛选后的效果只有在次期才能体现。</p>
-<p>真实的投资必须考虑不能有未来数据，故需要用上一交易周期的数据进行筛选，然后持有到当前交易周期的收盘。由于此时有些币种可能已经不在新筛选出的数据范围内了，故在过滤前需要先计算出每个币（如上重名、多名现象，对应唯一的cmc_id且唯一symbol才是一个币实体）的次期收益率<span class="math inline">\(rtn\_1\)</span>或次期对数收益率<span class="math inline">\(logRtn\_1\)</span>。</p>
+<p>真实的投资必须考虑不能有未来数据，故需要用上一交易周期的数据进行筛选，然后持有到当前交易周期的收盘。由于此时有些币种可能已经不在新筛选出的数据范围内了，故在过滤前需要先计算出每个币（如下文所述的重名、多名现象，对应唯一的cmc_id且唯一symbol才是一个币实体）的次期收益率<span class="math inline">\(rtn\_1\)</span>或次期对数收益率<span class="math inline">\(logRtn\_1\)</span>。</p>
 <p>用次期收益率<span class="math inline">\(rtn\_1\)</span>构建投资组合（进行时间上的<code>shift</code>），这样构建就不会有未来数据和数据缺失的问题。</p>
 <h3 id="交易量市值过滤">交易量市值过滤</h3>
 <h4 id="规则">规则</h4>
