@@ -93,7 +93,7 @@ logRtn_t=log(close_t)-log(close_{t-1})
 <p><span class="math display">\[\begin{equation}\label{eq3}
 rtn_t=e^{logRtn_t}-1
 \end{equation}\]</span></p>
-<p>计算进行如下处理，初步避免异常值：</p>
+<p>计算前进行了如下处理，初步避免异常值：</p>
 <blockquote>
 <ol type="1">
 <li>将收盘价为0的情况替换为空值<code>np.nan</code>，避免出现无穷大收益率；</li>
