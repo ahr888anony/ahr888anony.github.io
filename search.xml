@@ -523,7 +523,8 @@ rtn_t=e^{logRtn_t}-1
 <p><span class="math display">\[\begin{equation}\label{eq4}
 mad=median(abs(X-median(X)))
 \end{equation}\]</span></p>
-<p>异常值判断标准为超过中位数3个mad值的，用<span class="math inline">\(median\pm 3*mad\)</span>替换。</p>
+<p>异常值判断及处理标准为：超过中位数3个mad值的<span class="math inline">\(logRtn\_1\)</span>视为异常，用<span class="math inline">\(median\pm 3*mad\)</span>替换。</p>
+<p>处理完之后也需要转换为次期收益率<span class="math inline">\(rtn\_1\)</span>。</p>
 <blockquote>
 <p><font size="2"><em>各排名组及各异常值处理后的次期收益率<span class="math inline">\(rtn\_1\)</span>情况</em></font></p>
 </blockquote>
