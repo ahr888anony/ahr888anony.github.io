@@ -19,22 +19,37 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"btcrainmaker.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="本文分析了加密货币的市场因子，采用了排名前300的币种构建市场因子，并阐述了其原因。TODO 进而，从数据上解释了为什么币圈的量化机构一般都用比特币作为市场基准的原因。 最后，研究了币安上线有U本位永续合约的加密货币子集，通过t检验，得出币安U本位子集具有相较于不筛选更优期望的结论。TODO">
+    <meta name="description" content="本文首先分析加密全市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="加密市场的市场因子">
 <meta property="og:url" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/index.html">
 <meta property="og:site_name" content="雨师的博客">
-<meta property="og:description" content="本文分析了加密货币的市场因子，采用了排名前300的币种构建市场因子，并阐述了其原因。TODO 进而，从数据上解释了为什么币圈的量化机构一般都用比特币作为市场基准的原因。 最后，研究了币安上线有U本位永续合约的加密货币子集，通过t检验，得出币安U本位子集具有相较于不筛选更优期望的结论。TODO">
+<meta property="og:description" content="本文首先分析加密全市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E6%8E%92%E5%90%8D%E5%89%8D300%E6%9E%84%E5%BB%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E6%8C%87%E6%95%B0vs%E6%AF%94%E7%89%B9%E5%B8%81.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%89%8D100%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%89%8D300%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%89%8D500%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%89%8D1000%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%89%8D2000%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%85%A8%E6%95%B0%E6%8D%AE%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%90%84%E6%8E%92%E5%90%8D%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%90%84%E7%BB%84%E5%87%80%E5%80%BC%E5%88%86%E5%B9%B4%E8%B5%B0%E5%8A%BF.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E4%B8%8B%E5%90%84%E6%8E%92%E5%90%8D%E7%BB%84%E5%90%88%E5%8F%8Abtc%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%A7.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E5%90%84%E7%BB%84%E5%87%80%E5%80%BC%E5%88%86%E5%B9%B4%E8%B5%B0%E5%8A%BF.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E4%B8%8B%E5%90%84%E6%8E%92%E5%90%8D%E7%BB%84%E5%90%88%E5%8F%8Abtc%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%A7.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E4%B8%8D%E5%90%ABbtc%E7%9A%84%E5%90%84%E6%8E%92%E5%90%8D%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E5%8F%8Abtc%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E4%B8%8D%E5%90%ABbtc%E7%9A%84%E5%90%84%E6%8E%92%E5%90%8D%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E5%8F%8Abtc%E5%87%80%E5%80%BC%E5%88%86%E6%AE%B5.jpg">
+<meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E4%B8%8D%E5%90%ABbtc%E7%9A%84%E5%90%84%E6%8E%92%E5%90%8D%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E5%8F%8Abtc%E7%9B%B8%E5%85%B3%E6%80%A7.jpg">
 <meta property="article:published_time" content="2023-09-14T02:22:48.000Z">
-<meta property="article:modified_time" content="2023-09-15T06:54:51.683Z">
+<meta property="article:modified_time" content="2023-10-30T08:27:13.617Z">
 <meta property="article:author" content="雨师">
 <meta property="article:tag" content="加密货币">
 <meta property="article:tag" content="因子投资">
 <meta property="article:tag" content="比特币">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E6%8E%92%E5%90%8D%E5%89%8D300%E6%9E%84%E5%BB%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E6%8C%87%E6%95%B0vs%E6%AF%94%E7%89%B9%E5%B8%81.jpg">
+<meta name="twitter:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
 
 
 <link rel="canonical" href="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/">
@@ -161,7 +176,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90"><span class="nav-number">1.</span> <span class="nav-text">市场因子</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%B8%82%E5%9C%BA%E6%83%85%E5%86%B5"><span class="nav-number">1.</span> <span class="nav-text">全市场情况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B6%E7%9B%8A%E7%8E%87%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">收益率描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%B7%E6%A0%BC%E6%B6%A8%E5%B9%85%E6%94%B6%E7%9B%8A%E7%8E%87"><span class="nav-number">1.2.</span> <span class="nav-text">价格涨幅收益率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%95%B0%E6%94%B6%E7%9B%8A%E7%8E%87"><span class="nav-number">1.3.</span> <span class="nav-text">对数收益率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%95%E8%B5%84%E7%BB%84%E5%90%88%E6%9E%84%E5%BB%BA"><span class="nav-number">1.4.</span> <span class="nav-text">投资组合构建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E9%87%8F%E5%B8%82%E5%80%BC%E8%BF%87%E6%BB%A4"><span class="nav-number">1.5.</span> <span class="nav-text">交易量市值过滤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%84%E5%88%99"><span class="nav-number">1.5.1.</span> <span class="nav-text">规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E5%90%8D%E5%8F%8A%E5%A4%9A%E5%90%8D%E7%8E%B0%E8%B1%A1"><span class="nav-number">1.5.2.</span> <span class="nav-text">重名及多名现象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%90%8E%E7%9A%84%E6%94%B6%E7%9B%8A%E7%8E%87"><span class="nav-number">1.5.3.</span> <span class="nav-text">过滤后的收益率</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%82%E5%80%BC%E6%8E%92%E5%90%8D%E8%BF%87%E6%BB%A4"><span class="nav-number">1.6.</span> <span class="nav-text">市值排名过滤</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%A8%E9%87%8F%E6%95%B0%E6%8D%AE%E7%9A%84%E6%8E%92%E5%90%8D"><span class="nav-number">1.6.1.</span> <span class="nav-text">全量数据的排名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E6%95%B0%E6%8D%AE%E7%9A%84%E6%8E%92%E5%90%8D"><span class="nav-number">1.6.2.</span> <span class="nav-text">过滤数据的排名</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86"><span class="nav-number">1.7.</span> <span class="nav-text">异常值处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%82%E5%9C%BA%E7%BB%84%E5%90%88%E6%9E%84%E5%BB%BA"><span class="nav-number">2.</span> <span class="nav-text">市场组合构建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83"><span class="nav-number">2.1.</span> <span class="nav-text">等权重加权</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E6%94%B6%E7%9B%8A%E7%8E%87%E8%BF%9B%E8%A1%8C%E5%BC%82%E5%B8%B8%E5%80%BC%E5%A4%84%E7%90%86%E4%B8%8D%E5%90%88%E7%90%86"><span class="nav-number">2.1.1.</span> <span class="nav-text">对收益率进行异常值处理不合理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E7%9A%84%E8%A1%A8%E7%8E%B0"><span class="nav-number">2.1.2.</span> <span class="nav-text">等权重加权的表现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83"><span class="nav-number">2.2.</span> <span class="nav-text">市值加权</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%94%E9%99%A4btc%E7%9A%84%E5%B8%82%E5%9C%BA%E7%BB%84%E5%90%88"><span class="nav-number">2.2.1.</span> <span class="nav-text">剔除BTC的市场组合</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">3.1.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E"><span class="nav-number">3.2.</span> <span class="nav-text">声明</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -180,7 +195,7 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -253,7 +268,16 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-15 14:54:51" itemprop="dateModified" datetime="2023-09-15T14:54:51+08:00">2023-09-15</time>
+      <time title="修改时间：2023-10-30 16:27:13" itemprop="dateModified" datetime="2023-10-30T16:27:13+08:00">2023-10-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%95%E8%B5%84/" itemprop="url" rel="index"><span itemprop="name">投资</span></a>
+        </span>
     </span>
 
   
@@ -272,51 +296,1048 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>本文分析了加密货币的市场因子，采用了排名前300的币种构建市场因子，并阐述了其原因。TODO</p>
-<p>进而，从数据上解释了为什么币圈的量化机构一般都用比特币作为市场基准的原因。</p>
-<p>最后，研究了币安上线有U本位永续合约的加密货币子集，通过t检验，得出币安U本位子集具有相较于不筛选更优期望的结论。TODO</p>
+    <div class="post-body" itemprop="articleBody"><p>本文首先分析加密全市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。</p>
 <span id="more"></span>
-<h2 id="市场因子">市场因子</h2>
-<p>本文的数据来源于<a target="_blank" rel="noopener" href="https://coinmarketcap.com">coinmarketcap</a>，截止到2023-09-14日，该网站上收录了超过9000种数字货币。</p>
-<p>采用如下方法构建市场指数：</p>
+<h2 id="全市场情况">全市场情况</h2>
+<p>本节主要侧重分析收益率的情况。先分析了全市场的日收益率情况，然后为后续研究进行一定的数据过滤，最后进行了异常值处理。</p>
+<p>阅读本节，有助于了解加密市场的整体情况。</p>
+<h3 id="收益率描述">收益率描述</h3>
+<p>本文的数据来源于<a target="_blank" rel="noopener" href="https://coinmarketcap.com">coinmarketcap</a>，截止到2023-09-14日，该网站上收录了超过9000种以USD计价的数字货币。</p>
+<p>对于0价格、本文将其视为空缺数据、替换为<code>np.nan</code>、然后采用向下填充方式补齐。</p>
+<p>收益率有两种计算方式，价格涨幅与对数价格差。</p>
+<p>价格涨幅收益率计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq1}
+rtn_t=(close_t-close_{t-1})/close_{t-1}
+\end{equation}\]</span></p>
+<p>上式中的<span class="math inline">\(t\)</span>为第t个交易日。</p>
+<p>对数收益率计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq2}
+logRtn_t=log(close_t)-log(close_{t-1})
+\end{equation}\]</span></p>
+<p>对数收益率与价格涨幅收益率两者的转换关系为：</p>
+<p><span class="math display">\[\begin{equation}\label{eq3}
+rtn_t=e^{logRtn_t}-1
+\end{equation}\]</span></p>
+<p>计算进行如下处理，初步避免异常值：</p>
 <blockquote>
 <ol type="1">
-<li>市值大于<span class="math inline">\(10^{6}\)</span>美元的币作为有效币，不足的过滤掉；</li>
-<li>日交易量超过<span class="math inline">\(10^5\)</span>美元的作为有效币，不足的过滤掉；</li>
-<li>每个交易日收盘（UTC时间）时，选择当日市值排名前300的币持有，如果当日全市场币的数量不足300，则满足1、2条件的全选，采用市值加权构建投资组合，忽略交易成本；</li>
-<li>次日，根据新的市值排名再平衡。</li>
+<li>将收盘价为0的情况替换为空值<code>np.nan</code>，避免出现无穷大收益率；</li>
+<li>采用向下填充的方法填补收盘价空值。</li>
 </ol>
 </blockquote>
-<p>如上构建的市场指数与btc对比的走势图如下：</p>
-<p><img src="排名前300构建的市场指数vs比特币.jpg"></p>
-<p>可见市场指数与btc走势很相似，</p>
-<p>检查两者的收益率相关性，得到如下相关性表格：</p>
+<h3 id="价格涨幅收益率">价格涨幅收益率</h3>
+<p>我们可以看看如果不进行任何处理的所有币种（共9064个币种）的日收益率（共4812个交易日）描述情况，见下表：</p>
 <blockquote>
-<p><font size="2"><em>300指数与比特币收益率相关性表格</em></font></p>
+<p><font size="2"><em>价格涨幅收益率描述表</em></font></p>
 </blockquote>
-<table>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 13%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 7%">
+<col style="width: 12%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 13%">
+</colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
-<th style="text-align: right;">mkt300</th>
-<th style="text-align: right;">btc</th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">mkt300</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">0.943</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">btc</td>
-<td style="text-align: right;">0.943</td>
-<td style="text-align: right;">1</td>
+<td style="text-align: left;">rtn</td>
+<td style="text-align: right;">6.35182e+06</td>
+<td style="text-align: right;">276334</td>
+<td style="text-align: right;">5.1249e+08</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.0333691</td>
+<td style="text-align: right;">-0.000971782</td>
+<td style="text-align: right;">0.0239019</td>
+<td style="text-align: right;">1.26464e+12</td>
 </tr>
 </tbody>
 </table>
-<p>故比特币可以作为市场指数很好的代理变量，这也就是为什么加密市场通常可以将比特币作为基准的原因。</p>
-<p>这也揭示出加密市场除开比特币以外的头部币种，可以看作比特币的市值延拓。</p>
+<p>上表中count指总共的有效样本数（空值不算在内）。</p>
+<p>收益率均值达到276334的原因是处在75%之外的异常值产生了巨大影响，其中位数及四分位均处在合理范围内。</p>
+<p>由于收益率的计算采用了价格的增量法、而非对数价格差，故而收益率会呈现出正负不对称的现象、特别是在异常值区间，即上表中的最小收益率仅约-1（对应1日几乎归零、投资者完全亏损），而最大值为1.26464e+12。</p>
+<p>我们来看看天量级的最大收益率是怎么产生的。</p>
+<p>找到收益率最大值，发现为<code>BBUNNY</code>于<code>2023-08-05</code>日出现，该币种前一交易日（<code>2023-08-04</code>）的收盘价为<code>$8.200000e-13</code>，而<code>2023-08-05</code>日收盘价为<code>$1.037006</code>，涨幅惊人、不过该日的交易量仅仅为<code>$0.18</code>。如此之低的交易量，实在是不具有真实交易的潜在可能性。</p>
+<p>收益率最小值，出现在<code>2023-08-06</code>的<code>LEET</code>币，该币种前一日（<code>2023-08-05</code>）的收盘价为<code>$1.541654</code>而次日的收盘价为<code>$1.755000e-11</code>，该日的交易量仅为<code>$260.1</code>，与最大收益率的<code>BBUNNY</code>一样交易量实在是太低。</p>
+<h3 id="对数收益率">对数收益率</h3>
+<p>如果采用对数价格差法计算，则最大最小收益率会相当，如下表：</p>
+<blockquote>
+<p><font size="2"><em>对数收益率描述表</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 12%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">logRtn</td>
+<td style="text-align: right;">6.35182e+06</td>
+<td style="text-align: right;">-0.00381977</td>
+<td style="text-align: right;">0.231411</td>
+<td style="text-align: right;">-25.1988</td>
+<td style="text-align: right;">-0.0339385</td>
+<td style="text-align: right;">-0.000972255</td>
+<td style="text-align: right;">0.0236208</td>
+<td style="text-align: right;">27.8658</td>
+</tr>
+</tbody>
+</table>
+<p>可见此时最大最小值差距不大、正负收益率基本对称。</p>
+<p>不过采用对数价格差计算的收益率在计算横截面（cross-section）的投资组合时，会产生很复杂的可加性问题（可参见石川博士在知乎的回答，见<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/30113132/answer/431786548">这里</a>），不如简单收益率简洁方便。故本文采用价格涨幅法计算收益率。</p>
+<p>如果不对收益率中存在的异常值进行适当的处理，会对后续研究会造成巨大的影响、得出错误结论。</p>
+<p>出于涨跌对称的考虑，对异常值处理时选用对数收益率更方便。做投资组合时再根据<span class="math inline">\(\eqref{eq3}\)</span>式转换回价格涨幅收益率。</p>
+<h3 id="投资组合构建">投资组合构建</h3>
+<p>对原数据进行的任何过滤都要万分小心。</p>
+<p>在过滤数据之前，我们先阐述一下投资组合的构建方法，防止数据丢失引起的错误。</p>
+<p>过滤后真正有效的收益率是次期收益率<span class="math inline">\(rtn\_1\)</span>或次期对数收益率<span class="math inline">\(logRtn\_1\)</span>，因为我们构建投资组合时用到的筛选值为当期值、但筛选后的效果只有在次期才能体现。</p>
+<p>真实的投资必须考虑不能有未来数据，故需要用上一交易周期的数据进行筛选，然后持有到当前交易周期的收盘。由于此时有些币种可能已经不在新筛选出的数据范围内了，故在过滤前需要先计算出每个币（如上重名、多名现象，对应唯一的cmc_id且唯一symbol才是一个币实体）的次期收益率<span class="math inline">\(rtn\_1\)</span>或次期对数收益率<span class="math inline">\(logRtn\_1\)</span>。</p>
+<p>用次期收益率<span class="math inline">\(rtn\_1\)</span>构建投资组合（进行时间上的<code>shift</code>），这样构建就不会有未来数据和数据缺失的问题。</p>
+<h3 id="交易量市值过滤">交易量市值过滤</h3>
+<h4 id="规则">规则</h4>
+<p>将交易量低、市值低的币种过滤掉。制定如下规则：</p>
+<blockquote>
+<ol type="1">
+<li>日交易量需要不少于<span class="math inline">\(\$10^5\)</span>；</li>
+<li>市值不少于<span class="math inline">\(\$10^6\)</span>；</li>
+</ol>
+</blockquote>
+<p>进行筛选。上述筛选会将早期不符合条件的比特币也过滤掉，这是正常的。</p>
+<h4 id="重名及多名现象">重名及多名现象</h4>
+<p>筛选后剩下的symbol数有2360个、cmc_id（cmc给的唯一id）有2444个，说明有多个不同币种存在简称相同的现象；</p>
+<p>在cmc_id固定后对symbol进行二次分组后，发现有2446个币，说明有2个币具有多个symbol简称！</p>
+<p>对应的为<code>id=1720</code>的<code>IOTA</code>、其还有另一个名字<code>MIOTA</code>，两者价格、市值、交易量完全一样。</p>
+<p>另一个具有两个symbol简称的是<code>EURC</code>，它的另一个名称为<code>EUROC</code>，对应在不同交易所或链上的名称，两者之间只存在微小的差异。</p>
+<h4 id="过滤后的收益率">过滤后的收益率</h4>
+<p>此时收益率情况见下表：</p>
+<blockquote>
+<p><font size="2"><em>过滤后的收益率情况</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 14%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 13%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rtn</td>
+<td style="text-align: right;">1.44167e+06</td>
+<td style="text-align: right;">0.0305863</td>
+<td style="text-align: right;">16.7628</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.0337052</td>
+<td style="text-align: right;">-0.00180506</td>
+<td style="text-align: right;">0.028485</td>
+<td style="text-align: right;">15695.5</td>
+</tr>
+</tbody>
+</table>
+<p>可见虽然样本数量显著下降，但是异常值仍然存在。</p>
+<p>我们再次检查最大最小值出现的情况。</p>
+<p>出现上表中最大收益率的有<code>UNI</code>（需要注意cmc收录有很多简称均为<code>UNI</code>的币，本处对应的为<code>id=4307</code>的<code>UNICORN Token</code>），对应的时间在<code>2022-10-21</code>，该币种前日（<code>2022-10-20</code>）的收盘价为<code>$0.000038</code>、成交量仅<code>$3.38</code>，而收益率异常日（<code>2022-10-21</code>）的收盘价约为<code>$0.598153</code>、交易量达到<code>$210829.03</code>；</p>
+<p>最小值对应的有<code>WSPP</code>（对应的<code>id=10841</code>，<code>BSC</code>链上的<code>Wolf Safe Poor People</code>币），对应日期为<code>2021-09-13</code>、该日价格为<code>$8.398000e-11</code>、交易量<code>$128837.54</code>，发现该币种<code>2021-09-12</code>日的收盘价为<code>$0</code>、交易量<code>$126266.08</code>（注意不是近似，而真的是0，同时其交易量不为0！该币种早期有很多0价格），如开篇所述、我们将其视为空并用上个有效价格替换处理，故处理后<code>2021-09-12</code>日的收盘价为<code>$0.000295</code>（实际对应<code>2021-07-20</code>日收盘价）。</p>
+<p>由于过滤导致数据集变小，次期收益率能保证投资组合时数据不丢失，次期收益率情况见下表：</p>
+<blockquote>
+<p><font size="2"><em>过滤后的次期收益率情况</em></font></p>
+</blockquote>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 11%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rtn_1</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.00206201</td>
+<td style="text-align: right;">0.419397</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.0343359</td>
+<td style="text-align: right;">-0.00237246</td>
+<td style="text-align: right;">0.0269167</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+</tbody>
+</table>
+<p>可见异常值情况也存在。</p>
+<h3 id="市值排名过滤">市值排名过滤</h3>
+<p>按照市值排名进行过滤，是截面（cross-section）过滤，指的是只保留截面上市值排名靠前的币种，如果某个交易日数据量不足排名数、则选用当日的全量数据。</p>
+<h4 id="全量数据的排名">全量数据的排名</h4>
+<p>首先，我们选用全量数据进行观察。</p>
+<p>我们作出排名前100、前300、前1000、前2000及全量数据的次期收益率描述情况。</p>
+<blockquote>
+<p><font size="2"><em>全量数据、市值排名筛选的次期收益率<span class="math inline">\(rtn\_1\)</span>情况</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 18%">
+<col style="width: 12%">
+<col style="width: 16%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">top_100</td>
+<td style="text-align: right;">347371</td>
+<td style="text-align: right;">25.877</td>
+<td style="text-align: right;">15247.5</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.035</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">8.98659e+06</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300</td>
+<td style="text-align: right;">861227</td>
+<td style="text-align: right;">10.567</td>
+<td style="text-align: right;">9683.94</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.037</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.032</td>
+<td style="text-align: right;">8.98659e+06</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500</td>
+<td style="text-align: right;">1.28833e+06</td>
+<td style="text-align: right;">7.067</td>
+<td style="text-align: right;">7917.66</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.038</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.032</td>
+<td style="text-align: right;">8.98659e+06</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000</td>
+<td style="text-align: right;">2.19656e+06</td>
+<td style="text-align: right;">4.152</td>
+<td style="text-align: right;">6063.72</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.038</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.032</td>
+<td style="text-align: right;">8.98659e+06</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000</td>
+<td style="text-align: right;">3.34636e+06</td>
+<td style="text-align: right;">6.786</td>
+<td style="text-align: right;">8582.5</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.037</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.031</td>
+<td style="text-align: right;">1.2867e+07</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all</td>
+<td style="text-align: right;">6.35182e+06</td>
+<td style="text-align: right;">276334</td>
+<td style="text-align: right;">5.1249e+08</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.26464e+12</td>
+</tr>
+</tbody>
+</table>
+<p>可见单纯进行市值排名过滤，不能起到过滤掉异常收益率的效果。</p>
+<h4 id="过滤数据的排名">过滤数据的排名</h4>
+<p>本小节是对已经采用交易量市值过滤规则后的数据进行排名，然后筛选排名靠前的数据。</p>
+<p>仍然作出排名前100、前300、前1000、前2000及全量数据的次期收益率描述情况，如下表：</p>
+<blockquote>
+<p><font size="2"><em>筛选后数据、市值排名筛选的次期收益率<span class="math inline">\(rtn\_1\)</span>情况</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 12%">
+<col style="width: 21%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">top_100</td>
+<td style="text-align: right;">246308</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.083</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.029</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">3.556</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300</td>
+<td style="text-align: right;">668131</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.532</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500</td>
+<td style="text-align: right;">938668</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.454</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000</td>
+<td style="text-align: right;">1.39848e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.425</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.419</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.419</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+</tbody>
+</table>
+<p>可见如想进一步处理异常值，需要额外的办法。</p>
+<h3 id="异常值处理">异常值处理</h3>
+<p>对异常值的任何处理，都可能造成模型与研究结论的改变，需要谨慎使用。</p>
+<p>异常值的常用处理办法有放缩法、mad法、均值-方差法三种，这三种方法应该对异常上涨和异常下跌平等的处理，故应该处理次期对数收益率<span class="math inline">\(logRtn\_1\)</span>。由于加密市场收益率异常值对均值方差影响太大，故均值-方差法不适用，本文不进行讨论。</p>
+<p>缩放法的参数为0.02，即将次期对数收益率处在分位数<span class="math inline">\([0, 0.02]\)</span>和<span class="math inline">\([0.98, 1]\)</span>的用临界值<span class="math inline">\(logRtn\_1_{0.02}\)</span>和<span class="math inline">\(logRtn\_1_{0.98}\)</span>代替。完成缩放后，按照<span class="math inline">\(\eqref{eq3}\)</span>得出处理后的次期收益率<span class="math inline">\(rtn\_1\)</span>。</p>
+<p>mad（中位数绝对值离差的中位数）的计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq4}
+mad=median(abs(X-median(X)))
+\end{equation}\]</span></p>
+<p>异常值判断标准为超过中位数3个mad值的，用<span class="math inline">\(median\pm 3*mad\)</span>替换。</p>
+<blockquote>
+<p><font size="2"><em>各排名组及各异常值处理后的次期收益率<span class="math inline">\(rtn\_1\)</span>情况</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 18%">
+<col style="width: 17%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">top_100_raw</td>
+<td style="text-align: right;">246308</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.083</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.029</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">3.556</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_100_win</td>
+<td style="text-align: right;">246308</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.069</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.029</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_100_mad</td>
+<td style="text-align: right;">246308</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.514</td>
+<td style="text-align: right;">-0.028</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300_raw</td>
+<td style="text-align: right;">668131</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.532</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_300_win</td>
+<td style="text-align: right;">668131</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.071</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300_mad</td>
+<td style="text-align: right;">668131</td>
+<td style="text-align: right;">-0.003</td>
+<td style="text-align: right;">0.059</td>
+<td style="text-align: right;">-0.566</td>
+<td style="text-align: right;">-0.032</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500_raw</td>
+<td style="text-align: right;">938668</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.454</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_500_win</td>
+<td style="text-align: right;">938668</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.07</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500_mad</td>
+<td style="text-align: right;">938668</td>
+<td style="text-align: right;">-0.003</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.572</td>
+<td style="text-align: right;">-0.032</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000_raw</td>
+<td style="text-align: right;">1.39848e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.425</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_1000_win</td>
+<td style="text-align: right;">1.39848e+06</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.071</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000_mad</td>
+<td style="text-align: right;">1.39848e+06</td>
+<td style="text-align: right;">-0.004</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.572</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000_raw</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.419</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_2000_win</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.072</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000_mad</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">-0.004</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.572</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all_raw</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.419</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">all_win</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.072</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all_mad</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">-0.004</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.572</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+</tbody>
+</table>
+<p>上表中处理方法名称后缀<code>_raw</code>代表未经处理的数据、后缀<code>_win</code>代表缩放法处理的数据、后缀<code>_mad</code>代表mad法处理的数据。</p>
+<p>可见两种处理方法对比，mad对异常值的处理效果更好，不过也意味着更失真，因为加密市场的日涨幅超过10倍是较常见的事情。如果需要研究更准确的投资组合、或者极限抗压情况，则不应该进行收益率异常值处理。</p>
+<p>后续的市场因子研究，我们将用分缩放法处理、mad法处理、没进行异常值处理3中情况进行比较讨论。</p>
+<h2 id="市场组合构建">市场组合构建</h2>
+<p>我们利用上述处理过的收益率来构建市场投资组合，以代表整个加密市场。本节分等权重与市值加权两种情况讨论。</p>
+<p>等权重加权会加大市值小的币种权重，有潜在暴涨的可能性，对于很多投机者来说，这意味着机会，故本节也兼顾讨论。市值加权更能反应整体市场情况，反应了整个市场可以容纳的资金情况下的表现。</p>
+<h3 id="等权重加权">等权重加权</h3>
+<p>所谓的等权重加权就是，在每一个交易日，将所有非空值的币种收益率（实际是次期收益率）取均值，也即对收益率取截面平均。如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq5}
+rtn_{eq}^t=\sum_{j}^{N^t} \frac{1}{N^t}*rtn_j^t
+\end{equation}\]</span></p>
+<p>上式中的<span class="math inline">\(t\)</span>为第t个交易日，<span class="math inline">\(j\)</span>为截面上（第t个交易日内）收益率非空的第j个币种，<span class="math inline">\(N^t\)</span>为第t个交易日、收益率非空的币种总数。</p>
+<p>如上计算的等权重加权收益率描述统计情况见下表：</p>
+<blockquote>
+<p><font size="2"><em>等权重加权下，各排名组及各异常值处理方式的收益率描述情况</em>
+</font></p>
+</blockquote>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">top_100_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_100_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_100_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.047</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_300_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.047</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.02</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.018</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_500_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.047</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_1000_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.022</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.017</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_2000_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.022</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.017</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">all_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.022</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+</tbody>
+</table>
+<p>上表中的后缀<code>_raw</code>代表未经处理的数据、后缀<code>_win</code>代表缩放法处理的数据、后缀<code>_mad</code>代表mad法处理的数据。</p>
+<p>从上表可见各排名截断下，均值、中位数、标准差均是
+<code>raw &gt; win &gt; mad</code>。</p>
+<h4 id="对收益率进行异常值处理不合理">对收益率进行异常值处理不合理</h4>
+<p>仅仅作出汇总统计表很不直观，且考虑到各组净值的量级差异太大不便直接对比观察，故作出对数净值图，如下：</p>
+<figure>
+<img src="等权重加权对数净值走势图.jpg" alt="等权重加权对数净值走势图">
+<figcaption aria-hidden="true">等权重加权对数净值走势图</figcaption>
+</figure>
+<p>发现仍然不能很好的观察区分，进行分组对比。</p>
+<p>排名前100的对数净值走势对比如下：</p>
+<figure>
+<img src="前100等权重加权对数净值走势图.jpg" alt="前100等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前100等权重加权对数净值走势图</figcaption>
+</figure>
+<p>前300如下：</p>
+<figure>
+<img src="前300等权重加权对数净值走势图.jpg" alt="前300等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前300等权重加权对数净值走势图</figcaption>
+</figure>
+<p>前500：</p>
+<figure>
+<img src="前500等权重加权对数净值走势图.jpg" alt="前500等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前500等权重加权对数净值走势图</figcaption>
+</figure>
+<p>前1000：</p>
+<figure>
+<img src="前1000等权重加权对数净值走势图.jpg" alt="前1000等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前1000等权重加权对数净值走势图</figcaption>
+</figure>
+<p>前2000：</p>
+<figure>
+<img src="前2000等权重加权对数净值走势图.jpg" alt="前2000等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前2000等权重加权对数净值走势图</figcaption>
+</figure>
+<p>全数据：</p>
+<figure>
+<img src="全数据等权重加权对数净值走势图.jpg" alt="全数据等权重加权对数净值走势图">
+<figcaption aria-hidden="true">全数据等权重加权对数净值走势图</figcaption>
+</figure>
+<p>可见进行收益率异常值处理会导致投资组合结果严重失真。后续研究只采用没有进行收益率异常值处理的数据，并去掉后缀<code>_raw</code>。</p>
+<h4 id="等权重加权的表现">等权重加权的表现</h4>
+<p>故后续不应该采用收益率异常值处理过的数据进行投资组合研究。各排名组合的对比走势图如下：</p>
+<figure>
+<img src="各排名等权重加权对数净值.jpg" alt="各排名等权重加权对数净值">
+<figcaption aria-hidden="true">各排名等权重加权对数净值</figcaption>
+</figure>
+<p>可见在等权重加权下，全量数据（经过市值、交易量过滤）投资组合表现最好，且排名选择的范围越大越好。</p>
+<p>加入了比特币作为对比的净值分段走势如下：</p>
+<figure>
+<img src="等权重加权各组净值分年走势.jpg" alt="等权重加权各组净值分年走势">
+<figcaption aria-hidden="true">等权重加权各组净值分年走势</figcaption>
+</figure>
+<p>可见通过等权重加权方式构建的投资组合与比特币的走势具有很强的相关性，各市值排名组合的表现好于比特币，这意味着加密市场具有很好的投资机会可供挖掘。</p>
+<p>我们作出各投资组合与比特币收益率之间的相关性，如下：</p>
+<figure>
+<img src="等权重加权下各排名组合及btc的相关性.jpg" alt="等权重加权下各排名组合及btc的相关性">
+<figcaption aria-hidden="true">等权重加权下各排名组合及btc的相关性</figcaption>
+</figure>
+<p>从相关性数值上证明了btc与各组合间具有很强的相关性。</p>
+<p>市值排名前300、500、1000、2000及不进行市值排名过滤的组合效果差别不大。</p>
+<h3 id="市值加权">市值加权</h3>
+<p>由于市值的限制，我们实际上对等权重加权进行投资组合的可能性很低，市值排名越靠后的币种的资金容量越有限，较大资金不太容易买卖。故市值加权更具有可投资性。</p>
+<p>某一交易日<span class="math inline">\(t\)</span>的截面上，市值加权收益率的计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq6}
+rtn_{mkt}^t=\sum_{i}^{N^{t-1}}
+\frac{mkt_i^{t-1}}{\sum_{i}^{N^{t-1}}mkt_i^{t-1}}*rtn_i^t
+\end{equation}\]</span></p>
+<p>上式中<span class="math inline">\(N^{t-1}\)</span>代表的上一交易日结束时的币种数量。市值<span class="math inline">\(mkt\)</span>与收益率<span class="math inline">\(rtn\)</span>之间有1期的偏差，即利用上一期的市值进行加权获得当期的收益率。</p>
+<p>市值加权各组的对数净值表现如下：</p>
+<p><img src="市值加权对数净值走势图.jpg"></p>
+<p>对数净值走势非常接近。作出净值分段时序图，如下：</p>
+<figure>
+<img src="市值加权各组净值分年走势.jpg" alt="市值加权各组净值分年走势">
+<figcaption aria-hidden="true">市值加权各组净值分年走势</figcaption>
+</figure>
+<p>收益率相关性热图如下：</p>
+<figure>
+<img src="市值加权下各排名组合及btc的相关性.jpg" alt="市值加权下各排名组合及btc的相关性">
+<figcaption aria-hidden="true">市值加权下各排名组合及btc的相关性</figcaption>
+</figure>
+<p>可见市值加权下，各排名组合的相关性非常高、接近1，且都与btc的相关性高达0.96以上。</p>
+<p>市值排名前100、300、500、1000、2000及不进行市值排名过滤的组合效果差别不大，均可作为市场因子的代理。</p>
+<h4 id="剔除btc的市场组合">剔除BTC的市场组合</h4>
+<p>上文讨论了市值加权下各排名组合的相关性情况，可以看出在加密市场中，btc也是一个很好的市场因子代理变量。即然比特币可以作为市场代理，那么加密市场除了比特币之外的其他币种的组合又是什么样子呢？我们将btc从投资组合中剔除，观察不包含btc的市值加权组合情况，且将它们与btc进行对比。</p>
+<p>首先作出对数净值走势，如下：</p>
+<figure>
+<img src="不含btc的各排名市值加权及btc对数净值走势.jpg" alt="不含btc的各排名市值加权及btc对数净值走势">
+<figcaption aria-hidden="true">不含btc的各排名市值加权及btc对数净值走势</figcaption>
+</figure>
+<p>分段走势：</p>
+<figure>
+<img src="不含btc的各排名市值加权及btc净值分段.jpg" alt="不含btc的各排名市值加权及btc净值分段">
+<figcaption aria-hidden="true">不含btc的各排名市值加权及btc净值分段</figcaption>
+</figure>
+<p>相关性热图：</p>
+<figure>
+<img src="不含btc的各排名市值加权及btc相关性.jpg" alt="不含btc的各排名市值加权及btc相关性">
+<figcaption aria-hidden="true">不含btc的各排名市值加权及btc相关性</figcaption>
+</figure>
+<p>由净值及相关性可见，除去btc后的各组间的相关性仍然很高，且收益率与btc具有较高的正相关性。</p>
+<p>这与人们普遍感觉到的机密市场同涨同跌的现象很符合。</p>
+<h2 id="总结">总结</h2>
+<p>本文进行了如下工作：</p>
+<ol type="1">
+<li>分析了全加密市场的收益率情况，列举了一些异常收益率的情况；</li>
+<li>进行了市值与交易量过滤，将交易量及市值过低的币种去掉，组建了市值排名前100、300、500、1000、2000及全量数据（进行了交易量、市值过滤），发现不能对异常收益率进行异常值处理，处理后的数据与原数据组合表现的差异会很大；</li>
+<li>进行了等权重加权构建市场组合，发现除排名前100之外的其他组合之间的相关性很高；加上btc之后，发现投资组合之间的正相关性很高，且排名选择的范围越大、相较于btc的表现越好；</li>
+<li>进行了市值加权构建市场组合，发现各排名的组合之间的相关性很高，且均与btc具有很高的相关性，故可以将比特币作为市场代理变量；</li>
+<li>进一步将比特币从市值加权投资组合中剔除，发现各排名组合之间的相关性仍然很高，且仍与btc具有很高的正相关性。</li>
+</ol>
+<h3 id="结论">结论</h3>
+<p>本文说明比特币本身就可以作为全加密市场市场因子的很好代理。</p>
+<p>如需进一步精确，采用市值排名前300、500、1000、2000或全量数据作为市场因子代理的效果差不多。</p>
+<h3 id="声明">声明</h3>
+<p>本文涉及到很多技术细节，略显乏味，希望能供对加密市场感兴趣的研究人员参考，不构成投资建议。</p>
+<p>谢谢阅读！</p>
 
     </div>
 
@@ -481,7 +1502,7 @@
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="/js/third-party/math/mathjax.js"></script>
 
 

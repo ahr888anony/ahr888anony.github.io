@@ -1,170 +1,1876 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>比特币S2F模型还适用吗</title>
-      <link href="/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/"/>
-      <url>/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/</url>
-      
-        <content type="html"><![CDATA[<p>在上轮比特币减半（2020-05-11减半）周期中，<a href="https://twitter.com/100trillionusd/">PlanB</a>的<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F模型</a>扮演了非常重要的角色，<a href="https://charts.bitbo.io/stock-to-flow/">该模型预测</a>的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#对数供给量多项式模型">对数供给量多项式模型</a>的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与市值的关系。</p><span id="more"></span><h2 id="s2f模型的不足">S2F模型的不足</h2><p>正如我之前的文章所指出的（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">比特币的价格模型</a>一节），按照S2F模型，比特币会无限上涨。更量化的，每4年减半一次都上涨接近10倍，没有尽头。特别是当比特币增量为0后（2140年后），按照S2F模型，<span class="math inline">\(stock/flow\)</span>会变为无穷大。按该模型预测，比特币的市值会趋于无穷大。</p><p>众所周知，目前美元m2总量才21万亿左右，只要美元的计价地位不变（美元仍为本位货币），则比特币的市值不应该超过21万亿美元太多。</p><p>PlanB的原始模型显然没有考虑这一限制，特别是其对涨幅衰减效应的欠考虑，引起模型与真实情况的偏离，最终导致预测上轮（对应2020-05-11减半）牛市的价格区间出错。这是该模型最大的一个不足之处。</p><p>另外，该模型还进行了跨市场的验证，其中包含了黄金和白银等，得出S2F越大则市值越大的结论。照此推论，黄金的S2F值高于美元，那么为什么黄金的市值低于美元？这显然也不合理。</p><p>最后，近年来大为流行的NFT产品，具有唯一性，这类产品的S2F理论上应该趋于无穷大，但现实中只有极少数NFT产品卖出了天价，这显然也与S2F模型所描述的规律不一样。</p><h2 id="s2f简化模型建模">S2F简化模型建模</h2><p>本节对S2F模型做了一些简化处理，得出与原始版本相当的结论。</p><p>首先，与原文的方式不同，本文存量（stock）采用如下更简单的方式计算：</p><p><span class="math display">\[\begin{equation}\label{eq1}stock_i=market\_cap_i/close_i\end{equation}\]</span></p><p>其中i代表第i个交易日，下同。下文用<span class="math inline">\(M\)</span>代表市值、<span class="math inline">\(S\)</span>代表存量。另外，本文的数据采用日频数据，而非原本S2F模型的月度数据。</p><p>流通量（flow）与PlanB的定义也不同，不采用年化的产量，而直接采用日产量（即stock的增量），计算方法如下：</p><p><span class="math display">\[\begin{equation}\label{eq2}flow_i=\Delta S_i=S_i-S_{i-1}\end{equation}\]</span></p><p>这种直接计算存量、流通量的方法更简单，理论上与原版模型只有常数（会略微有一点随机偏差）差异。</p><p>有了存量、流通量后，自然有：</p><p><span class="math display">\[\begin{equation}\label{eq3}S2F_i=S_i/flow_i\end{equation}\]</span></p><p>如上计算出<span class="math inline">\(S2F\)</span>后，先观察未进行处理的对数<span class="math inline">\(S2F\)</span>值、即<span class="math inline">\(log(S2F)\)</span>（简计为<span class="math inline">\(logS2F\)</span>）与对数市值<span class="math inline">\(log(M)\)</span>（简记<span class="math inline">\(logM\)</span>）的走势图，如下：</p><figure><img src="logM与logS2F未处理走势图.jpg" alt="logM与logS2F未处理走势图"><figcaption aria-hidden="true">logM与logS2F未处理走势图</figcaption></figure><p>可见有不少异常数据。采用如下mad法来处理异常值：</p><blockquote><p>采用中位数绝对偏差法（mad法），选择1月滚动回视窗口，即<span class="math inline">\(window=30\)</span>，将与中位数（滚动median值）偏差超过3倍mad值的数值视为异常值，采用滚动<span class="math inline">\(median\pm3*mad\)</span>值替换异常值，即超出上限的用上限替换、超出下限的用下限替换。</p></blockquote><p>其中mad值的计算如下：</p><p><span class="math display">\[\begin{equation}\label{eq4}mad=median(abs(X-median(X))\end{equation}\]</span></p><p>采用上述方法、会将减半日的<span class="math inline">\(logS2F\)</span>跳跃效应延迟，在滞后约<span class="math inline">\(window/2=15\)</span>期后才会过渡到真实的<span class="math inline">\(logS2F\)</span>值。这一处理无伤大雅，不妨碍揭示出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的关系。</p><p>做了异常值处理的<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>走势对比如下：</p><figure><img src="logM与logS2F进行异常值处理后的走势图.jpg" alt="logM与logS2F进行异常值处理后的走势图"><figcaption aria-hidden="true">logM与logS2F进行异常值处理后的走势图</figcaption></figure><p>可见减半日附近的<span class="math inline">\(logS2F\)</span>跳跃效应依然存在，曲线中的异常值被很好的处理了。下文中均采用处理过的<span class="math inline">\(logS2F\)</span>来建模及讨论。</p><p>先做出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的线性回归图：</p><figure><img src="logM与异常值处理后的logS2F线性回归图.jpg" alt="logM与异常值处理后的logS2F线性回归图"><figcaption aria-hidden="true">logM与异常值处理后的logS2F线性回归图</figcaption></figure><p>图中的线性关系为：</p><p><span class="math display">\[\begin{equation}\label{eq5}logM=-4.55+3.21*logS2F\end{equation}\]</span></p><p>这一拟合结果与PlanB的结果非常相近（参见<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">此处</a>），他得到的系数为3.32。故本文采用的简单计算方式与原文的计算方式区别不大。</p><p>从上图可以很明显的观察到：对应3次减半形成的4个时间区域，<span class="math inline">\(logS2F\)</span>数据形成了4个区分明显的阶梯。随着<span class="math inline">\(logS2F\)</span>的增大、对应减半次数的增加，<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的波动范围在缩小，波动性呈下降趋势。</p><p>不管从哪种意义上来说，上图的结果都是让人震惊的。与原文采用月频数据（111个样本）不同，本文在考虑了包含最新数据的日频数据（样本更多，共4826个样本）、且更改了计算方法后，仍可得出如下结论：</p><blockquote><p><font color="red"><strong>在目前阶段，线性的S2F模型依然可以作为价格规律的一个比较有效的近似。</strong></font></p></blockquote><p>但仍然需要指出的是，在<span class="math inline">\(logS2F\)</span>的最右侧区域（对应的是2020-05-11减半之后的数据），阶梯上升有减小的趋势，如我在2023-09-25所写的<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#引言">文章</a>所指出的那样。</p><p>由于减半次数太少（只发生了3次），这意味着目前有效的自变量变化范围尚且太小，线性拟合可以是很多种函数在局部区域的近似，并不能断言<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>两者就是线性关系。</p><h2 id="s2f模型与多项式拟合的关系">S2F模型与多项式拟合的关系</h2><p>下面我将讨论S2F模型与对数供给量多项式价格模型（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">此处</a>）的关系，得出多项式模型是对S2F模型的批判性继承的结论。</p><p>我们将<span class="math inline">\(flow\)</span>简计为<span class="math inline">\(F\)</span>，S2F模型可以一般的表达为：</p><p><span class="math display">\[\begin{equation}\label{eq6}\begin{aligned}logM &amp; =a+b*logS2F\\ &amp;=a+b*(logS-logF)\\&amp;=a+b*(logS-log\Delta S)\end{aligned}\end{equation}\]</span></p><p>其中<span class="math inline">\(\Delta S\)</span>是<span class="math inline">\(S\)</span>的一阶小量，有如下特点：</p><ol type="1"><li>随着减半次数的进一步增加<span class="math inline">\(\DeltaS\)</span>会变得越来越小，直至减半终结而趋于0；</li><li>在<span class="math inline">\(\Delta S&gt;1\)</span>时，<span class="math inline">\(log\DeltaS\)</span>会随着减半次数增加而单调递减，对应的<span class="math inline">\(logS\)</span>项则会越来越大，此时<span class="math inline">\(log\DeltaS\)</span>项的影响随着减半增加会越来越低，可作为微扰项，将其忽略影响不大；</li><li>当<span class="math inline">\(\Delta S&lt;1\)</span>时，<span class="math inline">\(log\DeltaS\)</span>会随着减半次数的进一步增加而变为负数、其绝对值越来越大、最终趋于无穷。此时该项的影响会超过<span class="math inline">\(logS\)</span>项，且其引入了与真实情况有悖的不可解释的效应，这些效应只在减半快要结束时才出现、并没有现实支撑。明显是不合理的，此时更应将该项舍弃；</li></ol><p>如上分析，<span class="math inline">\(\eqref{eq6}\)</span>最后的<span class="math inline">\(log\DeltaS\)</span>项在减半周期较小时才有意义，将其舍弃后模型才更合理。</p><p>结合市值的定义，上式可以如下转换：</p><p><span class="math display">\[\begin{equation}\label{eq7}\begin{aligned}log(S*P)  &amp;=a+b*logS \\ \Rightarrow logS+logP &amp;= a+b*logS \\\Rightarrow logP &amp;=a+(b-1)*logS \\ \RightarrowlogP&amp;=a+b&#39;*logS\end{aligned}\end{equation}\]</span></p><p>即舍弃了不合理部分的S2F模型化成了多项式拟合的1阶形式。</p><p>下面做出<span class="math inline">\(logS\)</span>与<span class="math inline">\(logP\)</span>的线性回归图，以验证舍去<span class="math inline">\(log\Delta S\)</span>项是否合理：</p><figure><img src="logS与logP的线性回归图.jpg" alt="logS与logP的线性回归图"><figcaption aria-hidden="true">logS与logP的线性回归图</figcaption></figure><p>通过上图的数据实证可见，两者效果上基本等价（1阶多项式拟合的<span class="math inline">\(R^2\)</span>为0.91，S2F模型为0.93），印证了<span class="math inline">\(log\Delta S\)</span>项实际上是冗余的。</p><p>从而，得出如下结论：</p><blockquote><p><font color="red"><strong>对数供给量多项式拟合可以被视为S2F模型的一种更合理的、可拓展的形式，其更适用于有极限价格的实际情况</strong>。</font></p></blockquote><h2 id="稀缺性与市值">稀缺性与市值</h2><p>稀缺性（仍可用S2F值代表）与市值，是一个很复杂的问题，本文目前仅仅只做一些逻辑上的讨论，更量化的讨论留待将来进行。</p><p>到目前为止，在流通性良好且为人们普遍接受的商品中，黄金的稀缺性是公认较高的，但其并没有超过以m2衡量的美元的市值，这或许与黄金不具有本位币地位有关。金本位的崩溃促使黄金退化为了一种普通商品，相较于可以购买一切的本位币而言，人们对黄金的潜在需求下降，导致其市值相较于美元缩水。</p><p>这对比特币的警示意义在于：如果其最终不能取得本位币地位，则其市值不太可能超越以m2衡量的美元，从而2140年之后btc的价格可能达不到以当前美元价值衡量的100万美元/BTC。</p><p>稀缺性高于黄金S2F值的商品，如古董、艺术品、NFT产品等，由于供给量限定，S2F会很高，但其价格的差别却很大、大多市值也很有限，并不完全遵循越稀缺市值越高的规律。显然，造成这一现象的主要的原因在于是否有足够的潜在购买者为其稀缺性买单。</p><p>这对于比特币的警示意义在于：虽然目前btc的流通性很好，但如果比特币不能更多的为大众所接纳，其使用场景不能更近一步增加，则人们很难会进一步为其稀缺性买单，从而减半导致的稀缺性上升也不能很好的反映在市值上，即便最终其S2F趋近于无穷大，也不代表其市值就会上涨到很高的水平。</p><h2 id="致谢与声明">致谢与声明</h2><p>本文仅仅是在做技术上的尝试，不构成投资建议，望读者自行甄别。</p><p>限于本人的水平，本文错谬之处在所难免，期待方家指正。</p><p>感谢您的阅读！</p><p>本文完。</p>]]></content>
-      
-      
+<search>
+  <entry>
+    <title>使用hexo遇到的坑</title>
+    <url>/2023/08/31/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
+    <content><![CDATA[<p>在初次使用hexo时，遇到一系列问题。现在开启这篇文章记录之。</p>
+<span id="more"></span>
+<h2 id="git提交用户与git登陆用户不一致问题">1.
+git提交用户与git登陆用户不一致问题</h2>
+<p>在实际操作时，发现GitHub提交项目的用户仍为之前<code>git config --global</code>设置的用户及邮箱，并没有采用<code>git config --local</code>设置或<code>_config.yml</code>文件中配置的参数，实际登陆用户为<code>--local</code>设置的那个，采用的ssh密钥也是这个用户。</p>
+<p>其中<code>_config.yml</code>的相关配置如下：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repository:</span> <span class="string">git@xxx.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">user01</span></span><br><span class="line">  <span class="attr">email:</span> <span class="string">email01@xxx.com</span></span><br></pre></td></tr></table></figure>
+<p>出现的问题如图：</p>
+<p><img src="用户修复.png"></p>
+<p>上图框中的用户名是问题修复后的，修复前为其他用户。</p>
+<p>问题产生的原因是hexo在第一次部署后会记录用户相关参数，保存在了<code>.deploy_git</code>文件中，之后一直延续之，故不论后续怎么修正都仍然采用的之前保留的用户。</p>
+<p>解决办法是在添加局域用户名后，删除本项目的<code>.deploy_git</code>文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">rm</span> -rf .deploy_git</span><br></pre></td></tr></table></figure>
+<p>然后重新部署即可。</p>
+<h2 id="typora与hexo的图片引用地址不一致问题">2.
+typora与hexo的图片引用地址不一致问题</h2>
+<p>在显示上面那张图片时存在hexo图片不显示的问题：</p>
+<p>图片保存地址为：</p>
+<p><code>source/_posts/&#123;文稿名称对应的资源文件夹&#125;/&#123;引用图片&#125;</code></p>
+<p>在typora中的相对位置需要指定图片文件的上层目录才可以引用、即需要指定：</p>
+<p><code>![](&#123;文稿名称对应的资源文件夹&#125;/&#123;引用图片&#125;)</code></p>
+<p>才可显示。</p>
+<p>而hexo按照教程（ <a href="https://hexo.io/docs/asset-folders#Embedding-an-image-using-markdown">资源文件夹</a>）设置后，不需要指定<code>&#123;文稿名称对应的资源文件夹&#125;</code>。</p>
+<p>在知乎上找到了<a href="https://zhuanlan.zhihu.com/p/542101567">解决方案</a>。需要更改</p>
+<p><code>node_modules</code> --&gt; <code>hexo-asset-image</code> --&gt;
+<code>index.js</code></p>
+<p>第58行的代码：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">$(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, config.<span class="property">root</span> + link + src);</span><br></pre></td></tr></table></figure>
+<p>改为：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">$(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, src);</span><br></pre></td></tr></table></figure>
+<p>最后在<code>*.md</code>文件中引用图片时还是需要指定没有<code>.md</code>文件名命名的文件夹作为索引路径，即：</p>
+<p><code>![](&#123;文件名&#125;/&#123;图片&#125;)</code></p>
+<p>然后执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure>
+<p>即可在本地浏览器看到正确的图片。</p>
+<h2 id="hexo每次部署后均需要重新配置自定义域名">3.
+hexo每次部署后均需要重新配置自定义域名</h2>
+<p>在每次新写文章之后，执行了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
+<p>结果发现GitHub上的项目历史commit记录丢失，且在<code>Settings -&gt; Pages -&gt; Custom domain</code>中配置的自定义域名也丢失，需要再次配置才能访问。</p>
+<p>估计是先执行了<code>clean</code>操作的原因。</p>
+<p>本文完成后，再次尝试部署，这回在部署前不<code>clean</code>:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo d -g</span><br></pre></td></tr></table></figure>
+<p>访问网页发现仍然出现域名解析丢失的问题，GitHub上的用户自定义域名又变为了空白。</p>
+<p>出现该问题的原因是域名解析的操作是在GitHub上进行的，在<code>Custom domain</code>中绑定用户自定义域名后，会在GitHub项目库根目录上生成一个名为<code>CNAME</code>的文件，该文件中有域名信息、本地没有。如果在本地执行部署，自然不会有该文件、从而强制推送到远端时会导致远端的该文件丢失。</p>
+<p>解决办法为在本地hexo博客的<code>source</code>文件夹下新建一个<code>CNAME</code>文件，写入自己的域名，再次部署即可。</p>
+<h2 id="更改主题">4. 更改主题</h2>
+<p>由于想给hexo博客增加一个访问量统计功能，找到的介绍均提到主题目录下还存在其他文件，但是我上面根据官网默认安装的在<code>themes</code>文件夹下是没有东西的，故需要安装以进一步增加统计功能。</p>
+<p>查询到更改（或沿用默认的<code>landscape</code>）主题的方法很简单，直接在官网<a href="https://hexo.io/themes/">主题</a>页面上查找到自己喜欢的，进入其GitHub项目直接克隆到本地的<code>blog/themes/</code>文件夹下即可，即：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/blog/themes</span><br><span class="line">$ git <span class="built_in">clone</span> xxx</span><br></pre></td></tr></table></figure>
+<p>由于本地采用了多个git账户，为了进行区分，在<code>~/.ssh/config</code>文件中分别配置了不同用户的ssh密钥，在克隆项目时需要指定用户，假定配置的为：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Host git_a</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa_a</span><br><span class="line">  IdentitiesOnly <span class="built_in">yes</span></span><br><span class="line">  ProxyCommand nc -X 5 -x 127.0.0.1:port_a %h %p</span><br><span class="line"></span><br><span class="line">Host git_b</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa_b</span><br><span class="line">  IdentitiesOnly <span class="built_in">yes</span></span><br><span class="line">  ProxyCommand nc -X 5 -x 127.0.0.1:port_b %h %p</span><br></pre></td></tr></table></figure>
+<p>上述的代理端口有差别是为了区分两个用户的流量。假定我们使用的是<code>git_b</code>账户，克隆的是<a href="https://github.com/hpcslag/hexo-theme-morgan">Morgan</a>主题，则需要对地址进行修正，先进入<code>~/blog</code>目录（即博客根目录），执行如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@git_b:hpcslag/hexo-theme-morgan.git themes/tocas-ui-morgan</span><br></pre></td></tr></table></figure>
+<p>即将<code>hexo-theme-morgan.git</code>克隆到<code>~/blog/themes/tocas-ui-morgan</code>文件夹。</p>
+<p>在实际使用的时候发现该主题不是很好看，且对不蒜子统计不是很友好，决定改为使用最广泛的<a href="https://github.com/iissnan/hexo-theme-next">nexT</a>主题，当然个人感觉默认的<a href="https://github.com/hexojs/hexo-theme-landscape">landscape</a>也挺不错。鉴于很多人说<code>netT</code>功能多、可拓展性强、对搜索引擎的支持更好，且其GitHub的star数量为hexo主题类最多的，故采用之。</p>
+<p>执行克隆操作安装：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@git_b:iissnan/hexo-theme-next.git themes/next</span><br></pre></td></tr></table></figure>
+<p>考虑到next使用有点复杂，考虑后续使用之。暂时仍然使用默认的landscape主题。</p>
+]]></content>
+      <tags>
+        <tag>hexo</tag>
+        <tag>技术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>加密市场的市场因子</title>
+    <url>/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/</url>
+    <content><![CDATA[<p>本文首先分析加密全市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。</p>
+<span id="more"></span>
+<h2 id="全市场情况">全市场情况</h2>
+<p>本节主要侧重分析收益率的情况。先分析了全市场的日收益率情况，然后为后续研究进行一定的数据过滤，最后进行了异常值处理。</p>
+<p>阅读本节，有助于了解加密市场的整体情况。</p>
+<h3 id="收益率描述">收益率描述</h3>
+<p>本文的数据来源于<a href="https://coinmarketcap.com">coinmarketcap</a>，截止到2023-09-14日，该网站上收录了超过9000种以USD计价的数字货币。</p>
+<p>对于0价格、本文将其视为空缺数据、替换为<code>np.nan</code>、然后采用向下填充方式补齐。</p>
+<p>收益率有两种计算方式，价格涨幅与对数价格差。</p>
+<p>价格涨幅收益率计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq1}
+rtn_t=(close_t-close_{t-1})/close_{t-1}
+\end{equation}\]</span></p>
+<p>上式中的<span class="math inline">\(t\)</span>为第t个交易日。</p>
+<p>对数收益率计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq2}
+logRtn_t=log(close_t)-log(close_{t-1})
+\end{equation}\]</span></p>
+<p>对数收益率与价格涨幅收益率两者的转换关系为：</p>
+<p><span class="math display">\[\begin{equation}\label{eq3}
+rtn_t=e^{logRtn_t}-1
+\end{equation}\]</span></p>
+<p>计算进行如下处理，初步避免异常值：</p>
+<blockquote>
+<ol type="1">
+<li>将收盘价为0的情况替换为空值<code>np.nan</code>，避免出现无穷大收益率；</li>
+<li>采用向下填充的方法填补收盘价空值。</li>
+</ol>
+</blockquote>
+<h3 id="价格涨幅收益率">价格涨幅收益率</h3>
+<p>我们可以看看如果不进行任何处理的所有币种（共9064个币种）的日收益率（共4812个交易日）描述情况，见下表：</p>
+<blockquote>
+<p><font size="2"><em>价格涨幅收益率描述表</em></font></p>
+</blockquote>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 13%">
+<col style="width: 8%">
+<col style="width: 12%">
+<col style="width: 7%">
+<col style="width: 12%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rtn</td>
+<td style="text-align: right;">6.35182e+06</td>
+<td style="text-align: right;">276334</td>
+<td style="text-align: right;">5.1249e+08</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.0333691</td>
+<td style="text-align: right;">-0.000971782</td>
+<td style="text-align: right;">0.0239019</td>
+<td style="text-align: right;">1.26464e+12</td>
+</tr>
+</tbody>
+</table>
+<p>上表中count指总共的有效样本数（空值不算在内）。</p>
+<p>收益率均值达到276334的原因是处在75%之外的异常值产生了巨大影响，其中位数及四分位均处在合理范围内。</p>
+<p>由于收益率的计算采用了价格的增量法、而非对数价格差，故而收益率会呈现出正负不对称的现象、特别是在异常值区间，即上表中的最小收益率仅约-1（对应1日几乎归零、投资者完全亏损），而最大值为1.26464e+12。</p>
+<p>我们来看看天量级的最大收益率是怎么产生的。</p>
+<p>找到收益率最大值，发现为<code>BBUNNY</code>于<code>2023-08-05</code>日出现，该币种前一交易日（<code>2023-08-04</code>）的收盘价为<code>$8.200000e-13</code>，而<code>2023-08-05</code>日收盘价为<code>$1.037006</code>，涨幅惊人、不过该日的交易量仅仅为<code>$0.18</code>。如此之低的交易量，实在是不具有真实交易的潜在可能性。</p>
+<p>收益率最小值，出现在<code>2023-08-06</code>的<code>LEET</code>币，该币种前一日（<code>2023-08-05</code>）的收盘价为<code>$1.541654</code>而次日的收盘价为<code>$1.755000e-11</code>，该日的交易量仅为<code>$260.1</code>，与最大收益率的<code>BBUNNY</code>一样交易量实在是太低。</p>
+<h3 id="对数收益率">对数收益率</h3>
+<p>如果采用对数价格差法计算，则最大最小收益率会相当，如下表：</p>
+<blockquote>
+<p><font size="2"><em>对数收益率描述表</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 13%">
+<col style="width: 13%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 12%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">logRtn</td>
+<td style="text-align: right;">6.35182e+06</td>
+<td style="text-align: right;">-0.00381977</td>
+<td style="text-align: right;">0.231411</td>
+<td style="text-align: right;">-25.1988</td>
+<td style="text-align: right;">-0.0339385</td>
+<td style="text-align: right;">-0.000972255</td>
+<td style="text-align: right;">0.0236208</td>
+<td style="text-align: right;">27.8658</td>
+</tr>
+</tbody>
+</table>
+<p>可见此时最大最小值差距不大、正负收益率基本对称。</p>
+<p>不过采用对数价格差计算的收益率在计算横截面（cross-section）的投资组合时，会产生很复杂的可加性问题（可参见石川博士在知乎的回答，见<a href="https://www.zhihu.com/question/30113132/answer/431786548">这里</a>），不如简单收益率简洁方便。故本文采用价格涨幅法计算收益率。</p>
+<p>如果不对收益率中存在的异常值进行适当的处理，会对后续研究会造成巨大的影响、得出错误结论。</p>
+<p>出于涨跌对称的考虑，对异常值处理时选用对数收益率更方便。做投资组合时再根据<span class="math inline">\(\eqref{eq3}\)</span>式转换回价格涨幅收益率。</p>
+<h3 id="投资组合构建">投资组合构建</h3>
+<p>对原数据进行的任何过滤都要万分小心。</p>
+<p>在过滤数据之前，我们先阐述一下投资组合的构建方法，防止数据丢失引起的错误。</p>
+<p>过滤后真正有效的收益率是次期收益率<span class="math inline">\(rtn\_1\)</span>或次期对数收益率<span class="math inline">\(logRtn\_1\)</span>，因为我们构建投资组合时用到的筛选值为当期值、但筛选后的效果只有在次期才能体现。</p>
+<p>真实的投资必须考虑不能有未来数据，故需要用上一交易周期的数据进行筛选，然后持有到当前交易周期的收盘。由于此时有些币种可能已经不在新筛选出的数据范围内了，故在过滤前需要先计算出每个币（如上重名、多名现象，对应唯一的cmc_id且唯一symbol才是一个币实体）的次期收益率<span class="math inline">\(rtn\_1\)</span>或次期对数收益率<span class="math inline">\(logRtn\_1\)</span>。</p>
+<p>用次期收益率<span class="math inline">\(rtn\_1\)</span>构建投资组合（进行时间上的<code>shift</code>），这样构建就不会有未来数据和数据缺失的问题。</p>
+<h3 id="交易量市值过滤">交易量市值过滤</h3>
+<h4 id="规则">规则</h4>
+<p>将交易量低、市值低的币种过滤掉。制定如下规则：</p>
+<blockquote>
+<ol type="1">
+<li>日交易量需要不少于<span class="math inline">\(\$10^5\)</span>；</li>
+<li>市值不少于<span class="math inline">\(\$10^6\)</span>；</li>
+</ol>
+</blockquote>
+<p>进行筛选。上述筛选会将早期不符合条件的比特币也过滤掉，这是正常的。</p>
+<h4 id="重名及多名现象">重名及多名现象</h4>
+<p>筛选后剩下的symbol数有2360个、cmc_id（cmc给的唯一id）有2444个，说明有多个不同币种存在简称相同的现象；</p>
+<p>在cmc_id固定后对symbol进行二次分组后，发现有2446个币，说明有2个币具有多个symbol简称！</p>
+<p>对应的为<code>id=1720</code>的<code>IOTA</code>、其还有另一个名字<code>MIOTA</code>，两者价格、市值、交易量完全一样。</p>
+<p>另一个具有两个symbol简称的是<code>EURC</code>，它的另一个名称为<code>EUROC</code>，对应在不同交易所或链上的名称，两者之间只存在微小的差异。</p>
+<h4 id="过滤后的收益率">过滤后的收益率</h4>
+<p>此时收益率情况见下表：</p>
+<blockquote>
+<p><font size="2"><em>过滤后的收益率情况</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 14%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 13%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rtn</td>
+<td style="text-align: right;">1.44167e+06</td>
+<td style="text-align: right;">0.0305863</td>
+<td style="text-align: right;">16.7628</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.0337052</td>
+<td style="text-align: right;">-0.00180506</td>
+<td style="text-align: right;">0.028485</td>
+<td style="text-align: right;">15695.5</td>
+</tr>
+</tbody>
+</table>
+<p>可见虽然样本数量显著下降，但是异常值仍然存在。</p>
+<p>我们再次检查最大最小值出现的情况。</p>
+<p>出现上表中最大收益率的有<code>UNI</code>（需要注意cmc收录有很多简称均为<code>UNI</code>的币，本处对应的为<code>id=4307</code>的<code>UNICORN Token</code>），对应的时间在<code>2022-10-21</code>，该币种前日（<code>2022-10-20</code>）的收盘价为<code>$0.000038</code>、成交量仅<code>$3.38</code>，而收益率异常日（<code>2022-10-21</code>）的收盘价约为<code>$0.598153</code>、交易量达到<code>$210829.03</code>；</p>
+<p>最小值对应的有<code>WSPP</code>（对应的<code>id=10841</code>，<code>BSC</code>链上的<code>Wolf Safe Poor People</code>币），对应日期为<code>2021-09-13</code>、该日价格为<code>$8.398000e-11</code>、交易量<code>$128837.54</code>，发现该币种<code>2021-09-12</code>日的收盘价为<code>$0</code>、交易量<code>$126266.08</code>（注意不是近似，而真的是0，同时其交易量不为0！该币种早期有很多0价格），如开篇所述、我们将其视为空并用上个有效价格替换处理，故处理后<code>2021-09-12</code>日的收盘价为<code>$0.000295</code>（实际对应<code>2021-07-20</code>日收盘价）。</p>
+<p>由于过滤导致数据集变小，次期收益率能保证投资组合时数据不丢失，次期收益率情况见下表：</p>
+<blockquote>
+<p><font size="2"><em>过滤后的次期收益率情况</em></font></p>
+</blockquote>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 13%">
+<col style="width: 12%">
+<col style="width: 10%">
+<col style="width: 7%">
+<col style="width: 12%">
+<col style="width: 13%">
+<col style="width: 11%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rtn_1</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.00206201</td>
+<td style="text-align: right;">0.419397</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.0343359</td>
+<td style="text-align: right;">-0.00237246</td>
+<td style="text-align: right;">0.0269167</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+</tbody>
+</table>
+<p>可见异常值情况也存在。</p>
+<h3 id="市值排名过滤">市值排名过滤</h3>
+<p>按照市值排名进行过滤，是截面（cross-section）过滤，指的是只保留截面上市值排名靠前的币种，如果某个交易日数据量不足排名数、则选用当日的全量数据。</p>
+<h4 id="全量数据的排名">全量数据的排名</h4>
+<p>首先，我们选用全量数据进行观察。</p>
+<p>我们作出排名前100、前300、前1000、前2000及全量数据的次期收益率描述情况。</p>
+<blockquote>
+<p><font size="2"><em>全量数据、市值排名筛选的次期收益率<span class="math inline">\(rtn\_1\)</span>情况</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 18%">
+<col style="width: 12%">
+<col style="width: 16%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 13%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">top_100</td>
+<td style="text-align: right;">347371</td>
+<td style="text-align: right;">25.877</td>
+<td style="text-align: right;">15247.5</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.035</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.03</td>
+<td style="text-align: right;">8.98659e+06</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300</td>
+<td style="text-align: right;">861227</td>
+<td style="text-align: right;">10.567</td>
+<td style="text-align: right;">9683.94</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.037</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.032</td>
+<td style="text-align: right;">8.98659e+06</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500</td>
+<td style="text-align: right;">1.28833e+06</td>
+<td style="text-align: right;">7.067</td>
+<td style="text-align: right;">7917.66</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.038</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.032</td>
+<td style="text-align: right;">8.98659e+06</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000</td>
+<td style="text-align: right;">2.19656e+06</td>
+<td style="text-align: right;">4.152</td>
+<td style="text-align: right;">6063.72</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.038</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.032</td>
+<td style="text-align: right;">8.98659e+06</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000</td>
+<td style="text-align: right;">3.34636e+06</td>
+<td style="text-align: right;">6.786</td>
+<td style="text-align: right;">8582.5</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.037</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.031</td>
+<td style="text-align: right;">1.2867e+07</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all</td>
+<td style="text-align: right;">6.35182e+06</td>
+<td style="text-align: right;">276334</td>
+<td style="text-align: right;">5.1249e+08</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.26464e+12</td>
+</tr>
+</tbody>
+</table>
+<p>可见单纯进行市值排名过滤，不能起到过滤掉异常收益率的效果。</p>
+<h4 id="过滤数据的排名">过滤数据的排名</h4>
+<p>本小节是对已经采用交易量市值过滤规则后的数据进行排名，然后筛选排名靠前的数据。</p>
+<p>仍然作出排名前100、前300、前1000、前2000及全量数据的次期收益率描述情况，如下表：</p>
+<blockquote>
+<p><font size="2"><em>筛选后数据、市值排名筛选的次期收益率<span class="math inline">\(rtn\_1\)</span>情况</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 12%">
+<col style="width: 21%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">top_100</td>
+<td style="text-align: right;">246308</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.083</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.029</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">3.556</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300</td>
+<td style="text-align: right;">668131</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.532</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500</td>
+<td style="text-align: right;">938668</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.454</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000</td>
+<td style="text-align: right;">1.39848e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.425</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.419</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.419</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+</tbody>
+</table>
+<p>可见如想进一步处理异常值，需要额外的办法。</p>
+<h3 id="异常值处理">异常值处理</h3>
+<p>对异常值的任何处理，都可能造成模型与研究结论的改变，需要谨慎使用。</p>
+<p>异常值的常用处理办法有放缩法、mad法、均值-方差法三种，这三种方法应该对异常上涨和异常下跌平等的处理，故应该处理次期对数收益率<span class="math inline">\(logRtn\_1\)</span>。由于加密市场收益率异常值对均值方差影响太大，故均值-方差法不适用，本文不进行讨论。</p>
+<p>缩放法的参数为0.02，即将次期对数收益率处在分位数<span class="math inline">\([0, 0.02]\)</span>和<span class="math inline">\([0.98, 1]\)</span>的用临界值<span class="math inline">\(logRtn\_1_{0.02}\)</span>和<span class="math inline">\(logRtn\_1_{0.98}\)</span>代替。完成缩放后，按照<span class="math inline">\(\eqref{eq3}\)</span>得出处理后的次期收益率<span class="math inline">\(rtn\_1\)</span>。</p>
+<p>mad（中位数绝对值离差的中位数）的计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq4}
+mad=median(abs(X-median(X)))
+\end{equation}\]</span></p>
+<p>异常值判断标准为超过中位数3个mad值的，用<span class="math inline">\(median\pm 3*mad\)</span>替换。</p>
+<blockquote>
+<p><font size="2"><em>各排名组及各异常值处理后的次期收益率<span class="math inline">\(rtn\_1\)</span>情况</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 18%">
+<col style="width: 17%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">top_100_raw</td>
+<td style="text-align: right;">246308</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.083</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.029</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">3.556</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_100_win</td>
+<td style="text-align: right;">246308</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.069</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.029</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_100_mad</td>
+<td style="text-align: right;">246308</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.514</td>
+<td style="text-align: right;">-0.028</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300_raw</td>
+<td style="text-align: right;">668131</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.532</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_300_win</td>
+<td style="text-align: right;">668131</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.071</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300_mad</td>
+<td style="text-align: right;">668131</td>
+<td style="text-align: right;">-0.003</td>
+<td style="text-align: right;">0.059</td>
+<td style="text-align: right;">-0.566</td>
+<td style="text-align: right;">-0.032</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500_raw</td>
+<td style="text-align: right;">938668</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.454</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_500_win</td>
+<td style="text-align: right;">938668</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.07</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500_mad</td>
+<td style="text-align: right;">938668</td>
+<td style="text-align: right;">-0.003</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.572</td>
+<td style="text-align: right;">-0.032</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000_raw</td>
+<td style="text-align: right;">1.39848e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.425</td>
+<td style="text-align: right;">-0.999</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_1000_win</td>
+<td style="text-align: right;">1.39848e+06</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.071</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000_mad</td>
+<td style="text-align: right;">1.39848e+06</td>
+<td style="text-align: right;">-0.004</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.572</td>
+<td style="text-align: right;">-0.033</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000_raw</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.419</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_2000_win</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.072</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000_mad</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">-0.004</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.572</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all_raw</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.419</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">427.365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">all_win</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.072</td>
+<td style="text-align: right;">-0.663</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: right;">1.448</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all_mad</td>
+<td style="text-align: right;">1.44094e+06</td>
+<td style="text-align: right;">-0.004</td>
+<td style="text-align: right;">0.058</td>
+<td style="text-align: right;">-0.572</td>
+<td style="text-align: right;">-0.034</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.026</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+</tbody>
+</table>
+<p>上表中处理方法名称后缀<code>_raw</code>代表未经处理的数据、后缀<code>_win</code>代表缩放法处理的数据、后缀<code>_mad</code>代表mad法处理的数据。</p>
+<p>可见两种处理方法对比，mad对异常值的处理效果更好，不过也意味着更失真，因为加密市场的日涨幅超过10倍是较常见的事情。如果需要研究更准确的投资组合、或者极限抗压情况，则不应该进行收益率异常值处理。</p>
+<p>后续的市场因子研究，我们将用分缩放法处理、mad法处理、没进行异常值处理3中情况进行比较讨论。</p>
+<h2 id="市场组合构建">市场组合构建</h2>
+<p>我们利用上述处理过的收益率来构建市场投资组合，以代表整个加密市场。本节分等权重与市值加权两种情况讨论。</p>
+<p>等权重加权会加大市值小的币种权重，有潜在暴涨的可能性，对于很多投机者来说，这意味着机会，故本节也兼顾讨论。市值加权更能反应整体市场情况，反应了整个市场可以容纳的资金情况下的表现。</p>
+<h3 id="等权重加权">等权重加权</h3>
+<p>所谓的等权重加权就是，在每一个交易日，将所有非空值的币种收益率（实际是次期收益率）取均值，也即对收益率取截面平均。如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq5}
+rtn_{eq}^t=\sum_{j}^{N^t} \frac{1}{N^t}*rtn_j^t
+\end{equation}\]</span></p>
+<p>上式中的<span class="math inline">\(t\)</span>为第t个交易日，<span class="math inline">\(j\)</span>为截面上（第t个交易日内）收益率非空的第j个币种，<span class="math inline">\(N^t\)</span>为第t个交易日、收益率非空的币种总数。</p>
+<p>如上计算的等权重加权收益率描述统计情况见下表：</p>
+<blockquote>
+<p><font size="2"><em>等权重加权下，各排名组及各异常值处理方式的收益率描述情况</em>
+</font></p>
+</blockquote>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">std</th>
+<th style="text-align: right;">min</th>
+<th style="text-align: right;">25%</th>
+<th style="text-align: right;">50%</th>
+<th style="text-align: right;">75%</th>
+<th style="text-align: right;">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">top_100_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_100_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_100_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.047</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_300_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">0.002</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_300_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.047</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.02</td>
+<td style="text-align: right;">-0</td>
+<td style="text-align: right;">0.018</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_500_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.023</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_500_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.047</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_1000_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.022</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_1000_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.017</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">top_2000_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.022</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">top_2000_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all_raw</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.017</td>
+<td style="text-align: right;">0.004</td>
+<td style="text-align: right;">0.024</td>
+<td style="text-align: right;">1.662</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">all_win</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;">0.049</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.018</td>
+<td style="text-align: right;">0.003</td>
+<td style="text-align: right;">0.022</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">all_mad</td>
+<td style="text-align: right;">3641</td>
+<td style="text-align: right;">-0.002</td>
+<td style="text-align: right;">0.046</td>
+<td style="text-align: right;">-0.491</td>
+<td style="text-align: right;">-0.019</td>
+<td style="text-align: right;">-0.001</td>
+<td style="text-align: right;">0.017</td>
+<td style="text-align: right;">0.485</td>
+</tr>
+</tbody>
+</table>
+<p>上表中的后缀<code>_raw</code>代表未经处理的数据、后缀<code>_win</code>代表缩放法处理的数据、后缀<code>_mad</code>代表mad法处理的数据。</p>
+<p>从上表可见各排名截断下，均值、中位数、标准差均是
+<code>raw &gt; win &gt; mad</code>。</p>
+<h4 id="对收益率进行异常值处理不合理">对收益率进行异常值处理不合理</h4>
+<p>仅仅作出汇总统计表很不直观，且考虑到各组净值的量级差异太大不便直接对比观察，故作出对数净值图，如下：</p>
+<figure>
+<img src="等权重加权对数净值走势图.jpg" alt="等权重加权对数净值走势图">
+<figcaption aria-hidden="true">等权重加权对数净值走势图</figcaption>
+</figure>
+<p>发现仍然不能很好的观察区分，进行分组对比。</p>
+<p>排名前100的对数净值走势对比如下：</p>
+<figure>
+<img src="前100等权重加权对数净值走势图.jpg" alt="前100等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前100等权重加权对数净值走势图</figcaption>
+</figure>
+<p>前300如下：</p>
+<figure>
+<img src="前300等权重加权对数净值走势图.jpg" alt="前300等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前300等权重加权对数净值走势图</figcaption>
+</figure>
+<p>前500：</p>
+<figure>
+<img src="前500等权重加权对数净值走势图.jpg" alt="前500等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前500等权重加权对数净值走势图</figcaption>
+</figure>
+<p>前1000：</p>
+<figure>
+<img src="前1000等权重加权对数净值走势图.jpg" alt="前1000等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前1000等权重加权对数净值走势图</figcaption>
+</figure>
+<p>前2000：</p>
+<figure>
+<img src="前2000等权重加权对数净值走势图.jpg" alt="前2000等权重加权对数净值走势图">
+<figcaption aria-hidden="true">前2000等权重加权对数净值走势图</figcaption>
+</figure>
+<p>全数据：</p>
+<figure>
+<img src="全数据等权重加权对数净值走势图.jpg" alt="全数据等权重加权对数净值走势图">
+<figcaption aria-hidden="true">全数据等权重加权对数净值走势图</figcaption>
+</figure>
+<p>可见进行收益率异常值处理会导致投资组合结果严重失真。后续研究只采用没有进行收益率异常值处理的数据，并去掉后缀<code>_raw</code>。</p>
+<h4 id="等权重加权的表现">等权重加权的表现</h4>
+<p>故后续不应该采用收益率异常值处理过的数据进行投资组合研究。各排名组合的对比走势图如下：</p>
+<figure>
+<img src="各排名等权重加权对数净值.jpg" alt="各排名等权重加权对数净值">
+<figcaption aria-hidden="true">各排名等权重加权对数净值</figcaption>
+</figure>
+<p>可见在等权重加权下，全量数据（经过市值、交易量过滤）投资组合表现最好，且排名选择的范围越大越好。</p>
+<p>加入了比特币作为对比的净值分段走势如下：</p>
+<figure>
+<img src="等权重加权各组净值分年走势.jpg" alt="等权重加权各组净值分年走势">
+<figcaption aria-hidden="true">等权重加权各组净值分年走势</figcaption>
+</figure>
+<p>可见通过等权重加权方式构建的投资组合与比特币的走势具有很强的相关性，各市值排名组合的表现好于比特币，这意味着加密市场具有很好的投资机会可供挖掘。</p>
+<p>我们作出各投资组合与比特币收益率之间的相关性，如下：</p>
+<figure>
+<img src="等权重加权下各排名组合及btc的相关性.jpg" alt="等权重加权下各排名组合及btc的相关性">
+<figcaption aria-hidden="true">等权重加权下各排名组合及btc的相关性</figcaption>
+</figure>
+<p>从相关性数值上证明了btc与各组合间具有很强的相关性。</p>
+<p>市值排名前300、500、1000、2000及不进行市值排名过滤的组合效果差别不大。</p>
+<h3 id="市值加权">市值加权</h3>
+<p>由于市值的限制，我们实际上对等权重加权进行投资组合的可能性很低，市值排名越靠后的币种的资金容量越有限，较大资金不太容易买卖。故市值加权更具有可投资性。</p>
+<p>某一交易日<span class="math inline">\(t\)</span>的截面上，市值加权收益率的计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq6}
+rtn_{mkt}^t=\sum_{i}^{N^{t-1}}
+\frac{mkt_i^{t-1}}{\sum_{i}^{N^{t-1}}mkt_i^{t-1}}*rtn_i^t
+\end{equation}\]</span></p>
+<p>上式中<span class="math inline">\(N^{t-1}\)</span>代表的上一交易日结束时的币种数量。市值<span class="math inline">\(mkt\)</span>与收益率<span class="math inline">\(rtn\)</span>之间有1期的偏差，即利用上一期的市值进行加权获得当期的收益率。</p>
+<p>市值加权各组的对数净值表现如下：</p>
+<p><img src="市值加权对数净值走势图.jpg"></p>
+<p>对数净值走势非常接近。作出净值分段时序图，如下：</p>
+<figure>
+<img src="市值加权各组净值分年走势.jpg" alt="市值加权各组净值分年走势">
+<figcaption aria-hidden="true">市值加权各组净值分年走势</figcaption>
+</figure>
+<p>收益率相关性热图如下：</p>
+<figure>
+<img src="市值加权下各排名组合及btc的相关性.jpg" alt="市值加权下各排名组合及btc的相关性">
+<figcaption aria-hidden="true">市值加权下各排名组合及btc的相关性</figcaption>
+</figure>
+<p>可见市值加权下，各排名组合的相关性非常高、接近1，且都与btc的相关性高达0.96以上。</p>
+<p>市值排名前100、300、500、1000、2000及不进行市值排名过滤的组合效果差别不大，均可作为市场因子的代理。</p>
+<h4 id="剔除btc的市场组合">剔除BTC的市场组合</h4>
+<p>上文讨论了市值加权下各排名组合的相关性情况，可以看出在加密市场中，btc也是一个很好的市场因子代理变量。即然比特币可以作为市场代理，那么加密市场除了比特币之外的其他币种的组合又是什么样子呢？我们将btc从投资组合中剔除，观察不包含btc的市值加权组合情况，且将它们与btc进行对比。</p>
+<p>首先作出对数净值走势，如下：</p>
+<figure>
+<img src="不含btc的各排名市值加权及btc对数净值走势.jpg" alt="不含btc的各排名市值加权及btc对数净值走势">
+<figcaption aria-hidden="true">不含btc的各排名市值加权及btc对数净值走势</figcaption>
+</figure>
+<p>分段走势：</p>
+<figure>
+<img src="不含btc的各排名市值加权及btc净值分段.jpg" alt="不含btc的各排名市值加权及btc净值分段">
+<figcaption aria-hidden="true">不含btc的各排名市值加权及btc净值分段</figcaption>
+</figure>
+<p>相关性热图：</p>
+<figure>
+<img src="不含btc的各排名市值加权及btc相关性.jpg" alt="不含btc的各排名市值加权及btc相关性">
+<figcaption aria-hidden="true">不含btc的各排名市值加权及btc相关性</figcaption>
+</figure>
+<p>由净值及相关性可见，除去btc后的各组间的相关性仍然很高，且收益率与btc具有较高的正相关性。</p>
+<p>这与人们普遍感觉到的机密市场同涨同跌的现象很符合。</p>
+<h2 id="总结">总结</h2>
+<p>本文进行了如下工作：</p>
+<ol type="1">
+<li>分析了全加密市场的收益率情况，列举了一些异常收益率的情况；</li>
+<li>进行了市值与交易量过滤，将交易量及市值过低的币种去掉，组建了市值排名前100、300、500、1000、2000及全量数据（进行了交易量、市值过滤），发现不能对异常收益率进行异常值处理，处理后的数据与原数据组合表现的差异会很大；</li>
+<li>进行了等权重加权构建市场组合，发现除排名前100之外的其他组合之间的相关性很高；加上btc之后，发现投资组合之间的正相关性很高，且排名选择的范围越大、相较于btc的表现越好；</li>
+<li>进行了市值加权构建市场组合，发现各排名的组合之间的相关性很高，且均与btc具有很高的相关性，故可以将比特币作为市场代理变量；</li>
+<li>进一步将比特币从市值加权投资组合中剔除，发现各排名组合之间的相关性仍然很高，且仍与btc具有很高的正相关性。</li>
+</ol>
+<h3 id="结论">结论</h3>
+<p>本文说明比特币本身就可以作为全加密市场市场因子的很好代理。</p>
+<p>如需进一步精确，采用市值排名前300、500、1000、2000或全量数据作为市场因子代理的效果差不多。</p>
+<h3 id="声明">声明</h3>
+<p>本文涉及到很多技术细节，略显乏味，希望能供对加密市场感兴趣的研究人员参考，不构成投资建议。</p>
+<p>谢谢阅读！</p>
+]]></content>
       <categories>
-          
-          <category> 技术 </category>
-          
+        <category>投资</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> bitcoin </tag>
-            
-            <tag> 减半 </tag>
-            
-            <tag> S2F模型 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>acme.sh不能自动更新证书的问题</title>
-      <link href="/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-      <url>/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-      
-        <content type="html"><![CDATA[<p>本文描述了一种使用<code>acme.sh</code>颁发的证书始终不能正常自动更新的问题，并记录了解决过程。</p><span id="more"></span><p>在服务器上使用了<code>acme.sh</code>来颁发ssl证书，按照<a href="https://github.com/acmesh-official/acme.sh/blob/master/README.md">官方指导</a>在用户<code>user1</code>根目录下安装了<code>acme.sh</code>，并在<code>root</code>用户下执行如下命令（如不在root下执行，会报提醒，建议到root下执行），成功颁发了证书：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --set-default-ca --server letsencrypt --issue -d test_domain.com --standalone --keylength ec-256 --force</span><br></pre></td></tr></table></figure><p>然后在<code>root</code>下执行了将证书安装到指定目录下的操作：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --install-cert -d test_domain.com --ecc \</span><br><span class="line">                          --fullchain-file /etc/v2ray/v2ray.crt \</span><br><span class="line">                          --key-file /etc/v2ray/v2ray.key \</span><br><span class="line">                          --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure><p>一切正常的话，按照官方所描述的，<code>crontab</code>中会每日自动检查证书是否需要<code>renew</code>，然后根据情况在快要到期时（<code>acme.sh</code>默认证书有效期为90天，到期前30天会自动更新。注意有效期最多只有90天，不能延长，<a href="https://letsencrypt.org/docs/faq/">参见此处</a>）更新。</p><p>但是在实际操作中，始终不能如预期正常更新证书。<code>user1</code>下检查定时任务</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo crontab -l</span><br></pre></td></tr></table></figure><p>查看结果：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure><p>由于一直没找到原因，故每次到期后都需要手动更新证书：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ~/.acme.sh/acme.sh --renew -d test_domain.com --force --ecc --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure><p>上述命令执行在用户<code>user1</code>下。最后的参数是在执行后重启<code>nginx</code>和<code>v2ray</code>。</p><p>手动更新正常（这很奇怪，可能是因为在<code>root</code>与<code>user1</code>下都生成了证书，保留了两个目录下的参数与证书，并在根目录下生成证书时输入了错误的域名？检查发现<code>root</code>下也安装了<code>acme.sh</code>，将其卸载，并删除了<code>.acme.sh/</code>目录。）。</p><p>一直对<code>acme.sh</code>定时更新的工作流程，特别是为什么不需要在<code>crontab</code>的定时任务里不需要传参的原因不是很理解，于是花了点时间检索，发现了<a href="https://github.com/acmesh-official/acme.sh/issues/3981">相关解答</a>。即在执行<code>--install-cert</code>后参数会保存，自动更新时调用之，故不需要在<code>crontab</code>中传参。</p><p>然后尝试直接<code>debug</code>执行更新操作：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure><p>发现执行日志有如下内容：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===Starting cron===</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Using config home:/home/user1/.acme.sh</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _stopRenewOnError</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] di=<span class="string">&#x27;/home/user1/.acme.sh/*.*/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Not a directory, skip: /home/user1/.acme.sh/*.*/</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _error_level=<span class="string">&#x27;3&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===End cron===</span><br></pre></td></tr></table></figure><p>从上述内容可见问题出现在参数配置文件目录出错，导致找不到<code>.acme.sh/*.*/</code>文件。这才意识到安装<code>acme.sh</code>脚本的目录是在<code>user1</code>根目录下，但是在申请证书是在<code>root</code>根目录下操作的。执行了：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo su -</span><br></pre></td></tr></table></figure><p>造成目录切换到了<code>root</code>根目录下，运行<code>--issue</code>域名的操作生成的文件直接保存在了<code>root</code>根目录下，即证书、配置的目录与脚本的目录不匹配。程序自动更新时在脚本目录<code>/home/user1/.acme.sh</code>下寻找不到所需的证书与参数，因而出错、忽略了。加上日志直接输到了<code>/dev/null</code>，故一直没找到原因。</p><p>修改<code>--home</code>后<code>debug</code>：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure><p>发现结果显示包含如下内容：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:47:17 UTC 2023] di=<span class="string">&#x27;/root/.acme.sh/test_domain_ecc/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] d=<span class="string">&#x27;test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] DOMAIN_PATH=<span class="string">&#x27;/root/.acme.sh/test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Renew: <span class="string">&#x27;test_domain.com&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Le_API=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Skip, Next renewal time is: Mon Dec 11 09:52:50 UTC 2023</span><br></pre></td></tr></table></figure><p>显然，这次脚本成功检查了证书的有效期，并跳过了不需要更新的证书。可判断这回脚本能够正确运行了。</p><p>在<code>root</code>下修改<code>crontab</code>中的任务：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure><p>将<code>--home</code>参数后的目录修改一下：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure><p>即可正常自动更新了。</p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> acme.sh </tag>
-            
-            <tag> 证书 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>可以在比特币上计算一切的BitVM</title>
-      <link href="/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/"/>
-      <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
-      
-        <content type="html"><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">RobinLinus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p><span id="more"></span><h2 id="前言">前言</h2><p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p><h2 id="白皮书内容理解">白皮书内容理解</h2><p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p><p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考BobBodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p><p>该白皮书（ TODO，待完成）</p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> bitcoin </tag>
-            
-            <tag> BitVM </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>由比特币已实现价格进行的一些推理</title>
-      <link href="/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/"/>
-      <url>/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/</url>
-      
-        <content type="html"><![CDATA[<p>本文首先介绍了一些比特币早期价格的历史；接着分析了比特币对数价格（<span class="math inline">\(logP\)</span>）与对数供给量（<span class="math inline">\(logS\)</span>）可能的一些回归关系；然后总结了历史上的3次减半规律；进而对总结的规律进行极值建模；最后运用汇总的规律及构建的模型，对下一次减半周期几个极值（最低价、减半价、最高价）和对应的时间范围进行了一些推测。</p><span id="more"></span><h2 id="引言">引言</h2><p>比特币神话般的价格涨幅，一直是投资界引人入胜的故事。那么，比特币早期价格是怎样的呢？本文第一部分简要回顾了一些btc交易的早期历史。</p><p>在做出比特币历史对数价格曲线后，忍不住会有对它进行回归建模的冲动，本文第二部分即尝试了这方面的工作。</p><p>4年的减半周期，对比特币价格有很重大的影响，这似乎成了加密投资圈的共识。那么，减半是否有某些定量的规律呢？本文第三部分分析了过去3次减半，汇总了一些重要的统计值，归纳出了一些规律。</p><p>在得出了历史减半规律后，本文第四部分对两个重要的极值进行了建模。</p><p>有了价格拟合模型、减半规律以及极值模型后，本文在第五部分对即将到来的新减半周期进行一些合理的推测，推算了下一轮减半周期的几个重要价格及对应的大致时间情况。</p><p>当然，限于样本量少及其他随机因素，本文只是对可能存在的一些规律的简单猜测，动机仅为了好玩，不构成投资建议。</p><h2 id="比特币早期价格">比特币早期价格</h2><p>本文先从比特币交易价格说起。</p><p>比特币诞生于2009-01-03，已知最早的价格，是由比特币第二位开发者<a href="https://twitter.com/marttimalmi?s=21&amp;t=r1CX6-KmGvZWwI5I3aeLNQ">MarttiMalmi</a>（网名Sirius）在2009-10-12发起的，他用5050个比特币换到了<span class="math inline">\(\$5.02\)</span>，每个比特币价格约为<span class="math inline">\(\$0.000994\)</span>，不足十分之一美分。可以参见推特（<a href="https://twitter.com/marttimalmi/status/423455561703624704?s=61&amp;t=jVERnELxYp8IK7gfE_8KnA">MarttiMalmi发起第一笔比特币兑美元交易</a>），对应的区块链交易记录（<a href="https://www.blockchain.com/explorer/transactions/btc/7dff938918f07619abd38e4510890396b1cef4fbeca154fb7aafba8843295ea2">首个价格交易记录</a>）。</p><p>不过这个事件知道的人不太多，更广为人知的是<a href="https://en.bitcoinwiki.org/wiki/Laszlo_Hanyecz">比特币披萨事件</a>。</p><p>2010-05-18，美国弗罗里达州的程序员Laszlo Hanyecz在<a href="https://bitcointalk.org">比特币论坛</a>上发布了一篇名为<a href="https://bitcointalk.org/index.php?topic=137.0"><code>Pizza for bitcoins?</code></a>的帖子，他想用1万个比特币购买价值约25美元的2个披萨，折合每个比特币<span class="math inline">\(\$0.0025\)</span>。经过4天多的时间，他证实了该交易已经顺利完成。这是人们第一次可以用比特币购买真实商品，这个事件被比特币爱好者纪念，从此每年的5月22日成为“比特币披萨节”。</p><p>其实在比特币披萨事件之前，已经有了一个名为<a href="https://en.bitcoin.it/wiki/Bitcoin_Market"><code>bitcoinmarket.com</code></a>的比特币交易网站。</p><p>该网站由<a href="https://bitcointalk.org/index.php?action=profile;u=24">dwdollar</a>开发建立，参见比特币论坛<a href="https://bitcointalk.org/index.php?topic=20.0">相关帖子</a>。2010-03-16，该网站开始用真实的美元交易比特币，dwdollar将比特币的初始价格定在<span class="math inline">\(\$0.0067/BC\)</span>。次日（2010-03-17）正式上线，有4人开始在线交易比特币，开始交易的价格大概为<a href="https://www.cryptohopper.com/blog/what-was-the-first-crypto-exchange-449"><span class="math inline">\(\$0.003\)</span></a>。该网站主要利用PayPal进行交易，由于欺诈的盛行，Paypal于2011-06-04停止了对<code>bitcoinmarket</code>的支持，导致了用户转向其他交易所，其中最著名的就是<a href="https://en.wikipedia.org/wiki/Mt._Gox"><code>Mt.Gox</code></a>，该网站于2010-07-18出现在比特币论坛，<a href="https://bitcointalk.org/index.php?topic=444.0">见此处</a>。</p><p>关于早期价格的情况不太好追溯，好在<a href="https://coinmarketcap.com/currencies/bitcoin/">coinmarketcap</a>上收录了自2010-07-13日以来的比特币价格数据，本篇文章的讨论便是基于这些数据进行。</p><p>本文重点讨论的是比特币的价格及周期，首先讨论比特币价格的某种可能回归。</p><blockquote><p>说明：本文数据截止到2023-09-24日。</p></blockquote><h2 id="比特币的价格模型">比特币的价格模型</h2><h3 id="对数价格与对数供给量">对数价格与对数供给量</h3><p>比特币价格的波动范围很大，为了直观全面的观察其趋势，可以采用对数价格作图，如下：</p><figure><img src="20100713-20230924比特币对数价格时序图.jpg" alt="比特币对数价格时序图"><figcaption aria-hidden="true">比特币对数价格时序图</figcaption></figure><p>直观上，比特币对数价格似乎符合某种函数的拟合。<a href="https://www.lookintobitcoin.com/charts/bitcoin-rainbow-chart/">比特币彩虹图</a>就是比特币对数价格与上线天数的某种回归。</p><p>比特币先后经历了3次减半，分别是2012-11-28、2016-07-09、2020-05-11。<a href="https://buybitcoinworldwide.com/halving/">据预测</a>，下一次减半日期大概在2024-04-16。</p><p>比特币每次减半之后，每个区块的产量会减半，最终比特币的数量约为21,000,000（实际略少于此值）。比特币历史总产量对数图如下：</p><figure><img src="20100713-20230924比特币对数供给量时序图.jpg" alt="比特币对数供给量图"><figcaption aria-hidden="true">比特币对数供给量图</figcaption></figure><p>由上图可见，比特币的对数价格与对数总供给量之间具有相似的趋势，可以猜测比特币对数价格（<span class="math inline">\(logP\)</span>）是对数总供给量（<span class="math inline">\(logS\)</span>）的某种可解析函数。</p><h3 id="对数供给量多项式模型">对数供给量多项式模型</h3><p>本文在拟合前，有一个期望的极限，即：</p><blockquote><p>如比特币最终趋于稳定，并取代了美元成为本位币。则按照目前美元m2总量约<a href="https://zh.tradingeconomics.com/united-states/money-supply-m2">20.9万亿</a>折算，比特币的价格将接近100万美元/BTC。</p></blockquote><p>符合上述预期的拟合才是合理的。</p><p>由于可解析函数可以进行泰勒展开，故可用<span class="math inline">\(logS\)</span>的多项式展开来拟合<span class="math inline">\(logP\)</span>： <span class="math display">\[\begin{equation}\label{eq1}logP=\sum_{i=0}^{n}\alpha_i(logS)^i\end{equation}\]</span>其中n为多项式的最高阶，是待定参数。毫无疑问随着n的增大，可以拟合得越好，本文假定n为较小的整数（10以内）。</p><p>n=1的拟合情况如下：</p><figure><img src="230924-比特币对数价格1阶拟合.jpg" alt="比特币对数价格1阶拟合"><figcaption aria-hidden="true">比特币对数价格1阶拟合</figcaption></figure><p>可见拟合的效果很好，<span class="math inline">\(R^2\)</span>达到0.91，其中<span class="math inline">\(R^2\)</span>的定义如下： <span class="math display">\[\begin{equation}\label{eq2}R^2=1-\frac{SS_{res}}{SS_{tot}}\end{equation}\]</span></p><p><span class="math display">\[\begin{equation}\label{eq3}SS_{tot}=\sum_i(y_i-\bar{y})^2\end{equation}\]</span></p><p><span class="math display">\[\begin{equation}\label{eq4}SS_{res}=\sum_i(y_i-f_i)^2\end{equation}\]</span></p><p><span class="math inline">\(f_i\)</span>为函数拟合的相应值。</p><p>由上图可知，一阶拟合下的回归关系为： <span class="math display">\[\begin{equation}\label{eq5}logP=-131.5+8.4*logS\end{equation}\]</span>如果比特币对数价格与对数供给量符合上述的1阶拟合，则根据拟合，最终比特币价格约为<span class="math inline">\(\$26,974.33\)</span>，这似乎不让人满意。</p><p>n=2的拟合如下：</p><figure><img src="230924-比特币对数价格2阶拟合.jpg" alt="比特币对数价格2阶拟合"><figcaption aria-hidden="true">比特币对数价格2阶拟合</figcaption></figure><p><span class="math inline">\(R^2\)</span>高达0.94，拟合结果如下：<span class="math display">\[\begin{equation}\label{eq6}\begin{aligned}logP=&amp;750.85-101.07*logS+\\&amp;3.39*logS^2\end{aligned}\end{equation}\]</span></p><p>如果2阶拟合满足，则比特币最终价格约为<span class="math inline">\(\$70,070.92\)</span>。</p><p>n=3时，拟合效果如下：</p><figure><img src="230924-比特币对数价格3阶拟合.jpg" alt="比特币对数价格3阶拟合"><figcaption aria-hidden="true">比特币对数价格3阶拟合</figcaption></figure><p><span class="math inline">\(R^2\)</span>为0.95，此时的拟合关系为：<span class="math display">\[\begin{equation}\label{eq7}\begin{aligned}logP=&amp;-16643.2+3153.22*logS-\\&amp;199.43*logS^2+4.21*logS^3\end{aligned}\end{equation}\]</span></p><p>3阶的比特币最终预测价格为<span class="math inline">\(\$151,235.78\)</span>。</p><p>可见参数越多，<span class="math inline">\(R^2\)</span>越高，拟合效果越好，但也越可能是过拟合。</p><p>尝试到6阶，发现这种情况下的比特币最终价格预测最高，为<span class="math inline">\(\$954,987.44\)</span>，接近1百万美元。如果比特币能够替换美元的地位，其理论价格应该差不多为1百万美元。</p><p>6阶拟合的曲线如下：</p><figure><img src="230924-比特币对数价格6阶拟合.jpg" alt="比特币对数价格6阶拟合"><figcaption aria-hidden="true">比特币对数价格6阶拟合</figcaption></figure><p>上图中的拟合公式如下： <span class="math display">\[\begin{equation}\label{eq8}\begin{aligned}logP=&amp;26.27*logS^6-2.52e3*logS^5+\\&amp;1.0e5*logS^4-2.14e6*logS^3+\\&amp;2.56e7*logS^2-1.63e8*logS+\\&amp;4.34e8\end{aligned}\end{equation}\]</span></p><p>其中系数采用了科学记数法，<span class="math inline">\(1.0e5\)</span>代表<span class="math inline">\(1.0\times10^5\)</span>。采用6阶拟合，我们可以做出未来的价格预期曲线，如下：</p><figure><img src="230924比特币对数价格6阶拟合未来走势.jpg" alt="比特币对数价格6阶拟合未来走势"><figcaption aria-hidden="true">比特币对数价格6阶拟合未来走势</figcaption></figure><p>由上述拟合可见，目前比特币还处在较早期的阶段，其价格尚未到达趋于稳定的时候。大约在2042年之后，比特币价格会开始逐渐趋于稳定。</p><p>需要指出的是：</p><blockquote><ol type="1"><li>影响比特币价格的因素可能有很多，本文只是对其中可能的一种进行了回归分析，可能有失偏颇；</li><li>多项式拟合的参数会对样本很敏感，随着未来价格的大幅变大或变小，再次拟合的曲线肯定会相应的变化。</li></ol></blockquote><p><strong>值得一提的是，按照对数供给量的多项式拟合，随着时间推移，比特币的供给量会趋于定值（具体为自2140年后不再减半），从而价格也会趋于某个定值。这与比特币创始的初衷相吻合，即按照当前价值不变的美元（实质上就是总美元M2量限定在约20万亿水平上）计算，最终比特币的价格会收敛，正如比特币的热爱者预期该价格会收敛于1百万美元/BTC那样。</strong></p><p><strong>之前的模型，如<a href="https://bitcointalk.org/index.php?topic=831547.0">彩虹图</a>所预言的价格（或对数价格）会以某种形式单调增长、直至永远，又如<a href="https://twitter.com/100trillionusd?s=21&amp;t=I28yqKWNbjQZue_4ZlkrLw">planB</a>的<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F</a>预言的每轮减半价格涨幅约10倍。这些理论，均认为比特币价格会近乎无限上涨，显然与实际情况有悖。</strong></p><p><strong>本文与他们的结论不同，按照本文的拟合，比特币按当前美元价值计算，是存在极限价格的</strong>。</p><p>由于比特币的总供给量随着时间推移基本上是确定的，上述回归自然是对未来价格的一种预测。</p><p>更详细的推测需要参考重要的时间节点及牛熊涨跌幅等规律，故本文接下来分析比特币减半周期，再进行价格区间及时间跨度相关的推测。</p><h2 id="比特币周期">比特币周期</h2><p>为了划分出减半周期的阶段，需要先观察价格在逐年的表现，再根据表现划分出牛熊周期。</p><h3 id="逐年走势">逐年走势</h3><blockquote><p><font color="red">注：本小节只是想从价格逐年走势图分析牛熊大致区间，读者可以选择跳过，不影响后续阅读。后续需要对照行情可参考此节。</font></p></blockquote><p>每3年汇在一张图中，做出逐年的价格走势及基本统计指标，如下：</p><p>2010.7.13--2012.12.31价格走势：</p><figure><img src="20100713-20121231_btc_price.jpg" alt="10-12年BTC价格走势"><figcaption aria-hidden="true">10-12年BTC价格走势</figcaption></figure><blockquote><p><font size="2"><em>注意上图中左上第一张为全3年时间段的价格走势，后续3张为逐年走势，下同。</em></font></p></blockquote><p>2013.01.01-2015.12.31价格走势：</p><figure><img src="20130101-20151231_btc_price.jpg" alt="13-16年btc价格"><figcaption aria-hidden="true">13-16年btc价格</figcaption></figure><p>2016.01.01-2018.12.31价格走势：</p><figure><img src="20160101-20181231_btc_price.jpg" alt="16-18年btc走势"><figcaption aria-hidden="true">16-18年btc走势</figcaption></figure><p>2019.01.01-2021.12.31走势：</p><figure><img src="20190101-20211231_btc_price.jpg" alt="19-21年btc价格走势"><figcaption aria-hidden="true">19-21年btc价格走势</figcaption></figure><p>2022.01.01-2023.09.16走势：</p><figure><img src="20220101-20230916_btc_price.jpg" alt="22-23年btc价格走势"><figcaption aria-hidden="true">22-23年btc价格走势</figcaption></figure><p>减半对应的牛熊周期一般需要经历完整的<code>盘整 -&gt; 启动 -&gt; 牛市 -&gt; 崩盘 -&gt; 熊市 -&gt; 盘整</code>过程。依照大约4年的周期，比特币历史减半周期大致可如下划分：</p><blockquote><ol type="1"><li>2010.07.13 - 2015.05.01，对应2012.11.28日第一次减半的行情；</li><li>2015.01.01 - 2019.05.01，对应2016.07.09日第二次减半的行情；</li><li>2018.11.01 - 2023.03.01，对应2020.05.11日第三次减半的行情；</li><li>2022.10.01 -今，对应约2024.04.16日第四次减半的行情，持续时间未知。</li></ol></blockquote><p>上述划分有重叠，是为了观察牛市启动前的最低价前和本轮周期最大回撤后的情况。</p><p>当然，上述划分不一定合理，毕竟23年之后的行情还没结束。</p><h3 id="减半周期">减半周期</h3><h4 id="四轮减半周期走势情况">四轮减半周期走势情况</h4><p>有了上面的划分，可以对应的做出每轮减半走势的图。</p><p>2010.07.13 - 2015.05.01第一轮走势：</p><figure><img src="第一轮牛熊比特币价格走势图.jpg" alt="第一轮牛熊比特币价格走势图"><figcaption aria-hidden="true">第一轮牛熊比特币价格走势图</figcaption></figure><blockquote><p><font size="2" color="red"><em>注意：上图中的最大回撤出现在减半之前，不是后续讨论的减半后最大回撤。</em></font></p></blockquote><p>2015.01.01 - 2019.05.01第二轮走势：</p><figure><img src="第二轮牛熊比特币价格走势图.jpg" alt="第二轮牛熊比特币价格走势图"><figcaption aria-hidden="true">第二轮牛熊比特币价格走势图</figcaption></figure><p>2018.11.01 - 2023.03.01第三轮走势：</p><figure><img src="第三轮牛熊比特币价格走势图.jpg" alt="第三轮牛熊比特币价格走势图"><figcaption aria-hidden="true">第三轮牛熊比特币价格走势图</figcaption></figure><p>2022.10.01 - 今第四轮走势：</p><figure><img src="第四轮牛熊比特币价格走势图.jpg" alt="第四轮牛熊比特币价格走势图"><figcaption aria-hidden="true">第四轮牛熊比特币价格走势图</figcaption></figure><h4 id="减半周期规律总结">减半周期规律总结</h4><p>本文定义如下一些概念：</p><blockquote><ul><li>行情启动：上一轮回撤的最低价格为行情启动价，该日为行情启动日，第一次减半也采用减半前的最大回撤作为行情启动点；</li><li>最高涨幅：本轮减半之后的最高价与行情启动价之比；</li><li>盘整期：在上一轮牛市结束后的最低价到本轮减半的最高价之间，持续时间最长的回视最高价（阻力位）对应的时间段；</li><li>牛市：衡量的为减半行情中的牛市，定义为盘整期结束到本轮最高价之间的时间段，类似2011年的上涨不在本定义内；</li><li>熊市：衡量的减半行情后的熊市，定义为本轮减半后，最高价到最大回撤之间的时间段；</li><li>最大回撤：指的是本轮减半后的最大回撤，即从减半后最高价到最低价的跌幅。</li></ul></blockquote><p>可以总结每轮牛熊的统计值，如下表：</p><blockquote><p><font size="2"><em>各减半周期统计总结表</em></font></p></blockquote><table><colgroup><col style="width: 26%"><col style="width: 18%"><col style="width: 18%"><col style="width: 18%"><col style="width: 18%"></colgroup><thead><tr class="header"><th style="text-align: center;"></th><th style="text-align: center;">第一轮减半</th><th style="text-align: center;">第二轮减半</th><th style="text-align: center;">第三轮减半</th><th style="text-align: center;">第四轮减半</th></tr></thead><tbody><tr class="odd"><td style="text-align: center;">减半日</td><td style="text-align: center;">2012-11-28</td><td style="text-align: center;">2016-07-09</td><td style="text-align: center;">2020-05-11</td><td style="text-align: center;">2024-04-16</td></tr><tr class="even"><td style="text-align: center;">减半价</td><td style="text-align: center;">12.377</td><td style="text-align: center;">650.96</td><td style="text-align: center;">8601.796</td><td style="text-align: center;">nan</td></tr><tr class="odd"><td style="text-align: center;">减半预测价</td><td style="text-align: center;">33.736</td><td style="text-align: center;">1399.326</td><td style="text-align: center;">12895.33</td><td style="text-align: center;">76458.321</td></tr><tr class="even"><td style="text-align: center;">减半预测真实价格比</td><td style="text-align: center;">2.726</td><td style="text-align: center;">2.15</td><td style="text-align: center;">1.499</td><td style="text-align: center;">nan</td></tr><tr class="odd"><td style="text-align: center;">行情启动日</td><td style="text-align: center;">2011-11-18</td><td style="text-align: center;">2015-01-14</td><td style="text-align: center;">2018-12-15</td><td style="text-align: center;">2022-11-21</td></tr><tr class="even"><td style="text-align: center;">启动时距减半天数</td><td style="text-align: center;">376</td><td style="text-align: center;">542</td><td style="text-align: center;">513</td><td style="text-align: center;">512</td></tr><tr class="odd"><td style="text-align: center;">启动价格</td><td style="text-align: center;">2.051</td><td style="text-align: center;">178.103</td><td style="text-align: center;">3236.762</td><td style="text-align: center;">15787.284</td></tr><tr class="even"><td style="text-align: center;">盘整开始日</td><td style="text-align: center;">2011-12-05</td><td style="text-align: center;">2016-06-04</td><td style="text-align: center;">2019-05-14</td><td style="text-align: center;">NaT</td></tr><tr class="odd"><td style="text-align: center;">盘整结束日</td><td style="text-align: center;">2012-06-29</td><td style="text-align: center;">2016-11-19</td><td style="text-align: center;">2020-09-10</td><td style="text-align: center;">NaT</td></tr><tr class="even"><td style="text-align: center;">盘整最高价</td><td style="text-align: center;">228.199</td><td style="text-align: center;">766.308</td><td style="text-align: center;">13016.232</td><td style="text-align: center;">nan</td></tr><tr class="odd"><td style="text-align: center;">最高价格日</td><td style="text-align: center;">2013-12-04</td><td style="text-align: center;">2017-12-16</td><td style="text-align: center;">2021-11-08</td><td style="text-align: center;">NaT</td></tr><tr class="even"><td style="text-align: center;">最高价格</td><td style="text-align: center;">1151.17</td><td style="text-align: center;">19497.4</td><td style="text-align: center;">67566.83</td><td style="text-align: center;">nan</td></tr><tr class="odd"><td style="text-align: center;">最高涨幅</td><td style="text-align: center;">561.261</td><td style="text-align: center;">109.473</td><td style="text-align: center;">20.875</td><td style="text-align: center;">nan</td></tr><tr class="even"><td style="text-align: center;">最大回撤日</td><td style="text-align: center;">2015-01-14</td><td style="text-align: center;">2018-12-15</td><td style="text-align: center;">2022-11-21</td><td style="text-align: center;">NaT</td></tr><tr class="odd"><td style="text-align: center;">最大回撤价</td><td style="text-align: center;">178.103</td><td style="text-align: center;">3236.762</td><td style="text-align: center;">15787.284</td><td style="text-align: center;">nan</td></tr><tr class="even"><td style="text-align: center;">最大回撤</td><td style="text-align: center;">-0.845</td><td style="text-align: center;">-0.834</td><td style="text-align: center;">-0.766</td><td style="text-align: center;">nan</td></tr><tr class="odd"><td style="text-align: center;">启动到盘整结束天数</td><td style="text-align: center;">224</td><td style="text-align: center;">675</td><td style="text-align: center;">635</td><td style="text-align: center;">nan</td></tr><tr class="even"><td style="text-align: center;">启动到最高价天数</td><td style="text-align: center;">747</td><td style="text-align: center;">1067</td><td style="text-align: center;">1059</td><td style="text-align: center;">nan</td></tr><tr class="odd"><td style="text-align: center;">盘整结束距减半天数</td><td style="text-align: center;">-152</td><td style="text-align: center;">133</td><td style="text-align: center;">122</td><td style="text-align: center;">nan</td></tr><tr class="even"><td style="text-align: center;">盘整持续天数</td><td style="text-align: center;">207</td><td style="text-align: center;">168</td><td style="text-align: center;">485</td><td style="text-align: center;">nan</td></tr><tr class="odd"><td style="text-align: center;">牛市持续天数</td><td style="text-align: center;">523</td><td style="text-align: center;">392</td><td style="text-align: center;">424</td><td style="text-align: center;">nan</td></tr><tr class="even"><td style="text-align: center;">熊市持续天数</td><td style="text-align: center;">406</td><td style="text-align: center;">364</td><td style="text-align: center;">378</td><td style="text-align: center;">nan</td></tr></tbody></table><p>关于上表的一些说明：</p><blockquote><ol type="1"><li>第四轮周期尚在进行中，没有完结，故数据有空缺。</li><li>减半预测值是根据第二部分的6阶模拟值计算所得，历史已发生的减半日价格低于该值。</li></ol></blockquote><p>从上表中可见如下有意思的结论（主要考虑最近两次已完成的减半周期）：</p><blockquote><ol type="1"><li><strong>行情在减半前1年半（500多天）左右启动；</strong></li><li><strong>每轮减半的最高涨幅呈衰减的特点；</strong></li><li><strong>减半价格与预测价之间的差异越来越小；</strong></li><li><strong>每轮最大回撤呈现出变小的趋势；</strong></li><li><strong>从行情启动到减半后的最高值大约需要1000天（近3年）左右；</strong></li><li><strong>行情启动到盘整结束需要600天左右；</strong></li><li><strong>最近两次减半，盘整结束于减半后约4个月之后；</strong></li><li><strong>牛市持续时间在1年以上；</strong></li><li><strong>熊市大约持续1年左右；</strong></li><li><strong>盘整持续时间至少在半年左右，可以长达1年以上。</strong></li></ol></blockquote><p>如上总结，比特币每轮周期都有很多相似的行情规律，且每轮的最高最低比、最大回撤均呈现减小趋势。不过，也需要指出的是，牛熊的划分方法有主观性、可以有很多种，周期本身也带有主观性。</p><h4 id="比特币波动性在减小">比特币波动性在减小</h4><p>为了验证比特币波动性确实是呈下降趋势的，可以做出比特币90日滚动年化波动率时序图，如下：</p><figure><img src="比特币90日滚动年化波动率.jpg" alt="比特币90日滚动年化波动率"><figcaption aria-hidden="true">比特币90日滚动年化波动率</figcaption></figure><p>从上图可见，<strong>若按照减半周期来看，比特币的波动是呈减小趋势的</strong>，这与NassimTaleb所质疑的比特币波动性没有变小的结论不同（<a href="https://arxiv.org/pdf/2106.14204.pdf">参见此处</a>）。<strong>由此分析，我们可以合理的假定比特币价格最终会趋于稳定。</strong></p><p>上图还有一个有意思的现象：比特币90日滚动年化波动率多次下降到0.23附近的位置，随着时间的推移，波动率纵然有所下降，但似乎始终没有低于此值。附带一提，0.23的年化波动率水平是低于大多数股票波动率的。</p><h2 id="减半行情的极值建模">减半行情的极值建模</h2><p>上一小节总结了一些减半的规律，本节将对减半的两个极值（最高涨幅、最大回撤）进行分析。</p><p>当然，我们还可以对减半日价格、每轮周期的最高价、最低价进行建模。</p><p>但是，最高价与最低价实际上是可以用历史价格、最高涨幅和最大回撤递推；随着减半次数的增加，第二部分预测的价格与减半价格之间的差距缩小，可以用其（对数总供给量6阶拟合函数）对减半价进行预测。</p><p>故而，本小节只讨论2个极值。</p><h3 id="最高涨幅拟合">最高涨幅拟合</h3><p>中文比特币社区著名的九神（ahr999），曾撰写过《囤比特币》系列文章，在其“<a href="https://coxxa.github.io/bitcoin-ahr999-HODL/#/di-san-zhang?id=第三章-囤比特币：你离财富自由还有多远？">囤比特币：你离财富自由还有多远？</a>”一章中，提出一个很有意思的假设，即比特币每轮减半增长倍数呈线性或“指数递减”方式变化。</p><p>如减半周期与最高涨幅之间呈线性关系，则应满足如下关系： <span class="math display">\[\begin{equation}\label{eq9}h_n=a+b*n\end{equation}\]</span> 其中h代表本轮减半行情的最高涨幅，n=1, 2, 3, ...,33为减半周期数，下同。</p><p>历史上发生过的3次减半行情最高涨幅与周期的线性拟合如下：</p><figure><img src="历史减半周期与最高涨幅线性回归.jpg" alt="历史减半周期与最高涨幅线性回归"><figcaption aria-hidden="true">历史减半周期与最高涨幅线性回归</figcaption></figure><p>上图中x轴被替换成了日期，因为每个减半周期对应唯一的日期。虽然上图中的<span class="math inline">\(R^2\)</span>较好，因为样本太少，很难说周期与涨幅是否符合线性关系。</p><p>如认可比特币2140年之后趋于稳定，则减半周期与减半行情最高涨幅的线性拟合如下：</p><figure><img src="趋于稳定的减半周期与最高涨幅线性回归.jpg" alt="趋于稳定的减半周期与最高涨幅线性回归"><figcaption aria-hidden="true">趋于稳定的减半周期与最高涨幅线性回归</figcaption></figure><p>可见此时线性拟合不是很合适。</p><p>下面考虑最高涨幅与周期呈指数衰减关系，即： <span class="math display">\[\begin{equation}\label{eq10}h_n=a+b*e^{-c*n}\end{equation}\]</span> 拟合效果如下：</p><figure><img src="减半周期与最高涨幅指数衰减拟合.jpg" alt="减半周期与最高涨幅指数衰减拟合"><figcaption aria-hidden="true">减半周期与最高涨幅指数衰减拟合</figcaption></figure><p>图中的x轴也从周期被替换成了日期，这样方便对照日期。</p><p>上图<span class="math inline">\(R^2\)</span>接近1的原因在于：</p><ol type="1"><li>样本太少，3参数的指数衰减可以很好的拟合4个最高涨幅；</li><li>样本的量级差异很大，作为分子的样本方差远远大于拟合值与真实值偏差的方差。</li></ol><p>指数衰减拟合结果显示，比特币价格趋于稳定后，最高涨幅小于1，这不合理，主要原因是样本太少。</p><p>为了避免量级引起的误判，可采用对数最高涨幅拟合。对数最高涨幅与减半周期的线性回归关系如下：<span class="math display">\[\begin{equation}\label{eq11}ln(h_n)=a+b*n\end{equation}\]</span> 这一拟合的结果如下：</p><figure><img src="减半周期与对数最高涨幅线性回归.jpg" alt="减半周期与对数最高涨幅线性回归"><figcaption aria-hidden="true">减半周期与对数最高涨幅线性回归</figcaption></figure><p>可见对数涨幅与周期之间的线性拟合的效果有所下降。由上图，直观感觉对数最高涨幅是随着周期增大指数衰减的，即有如下关系：<span class="math display">\[\begin{equation}\label{eq12}ln(h_n)=a+b*e^{-c*n}\end{equation}\]</span> 拟合效果如下：</p><figure><img src="减半周期与对数最高涨幅指数衰减拟合.jpg" alt="减半周期与对数最高涨幅指数衰减拟合"><figcaption aria-hidden="true">减半周期与对数最高涨幅指数衰减拟合</figcaption></figure><p>可见这一拟合效果非常好，不过原因也是用了3个参数来模拟4个样本。该拟合是否符合实际，有待未来的行情进行验证。</p><p>如将周期改为对数周期，进行如下关系的拟合： <span class="math display">\[\begin{equation}\label{eq13}ln(h_n)=a+b*ln(n)\end{equation}\]</span> 拟合结果如下：</p><figure><img src="对数减半周期与对数最高涨幅线性回归.jpg" alt="对数减半周期与对数最高涨幅线性回归"><figcaption aria-hidden="true">对数减半周期与对数最高涨幅线性回归</figcaption></figure><p>可见对数最高涨幅与对数周期之间的线性回归效果很好，在压低了量级影响后，线性关系（2参数拟合4个样本）仍然很显著。</p><p>上述<span class="math inline">\(\eqref{eq11}\)</span>和<span class="math inline">\(\eqref{eq12}\)</span>的拟合都可以作为减半周期最高涨幅的模型，第四部分中我们选定对数最高涨幅与周期呈指数衰减的<span class="math inline">\(\eqref{eq12}\)</span>模型进行讨论。</p><p>下面拟合每轮周期的最大回撤。</p><h3 id="最大回撤拟合">最大回撤拟合</h3><p>仍然假定比特币价格最终会趋于稳定，即2140年之后的最大回撤接近1。</p><p>做出周期-最大回撤（绝对值）的附带线性回归的散点图，如下：</p><figure><img src="减半周期与最大回撤线性回归图.jpg" alt="减半周期与最大回撤线性回归图"><figcaption aria-hidden="true">减半周期与最大回撤线性回归图</figcaption></figure><p>可见2参数的最大回撤线性拟合效果很好，我们可以将其作为最大回撤的拟合模型，即：<span class="math display">\[\begin{equation}\label{eq14}mdd_n=0.87-0.026*n\end{equation}\]</span></p><p>如上式，预期减半周期的最大回撤线性减小，每一轮比上一轮减小0.026。</p><p>当然，随着未来样本量的增加，可进一步拟合模型参数，或更换其他函数进行拟合。</p><h2 id="关于下一次减半的推测">关于下一次减半的推测</h2><p>我们在上面第2部分详细讨论了价格模型，并采用<span class="math inline">\(\eqref{eq8}\)</span>进行价格模拟，在第4部分利用了第3部分总结的减半规律建立了极值模型<span class="math inline">\(\eqref{eq12}\)</span>和<span class="math inline">\(\eqref{eq14}\)</span>，有了这些模型基础，我们可以顺理成章的对接下来的减半周期进行推理。</p><p>由于已经发生的减半次数过少，本文的模型不可能太精确。故本节仅粗略的预测下一轮减半日的价格、减半后的最高价、最高价后出现最大回撤的价格等。</p><p>在本节的叙述中会对下一轮减半周期的过程进行部分推测性描述。</p><h3 id="减半日价格预测">减半日价格预测</h3><p>由于过去3次减半日的价格均低于预测价格，且预测价与实际价的比值呈减小趋势，最近的预测真实价格比为1.499，故可根据<span class="math inline">\(\eqref{eq8}\)</span>推测下次减半日（2024-04-16左右），价格会高于76,458.321/1.499，低于76,458.321，即：<span class="math display">\[\begin{equation}\label{eq15}P_{2024-04-16}\in[51006.21, 76458.321]\end{equation}\]</span></p><p>这是纯粹按照上述逻辑预测的结果，当然这个预测值可能会有很大的误差，因为这一结论的得出有如下几个前提：</p><blockquote><ol type="1"><li>价格模型在一定时间内符合真实情况，且下一轮减半日的随机效应不太大、不至于抵消掉价格模型预期的减半上涨；</li><li>预测值略高于真实值的效应仍然存在，不至于反转，且预测、真实价之比仍然呈减小趋势。</li></ol></blockquote><h3 id="减半后最高价格预测">减半后最高价格预测</h3><p>我们采用<span class="math inline">\(\eqref{eq12}\)</span>进行最高涨幅的预测。</p><p>由于每轮减半的行情启动均出现在减半前510天上下，故基本可以确定2024年减半行情已经于2022-11-21日左右启动了，启动价格为<span class="math inline">\(\$15,787.284\)</span>。</p><p>按照最高涨幅模型，下次减半的最高涨幅将达到9.33倍左右，从而最高涨幅对应的减半行情最高价在<span class="math inline">\(\$147,295.36\)</span>左右。</p><p>之前的减半行情启动到最高价约1050天来估计，最高价格出现在2025-10-06前后，据6阶模型预估2025-10-06日价格在<span class="math inline">\(\$114,395\)</span>左右。</p><p>过去盘整结束与行情启动间隔的天数大约在600天上下，按此规律，盘整结束的日期大约在2024-07-13左右。或者以减半后4个月（120天）来估计，大概在2024-08-14左右，盘整结束，正式进入牛市，并持续一年左右。</p><h3 id="减半后最大回撤预测">减半后最大回撤预测</h3><p>按照最大回撤线性模型<span class="math inline">\(\eqref{eq14}\)</span>，我们预期下次减半行情冲高后的最大回撤大约为0.763左右。</p><p>照以往规律，最大回撤距离最高价日期大概在1年（365天）左右，如最高价（<span class="math inline">\(\$147,295.36\)</span>）出现在2025-10-06前后，则下次减半后比特币经过1年多的上涨，最终价格会持续约1年左右的下跌，跌幅76.3%左右、价格下跌到<span class="math inline">\(\$34,909\)</span>左右，日期约在2026-10-06日前后。</p><p>至此，比特币的第4轮减半行情结束，开始新的一轮周期。</p><h2 id="致谢">致谢</h2><p>本文篇幅有些长，非常感谢你能耐心阅读到此。</p><p>希望本文能或多或少对你有一些帮助，不至于辜负你认真的思考与耐心的探索。</p><p>需要再次指出的是，本文中涉及的内容只是对未来的一种猜测，仅作参考，不构成投资建议，望读者自行斟酌。</p><p>谢谢阅读！</p>]]></content>
-      
-      
+      <tags>
+        <tag>加密货币</tag>
+        <tag>因子投资</tag>
+        <tag>比特币</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pycharm重装打不开的问题</title>
+    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
+m1电脑，重装最新版pycharm专业版后不能打开。</p>
+<span id="more"></span>
+<h2 id="背景介绍">背景介绍</h2>
+<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
+<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
+m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
+<p>网上找了很久，才最终解决该问题。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
+<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
+<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
+<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
+]]></content>
+      <tags>
+        <tag>技术</tag>
+        <tag>PyCharm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>acme.sh不能自动更新证书的问题</title>
+    <url>/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>本文描述了一种使用<code>acme.sh</code>颁发的证书始终不能正常自动更新的问题，并记录了解决过程。</p>
+<span id="more"></span>
+<p>在服务器上使用了<code>acme.sh</code>来颁发ssl证书，按照<a href="https://github.com/acmesh-official/acme.sh/blob/master/README.md">官方指导</a>在用户<code>user1</code>根目录下安装了<code>acme.sh</code>，并在<code>root</code>用户下执行如下命令（如不在root下执行，会报提醒，建议到root下执行），成功颁发了证书：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --set-default-ca --server letsencrypt --issue -d test_domain.com --standalone --keylength ec-256 --force</span><br></pre></td></tr></table></figure>
+<p>然后在<code>root</code>下执行了将证书安装到指定目录下的操作：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --install-cert -d test_domain.com --ecc \</span><br><span class="line">                          --fullchain-file /etc/v2ray/v2ray.crt \</span><br><span class="line">                          --key-file /etc/v2ray/v2ray.key \</span><br><span class="line">                          --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure>
+<p>一切正常的话，按照官方所描述的，<code>crontab</code>中会每日自动检查证书是否需要<code>renew</code>，然后根据情况在快要到期时（<code>acme.sh</code>默认证书有效期为90天，到期前30天会自动更新。注意有效期最多只有90天，不能延长，<a href="https://letsencrypt.org/docs/faq/">参见此处</a>）更新。</p>
+<p>但是在实际操作中，始终不能如预期正常更新证书。<code>user1</code>下检查定时任务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo crontab -l</span><br></pre></td></tr></table></figure>
+<p>查看结果：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
+<p>由于一直没找到原因，故每次到期后都需要手动更新证书：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ~/.acme.sh/acme.sh --renew -d test_domain.com --force --ecc --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure>
+<p>上述命令执行在用户<code>user1</code>下。最后的参数是在执行后重启<code>nginx</code>和<code>v2ray</code>。</p>
+<p>手动更新正常（这很奇怪，可能是因为在<code>root</code>与<code>user1</code>下都生成了证书，保留了两个目录下的参数与证书，并在根目录下生成证书时输入了错误的域名？检查发现<code>root</code>下也安装了<code>acme.sh</code>，将其卸载，并删除了<code>.acme.sh/</code>目录。）。</p>
+<p>一直对<code>acme.sh</code>定时更新的工作流程，特别是为什么不需要在<code>crontab</code>的定时任务里不需要传参的原因不是很理解，于是花了点时间检索，发现了<a href="https://github.com/acmesh-official/acme.sh/issues/3981">相关解答</a>。即在执行<code>--install-cert</code>后参数会保存，自动更新时调用之，故不需要在<code>crontab</code>中传参。</p>
+<p>然后尝试直接<code>debug</code>执行更新操作：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure>
+<p>发现执行日志有如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===Starting cron===</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Using config home:/home/user1/.acme.sh</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _stopRenewOnError</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] di=<span class="string">&#x27;/home/user1/.acme.sh/*.*/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Not a directory, skip: /home/user1/.acme.sh/*.*/</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _error_level=<span class="string">&#x27;3&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===End cron===</span><br></pre></td></tr></table></figure>
+<p>从上述内容可见问题出现在参数配置文件目录出错，导致找不到<code>.acme.sh/*.*/</code>文件。这才意识到安装<code>acme.sh</code>脚本的目录是在<code>user1</code>根目录下，但是在申请证书是在<code>root</code>根目录下操作的。执行了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo su -</span><br></pre></td></tr></table></figure>
+<p>造成目录切换到了<code>root</code>根目录下，运行<code>--issue</code>域名的操作生成的文件直接保存在了<code>root</code>根目录下，即证书、配置的目录与脚本的目录不匹配。程序自动更新时在脚本目录<code>/home/user1/.acme.sh</code>下寻找不到所需的证书与参数，因而出错、忽略了。加上日志直接输到了<code>/dev/null</code>，故一直没找到原因。</p>
+<p>修改<code>--home</code>后<code>debug</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure>
+<p>发现结果显示包含如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:47:17 UTC 2023] di=<span class="string">&#x27;/root/.acme.sh/test_domain_ecc/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] d=<span class="string">&#x27;test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] DOMAIN_PATH=<span class="string">&#x27;/root/.acme.sh/test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Renew: <span class="string">&#x27;test_domain.com&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Le_API=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Skip, Next renewal time is: Mon Dec 11 09:52:50 UTC 2023</span><br></pre></td></tr></table></figure>
+<p>显然，这次脚本成功检查了证书的有效期，并跳过了不需要更新的证书。可判断这回脚本能够正确运行了。</p>
+<p>在<code>root</code>下修改<code>crontab</code>中的任务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+<p>将<code>--home</code>参数后的目录修改一下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
+<p>即可正常自动更新了。</p>
+]]></content>
+      <tags>
+        <tag>acme.sh</tag>
+        <tag>证书</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>比特币S2F模型还适用吗</title>
+    <url>/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/</url>
+    <content><![CDATA[<p>在上轮比特币减半（2020-05-11减半）周期中，<a href="https://twitter.com/100trillionusd/">PlanB</a>的<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F模型</a>扮演了非常重要的角色，<a href="https://charts.bitbo.io/stock-to-flow/">该模型预测</a>的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#对数供给量多项式模型">对数供给量多项式模型</a>的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与市值的关系。</p>
+<span id="more"></span>
+<h2 id="s2f模型的不足">S2F模型的不足</h2>
+<p>正如我之前的文章所指出的（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">比特币的价格模型</a>一节），按照S2F模型，比特币会无限上涨。更量化的，每4年减半一次都上涨接近10倍，没有尽头。特别是当比特币增量为0后（2140年后），按照S2F模型，<span class="math inline">\(stock/flow\)</span>会变为无穷大。按该模型预测，比特币的市值会趋于无穷大。</p>
+<p>众所周知，目前美元m2总量才21万亿左右，只要美元的计价地位不变（美元仍为本位货币），则比特币的市值不应该超过21万亿美元太多。</p>
+<p>PlanB的原始模型显然没有考虑这一限制，特别是其对涨幅衰减效应的欠考虑，引起模型与真实情况的偏离，最终导致预测上轮（对应2020-05-11减半）牛市的价格区间出错。这是该模型最大的一个不足之处。</p>
+<p>另外，该模型还进行了跨市场的验证，其中包含了黄金和白银等，得出S2F越大则市值越大的结论。照此推论，黄金的S2F值高于美元，那么为什么黄金的市值低于美元？这显然也不合理。</p>
+<p>最后，近年来大为流行的NFT产品，具有唯一性，这类产品的S2F理论上应该趋于无穷大，但现实中只有极少数NFT产品卖出了天价，这显然也与S2F模型所描述的规律不一样。</p>
+<h2 id="s2f简化模型建模">S2F简化模型建模</h2>
+<p>本节对S2F模型做了一些简化处理，得出与原始版本相当的结论。</p>
+<p>首先，与原文的方式不同，本文存量（stock）采用如下更简单的方式计算：</p>
+<p><span class="math display">\[\begin{equation}\label{eq1}
+stock_i=market\_cap_i/close_i
+\end{equation}\]</span></p>
+<p>其中i代表第i个交易日，下同。下文用<span class="math inline">\(M\)</span>代表市值、<span class="math inline">\(S\)</span>代表存量。另外，本文的数据采用日频数据，而非原本S2F模型的月度数据。</p>
+<p>流通量（flow）与PlanB的定义也不同，不采用年化的产量，而直接采用日产量（即stock的增量），计算方法如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq2}
+flow_i=\Delta S_i=S_i-S_{i-1}
+\end{equation}\]</span></p>
+<p>这种直接计算存量、流通量的方法更简单，理论上与原版模型只有常数（会略微有一点随机偏差）差异。</p>
+<p>有了存量、流通量后，自然有：</p>
+<p><span class="math display">\[\begin{equation}\label{eq3}
+S2F_i=S_i/flow_i
+\end{equation}\]</span></p>
+<p>如上计算出<span class="math inline">\(S2F\)</span>后，先观察未进行处理的对数<span class="math inline">\(S2F\)</span>值、即<span class="math inline">\(log(S2F)\)</span>（简计为<span class="math inline">\(logS2F\)</span>）与对数市值<span class="math inline">\(log(M)\)</span>（简记<span class="math inline">\(logM\)</span>）的走势图，如下：</p>
+<figure>
+<img src="logM与logS2F未处理走势图.jpg" alt="logM与logS2F未处理走势图">
+<figcaption aria-hidden="true">logM与logS2F未处理走势图</figcaption>
+</figure>
+<p>可见有不少异常数据。采用如下mad法来处理异常值：</p>
+<blockquote>
+<p>采用中位数绝对偏差法（mad法），选择1月滚动回视窗口，即<span class="math inline">\(window=30\)</span>，将与中位数（滚动median值）偏差超过3倍mad值的数值视为异常值，采用滚动<span class="math inline">\(median\pm
+3*mad\)</span>值替换异常值，即超出上限的用上限替换、超出下限的用下限替换。</p>
+</blockquote>
+<p>其中mad值的计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq4}
+mad=median(abs(X-median(X))
+\end{equation}\]</span></p>
+<p>采用上述方法、会将减半日的<span class="math inline">\(logS2F\)</span>跳跃效应延迟，在滞后约<span class="math inline">\(window/2=15\)</span>期后才会过渡到真实的<span class="math inline">\(logS2F\)</span>值。这一处理无伤大雅，不妨碍揭示出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的关系。</p>
+<p>做了异常值处理的<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>走势对比如下：</p>
+<figure>
+<img src="logM与logS2F进行异常值处理后的走势图.jpg" alt="logM与logS2F进行异常值处理后的走势图">
+<figcaption aria-hidden="true">logM与logS2F进行异常值处理后的走势图</figcaption>
+</figure>
+<p>可见减半日附近的<span class="math inline">\(logS2F\)</span>跳跃效应依然存在，曲线中的异常值被很好的处理了。下文中均采用处理过的<span class="math inline">\(logS2F\)</span>来建模及讨论。</p>
+<p>先做出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的线性回归图：</p>
+<figure>
+<img src="logM与异常值处理后的logS2F线性回归图.jpg" alt="logM与异常值处理后的logS2F线性回归图">
+<figcaption aria-hidden="true">logM与异常值处理后的logS2F线性回归图</figcaption>
+</figure>
+<p>图中的线性关系为：</p>
+<p><span class="math display">\[\begin{equation}\label{eq5}
+logM=-4.55+3.21*logS2F
+\end{equation}\]</span></p>
+<p>这一拟合结果与PlanB的结果非常相近（参见<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">此处</a>），他得到的系数为3.32。故本文采用的简单计算方式与原文的计算方式区别不大。</p>
+<p>从上图可以很明显的观察到：对应3次减半形成的4个时间区域，<span class="math inline">\(logS2F\)</span>数据形成了4个区分明显的阶梯。随着<span class="math inline">\(logS2F\)</span>的增大、对应减半次数的增加，<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的波动范围在缩小，波动性呈下降趋势。</p>
+<p>不管从哪种意义上来说，上图的结果都是让人震惊的。与原文采用月频数据（111个样本）不同，本文在考虑了包含最新数据的日频数据（样本更多，共4826个样本）、且更改了计算方法后，仍可得出如下结论：</p>
+<blockquote>
+<p><font color="red"><strong>在目前阶段，线性的S2F模型依然可以作为价格规律的一个比较有效的近似。</strong></font></p>
+</blockquote>
+<p>但仍然需要指出的是，在<span class="math inline">\(logS2F\)</span>的最右侧区域（对应的是2020-05-11减半之后的数据），阶梯上升有减小的趋势，如我在2023-09-25所写的<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#引言">文章</a>所指出的那样。</p>
+<p>由于减半次数太少（只发生了3次），这意味着目前有效的自变量变化范围尚且太小，线性拟合可以是很多种函数在局部区域的近似，并不能断言<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>两者就是线性关系。</p>
+<h2 id="s2f模型与多项式拟合的关系">S2F模型与多项式拟合的关系</h2>
+<p>下面我将讨论S2F模型与对数供给量多项式价格模型（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">此处</a>）的关系，得出多项式模型是对S2F模型的批判性继承的结论。</p>
+<p>我们将<span class="math inline">\(flow\)</span>简计为<span class="math inline">\(F\)</span>，S2F模型可以一般的表达为：</p>
+<p><span class="math display">\[\begin{equation}\label{eq6}
+\begin{aligned}
+logM &amp; =a+b*logS2F\\ &amp;=a+b*(logS-logF)\\
+&amp;=a+b*(logS-log\Delta S)
+\end{aligned}
+\end{equation}\]</span></p>
+<p>其中<span class="math inline">\(\Delta S\)</span>是<span class="math inline">\(S\)</span>的一阶小量，有如下特点：</p>
+<ol type="1">
+<li>随着减半次数的进一步增加<span class="math inline">\(\Delta
+S\)</span>会变得越来越小，直至减半终结而趋于0；</li>
+<li>在<span class="math inline">\(\Delta S&gt;1\)</span>时，<span class="math inline">\(log\Delta
+S\)</span>会随着减半次数增加而单调递减，对应的<span class="math inline">\(logS\)</span>项则会越来越大，此时<span class="math inline">\(log\Delta
+S\)</span>项的影响随着减半增加会越来越低，可作为微扰项，将其忽略影响不大；</li>
+<li>当<span class="math inline">\(\Delta S&lt;1\)</span>时，<span class="math inline">\(log\Delta
+S\)</span>会随着减半次数的进一步增加而变为负数、其绝对值越来越大、最终趋于无穷。此时该项的影响会超过<span class="math inline">\(logS\)</span>项，且其引入了与真实情况有悖的不可解释的效应，这些效应只在减半快要结束时才出现、并没有现实支撑。明显是不合理的，此时更应将该项舍弃；</li>
+</ol>
+<p>如上分析，<span class="math inline">\(\eqref{eq6}\)</span>最后的<span class="math inline">\(log\Delta
+S\)</span>项在减半周期较小时才有意义，将其舍弃后模型才更合理。</p>
+<p>结合市值的定义，上式可以如下转换：</p>
+<p><span class="math display">\[\begin{equation}\label{eq7}
+\begin{aligned}
+log(S*P)  &amp;=a+b*logS \\ \Rightarrow logS+logP &amp;= a+b*logS \\
+\Rightarrow logP &amp;=a+(b-1)*logS \\ \Rightarrow
+logP&amp;=a+b&#39;*logS
+\end{aligned}
+\end{equation}\]</span></p>
+<p>即舍弃了不合理部分的S2F模型化成了多项式拟合的1阶形式。</p>
+<p>下面做出<span class="math inline">\(logS\)</span>与<span class="math inline">\(logP\)</span>的线性回归图，以验证舍去<span class="math inline">\(log\Delta S\)</span>项是否合理：</p>
+<figure>
+<img src="logS与logP的线性回归图.jpg" alt="logS与logP的线性回归图">
+<figcaption aria-hidden="true">logS与logP的线性回归图</figcaption>
+</figure>
+<p>通过上图的数据实证可见，两者效果上基本等价（1阶多项式拟合的<span class="math inline">\(R^2\)</span>为0.91，S2F模型为0.93），印证了<span class="math inline">\(log\Delta S\)</span>项实际上是冗余的。</p>
+<p>从而，得出如下结论：</p>
+<blockquote>
+<p><font color="red"><strong>对数供给量多项式拟合可以被视为S2F模型的一种更合理的、可拓展的形式，其更适用于有极限价格的实际情况</strong>。</font></p>
+</blockquote>
+<h2 id="稀缺性与市值">稀缺性与市值</h2>
+<p>稀缺性（仍可用S2F值代表）与市值，是一个很复杂的问题，本文目前仅仅只做一些逻辑上的讨论，更量化的讨论留待将来进行。</p>
+<p>到目前为止，在流通性良好且为人们普遍接受的商品中，黄金的稀缺性是公认较高的，但其并没有超过以m2衡量的美元的市值，这或许与黄金不具有本位币地位有关。金本位的崩溃促使黄金退化为了一种普通商品，相较于可以购买一切的本位币而言，人们对黄金的潜在需求下降，导致其市值相较于美元缩水。</p>
+<p>这对比特币的警示意义在于：如果其最终不能取得本位币地位，则其市值不太可能超越以m2衡量的美元，从而2140年之后btc的价格可能达不到以当前美元价值衡量的100万美元/BTC。</p>
+<p>稀缺性高于黄金S2F值的商品，如古董、艺术品、NFT产品等，由于供给量限定，S2F会很高，但其价格的差别却很大、大多市值也很有限，并不完全遵循越稀缺市值越高的规律。显然，造成这一现象的主要的原因在于是否有足够的潜在购买者为其稀缺性买单。</p>
+<p>这对于比特币的警示意义在于：虽然目前btc的流通性很好，但如果比特币不能更多的为大众所接纳，其使用场景不能更近一步增加，则人们很难会进一步为其稀缺性买单，从而减半导致的稀缺性上升也不能很好的反映在市值上，即便最终其S2F趋近于无穷大，也不代表其市值就会上涨到很高的水平。</p>
+<h2 id="致谢与声明">致谢与声明</h2>
+<p>本文仅仅是在做技术上的尝试，不构成投资建议，望读者自行甄别。</p>
+<p>限于本人的水平，本文错谬之处在所难免，期待方家指正。</p>
+<p>感谢您的阅读！</p>
+<p>本文完。</p>
+]]></content>
       <categories>
-          
-          <category> 技术 </category>
-          
+        <category>技术</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> bitcoin </tag>
-            
-            <tag> 减半 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>pycharm重装打不开的问题</title>
-      <link href="/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-      <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-      
-        <content type="html"><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的macm1电脑，重装最新版pycharm专业版后不能打开。</p><span id="more"></span><h2 id="背景介绍">背景介绍</h2><p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p><p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，macm1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p><p>网上找了很久，才最终解决该问题。</p><h2 id="解决办法">解决办法</h2><p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p><p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure><p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure><p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p><p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p><p>激活后发现新版本功能多了好多，花了钱的就是好。</p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 技术 </tag>
-            
-            <tag> PyCharm </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>加密市场的市场因子</title>
-      <link href="/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/"/>
-      <url>/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/</url>
-      
-        <content type="html"><![CDATA[<p>本文分析了加密货币的市场因子，采用了排名前300的币种构建市场因子，并阐述了其原因。TODO</p><p>进而，从数据上解释了为什么币圈的量化机构一般都用比特币作为市场基准的原因。</p><p>最后，研究了币安上线有U本位永续合约的加密货币子集，通过t检验，得出币安U本位子集具有相较于不筛选更优期望的结论。TODO</p><span id="more"></span><h2 id="市场因子">市场因子</h2><p>本文的数据来源于<a href="https://coinmarketcap.com">coinmarketcap</a>，截止到2023-09-14日，该网站上收录了超过9000种数字货币。</p><p>采用如下方法构建市场指数：</p><blockquote><ol type="1"><li>市值大于<span class="math inline">\(10^{6}\)</span>美元的币作为有效币，不足的过滤掉；</li><li>日交易量超过<span class="math inline">\(10^5\)</span>美元的作为有效币，不足的过滤掉；</li><li>每个交易日收盘（UTC时间）时，选择当日市值排名前300的币持有，如果当日全市场币的数量不足300，则满足1、2条件的全选，采用市值加权构建投资组合，忽略交易成本；</li><li>次日，根据新的市值排名再平衡。</li></ol></blockquote><p>如上构建的市场指数与btc对比的走势图如下：</p><p><img src="排名前300构建的市场指数vs比特币.jpg"></p><p>可见市场指数与btc走势很相似，</p><p>检查两者的收益率相关性，得到如下相关性表格：</p><blockquote><p><font size="2"><em>300指数与比特币收益率相关性表格</em></font></p></blockquote><table><thead><tr class="header"><th style="text-align: left;"></th><th style="text-align: right;">mkt300</th><th style="text-align: right;">btc</th></tr></thead><tbody><tr class="odd"><td style="text-align: left;">mkt300</td><td style="text-align: right;">1</td><td style="text-align: right;">0.943</td></tr><tr class="even"><td style="text-align: left;">btc</td><td style="text-align: right;">0.943</td><td style="text-align: right;">1</td></tr></tbody></table><p>故比特币可以作为市场指数很好的代理变量，这也就是为什么加密市场通常可以将比特币作为基准的原因。</p><p>这也揭示出加密市场除开比特币以外的头部币种，可以看作比特币的市值延拓。</p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 加密货币 </tag>
-            
-            <tag> 因子投资 </tag>
-            
-            <tag> 比特币 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>使用hexo遇到的坑</title>
-      <link href="/2023/08/31/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/"/>
-      <url>/2023/08/31/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
-      
-        <content type="html"><![CDATA[<p>在初次使用hexo时，遇到一系列问题。现在开启这篇文章记录之。</p><span id="more"></span><h2 id="git提交用户与git登陆用户不一致问题">1.git提交用户与git登陆用户不一致问题</h2><p>在实际操作时，发现GitHub提交项目的用户仍为之前<code>git config --global</code>设置的用户及邮箱，并没有采用<code>git config --local</code>设置或<code>_config.yml</code>文件中配置的参数，实际登陆用户为<code>--local</code>设置的那个，采用的ssh密钥也是这个用户。</p><p>其中<code>_config.yml</code>的相关配置如下：</p><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repository:</span> <span class="string">git@xxx.io.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">main</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">user01</span></span><br><span class="line">  <span class="attr">email:</span> <span class="string">email01@xxx.com</span></span><br></pre></td></tr></table></figure><p>出现的问题如图：</p><p><img src="用户修复.png"></p><p>上图框中的用户名是问题修复后的，修复前为其他用户。</p><p>问题产生的原因是hexo在第一次部署后会记录用户相关参数，保存在了<code>.deploy_git</code>文件中，之后一直延续之，故不论后续怎么修正都仍然采用的之前保留的用户。</p><p>解决办法是在添加局域用户名后，删除本项目的<code>.deploy_git</code>文件：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">rm</span> -rf .deploy_git</span><br></pre></td></tr></table></figure><p>然后重新部署即可。</p><h2 id="typora与hexo的图片引用地址不一致问题">2.typora与hexo的图片引用地址不一致问题</h2><p>在显示上面那张图片时存在hexo图片不显示的问题：</p><p>图片保存地址为：</p><p><code>source/_posts/&#123;文稿名称对应的资源文件夹&#125;/&#123;引用图片&#125;</code></p><p>在typora中的相对位置需要指定图片文件的上层目录才可以引用、即需要指定：</p><p><code>![](&#123;文稿名称对应的资源文件夹&#125;/&#123;引用图片&#125;)</code></p><p>才可显示。</p><p>而hexo按照教程（ <a href="https://hexo.io/docs/asset-folders#Embedding-an-image-using-markdown">资源文件夹</a>）设置后，不需要指定<code>&#123;文稿名称对应的资源文件夹&#125;</code>。</p><p>在知乎上找到了<a href="https://zhuanlan.zhihu.com/p/542101567">解决方案</a>。需要更改</p><p><code>node_modules</code> --&gt; <code>hexo-asset-image</code> --&gt;<code>index.js</code></p><p>第58行的代码：</p><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">$(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, config.<span class="property">root</span> + link + src);</span><br></pre></td></tr></table></figure><p>改为：</p><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">$(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, src);</span><br></pre></td></tr></table></figure><p>最后在<code>*.md</code>文件中引用图片时还是需要指定没有<code>.md</code>文件名命名的文件夹作为索引路径，即：</p><p><code>![](&#123;文件名&#125;/&#123;图片&#125;)</code></p><p>然后执行：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</span><br></pre></td></tr></table></figure><p>即可在本地浏览器看到正确的图片。</p><h2 id="hexo每次部署后均需要重新配置自定义域名">3.hexo每次部署后均需要重新配置自定义域名</h2><p>在每次新写文章之后，执行了：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure><p>结果发现GitHub上的项目历史commit记录丢失，且在<code>Settings -&gt; Pages -&gt; Custom domain</code>中配置的自定义域名也丢失，需要再次配置才能访问。</p><p>估计是先执行了<code>clean</code>操作的原因。</p><p>本文完成后，再次尝试部署，这回在部署前不<code>clean</code>:</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo d -g</span><br></pre></td></tr></table></figure><p>访问网页发现仍然出现域名解析丢失的问题，GitHub上的用户自定义域名又变为了空白。</p><p>出现该问题的原因是域名解析的操作是在GitHub上进行的，在<code>Custom domain</code>中绑定用户自定义域名后，会在GitHub项目库根目录上生成一个名为<code>CNAME</code>的文件，该文件中有域名信息、本地没有。如果在本地执行部署，自然不会有该文件、从而强制推送到远端时会导致远端的该文件丢失。</p><p>解决办法为在本地hexo博客的<code>source</code>文件夹下新建一个<code>CNAME</code>文件，写入自己的域名，再次部署即可。</p><h2 id="更改主题">4. 更改主题</h2><p>由于想给hexo博客增加一个访问量统计功能，找到的介绍均提到主题目录下还存在其他文件，但是我上面根据官网默认安装的在<code>themes</code>文件夹下是没有东西的，故需要安装以进一步增加统计功能。</p><p>查询到更改（或沿用默认的<code>landscape</code>）主题的方法很简单，直接在官网<a href="https://hexo.io/themes/">主题</a>页面上查找到自己喜欢的，进入其GitHub项目直接克隆到本地的<code>blog/themes/</code>文件夹下即可，即：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> ~/blog/themes</span><br><span class="line">$ git <span class="built_in">clone</span> xxx</span><br></pre></td></tr></table></figure><p>由于本地采用了多个git账户，为了进行区分，在<code>~/.ssh/config</code>文件中分别配置了不同用户的ssh密钥，在克隆项目时需要指定用户，假定配置的为：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Host git_a</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa_a</span><br><span class="line">  IdentitiesOnly <span class="built_in">yes</span></span><br><span class="line">  ProxyCommand nc -X 5 -x 127.0.0.1:port_a %h %p</span><br><span class="line"></span><br><span class="line">Host git_b</span><br><span class="line">  HostName github.com</span><br><span class="line">  User git</span><br><span class="line">  IdentityFile ~/.ssh/id_rsa_b</span><br><span class="line">  IdentitiesOnly <span class="built_in">yes</span></span><br><span class="line">  ProxyCommand nc -X 5 -x 127.0.0.1:port_b %h %p</span><br></pre></td></tr></table></figure><p>上述的代理端口有差别是为了区分两个用户的流量。假定我们使用的是<code>git_b</code>账户，克隆的是<a href="https://github.com/hpcslag/hexo-theme-morgan">Morgan</a>主题，则需要对地址进行修正，先进入<code>~/blog</code>目录（即博客根目录），执行如下命令：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@git_b:hpcslag/hexo-theme-morgan.git themes/tocas-ui-morgan</span><br></pre></td></tr></table></figure><p>即将<code>hexo-theme-morgan.git</code>克隆到<code>~/blog/themes/tocas-ui-morgan</code>文件夹。</p><p>在实际使用的时候发现该主题不是很好看，且对不蒜子统计不是很友好，决定改为使用最广泛的<a href="https://github.com/iissnan/hexo-theme-next">nexT</a>主题，当然个人感觉默认的<a href="https://github.com/hexojs/hexo-theme-landscape">landscape</a>也挺不错。鉴于很多人说<code>netT</code>功能多、可拓展性强、对搜索引擎的支持更好，且其GitHub的star数量为hexo主题类最多的，故采用之。</p><p>执行克隆操作安装：</p><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> git@git_b:iissnan/hexo-theme-next.git themes/next</span><br></pre></td></tr></table></figure><p>考虑到next使用有点复杂，考虑后续使用之。暂时仍然使用默认的landscape主题。</p>]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 技术 </tag>
-            
-            <tag> hexo </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-  
-  
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>减半</tag>
+        <tag>S2F模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>可以在比特币上计算一切的BitVM</title>
+    <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
+    <content><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">Robin
+Linus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p>
+<span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p>
+<h2 id="白皮书内容理解">白皮书内容理解</h2>
+<p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p>
+<p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考Bob
+Bodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p>
+<p>该白皮书（ TODO，待完成）</p>
+]]></content>
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>BitVM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>由比特币已实现价格进行的一些推理</title>
+    <url>/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/</url>
+    <content><![CDATA[<p>本文首先介绍了一些比特币早期价格的历史；接着分析了比特币对数价格（<span class="math inline">\(logP\)</span>）与对数供给量（<span class="math inline">\(logS\)</span>）可能的一些回归关系；然后总结了历史上的3次减半规律；进而对总结的规律进行极值建模；最后运用汇总的规律及构建的模型，对下一次减半周期几个极值（最低价、减半价、最高价）和对应的时间范围进行了一些推测。</p>
+<span id="more"></span>
+<h2 id="引言">引言</h2>
+<p>比特币神话般的价格涨幅，一直是投资界引人入胜的故事。那么，比特币早期价格是怎样的呢？本文第一部分简要回顾了一些btc交易的早期历史。</p>
+<p>在做出比特币历史对数价格曲线后，忍不住会有对它进行回归建模的冲动，本文第二部分即尝试了这方面的工作。</p>
+<p>4年的减半周期，对比特币价格有很重大的影响，这似乎成了加密投资圈的共识。那么，减半是否有某些定量的规律呢？本文第三部分分析了过去3次减半，汇总了一些重要的统计值，归纳出了一些规律。</p>
+<p>在得出了历史减半规律后，本文第四部分对两个重要的极值进行了建模。</p>
+<p>有了价格拟合模型、减半规律以及极值模型后，本文在第五部分对即将到来的新减半周期进行一些合理的推测，推算了下一轮减半周期的几个重要价格及对应的大致时间情况。</p>
+<p>当然，限于样本量少及其他随机因素，本文只是对可能存在的一些规律的简单猜测，动机仅为了好玩，不构成投资建议。</p>
+<h2 id="比特币早期价格">比特币早期价格</h2>
+<p>本文先从比特币交易价格说起。</p>
+<p>比特币诞生于2009-01-03，已知最早的价格，是由比特币第二位开发者<a href="https://twitter.com/marttimalmi?s=21&amp;t=r1CX6-KmGvZWwI5I3aeLNQ">Martti
+Malmi</a>（网名Sirius）在2009-10-12发起的，他用5050个比特币换到了<span class="math inline">\(\$5.02\)</span>，每个比特币价格约为<span class="math inline">\(\$0.000994\)</span>，不足十分之一美分。可以参见推特（<a href="https://twitter.com/marttimalmi/status/423455561703624704?s=61&amp;t=jVERnELxYp8IK7gfE_8KnA">Martti
+Malmi发起第一笔比特币兑美元交易</a>），对应的区块链交易记录（<a href="https://www.blockchain.com/explorer/transactions/btc/7dff938918f07619abd38e4510890396b1cef4fbeca154fb7aafba8843295ea2">首个价格交易记录</a>）。</p>
+<p>不过这个事件知道的人不太多，更广为人知的是<a href="https://en.bitcoinwiki.org/wiki/Laszlo_Hanyecz">比特币披萨事件</a>。</p>
+<p>2010-05-18，美国弗罗里达州的程序员Laszlo Hanyecz在<a href="https://bitcointalk.org">比特币论坛</a>上发布了一篇名为<a href="https://bitcointalk.org/index.php?topic=137.0"><code>Pizza for bitcoins?</code></a>的帖子，他想用1万个比特币购买价值约25美元的2个披萨，折合每个比特币<span class="math inline">\(\$0.0025\)</span>。经过4天多的时间，他证实了该交易已经顺利完成。这是人们第一次可以用比特币购买真实商品，这个事件被比特币爱好者纪念，从此每年的5月22日成为“比特币披萨节”。</p>
+<p>其实在比特币披萨事件之前，已经有了一个名为<a href="https://en.bitcoin.it/wiki/Bitcoin_Market"><code>bitcoinmarket.com</code></a>的比特币交易网站。</p>
+<p>该网站由<a href="https://bitcointalk.org/index.php?action=profile;u=24">dwdollar</a>开发建立，参见比特币论坛<a href="https://bitcointalk.org/index.php?topic=20.0">相关帖子</a>。2010-03-16，该网站开始用真实的美元交易比特币，dwdollar将比特币的初始价格定在<span class="math inline">\(\$0.0067/BC\)</span>。次日（2010-03-17）正式上线，有4人开始在线交易比特币，开始交易的价格大概为<a href="https://www.cryptohopper.com/blog/what-was-the-first-crypto-exchange-449"><span class="math inline">\(\$0.003\)</span></a>。该网站主要利用PayPal进行交易，由于欺诈的盛行，Paypal于2011-06-04停止了对<code>bitcoinmarket</code>的支持，导致了用户转向其他交易所，其中最著名的就是<a href="https://en.wikipedia.org/wiki/Mt._Gox"><code>Mt.Gox</code></a>，该网站于2010-07-18出现在比特币论坛，<a href="https://bitcointalk.org/index.php?topic=444.0">见此处</a>。</p>
+<p>关于早期价格的情况不太好追溯，好在<a href="https://coinmarketcap.com/currencies/bitcoin/">coinmarketcap</a>上收录了自2010-07-13日以来的比特币价格数据，本篇文章的讨论便是基于这些数据进行。</p>
+<p>本文重点讨论的是比特币的价格及周期，首先讨论比特币价格的某种可能回归。</p>
+<blockquote>
+<p>说明：本文数据截止到2023-09-24日。</p>
+</blockquote>
+<h2 id="比特币的价格模型">比特币的价格模型</h2>
+<h3 id="对数价格与对数供给量">对数价格与对数供给量</h3>
+<p>比特币价格的波动范围很大，为了直观全面的观察其趋势，可以采用对数价格作图，如下：</p>
+<figure>
+<img src="20100713-20230924比特币对数价格时序图.jpg" alt="比特币对数价格时序图">
+<figcaption aria-hidden="true">比特币对数价格时序图</figcaption>
+</figure>
+<p>直观上，比特币对数价格似乎符合某种函数的拟合。<a href="https://www.lookintobitcoin.com/charts/bitcoin-rainbow-chart/">比特币彩虹图</a>就是比特币对数价格与上线天数的某种回归。</p>
+<p>比特币先后经历了3次减半，分别是2012-11-28、2016-07-09、2020-05-11。<a href="https://buybitcoinworldwide.com/halving/">据预测</a>，下一次减半日期大概在2024-04-16。</p>
+<p>比特币每次减半之后，每个区块的产量会减半，最终比特币的数量约为21,000,000（实际略少于此值）。比特币历史总产量对数图如下：</p>
+<figure>
+<img src="20100713-20230924比特币对数供给量时序图.jpg" alt="比特币对数供给量图">
+<figcaption aria-hidden="true">比特币对数供给量图</figcaption>
+</figure>
+<p>由上图可见，比特币的对数价格与对数总供给量之间具有相似的趋势，可以猜测比特币对数价格（<span class="math inline">\(logP\)</span>）是对数总供给量（<span class="math inline">\(logS\)</span>）的某种可解析函数。</p>
+<h3 id="对数供给量多项式模型">对数供给量多项式模型</h3>
+<p>本文在拟合前，有一个期望的极限，即：</p>
+<blockquote>
+<p>如比特币最终趋于稳定，并取代了美元成为本位币。则按照目前美元m2总量约<a href="https://zh.tradingeconomics.com/united-states/money-supply-m2">20.9万亿</a>折算，比特币的价格将接近100万美元/BTC。</p>
+</blockquote>
+<p>符合上述预期的拟合才是合理的。</p>
+<p>由于可解析函数可以进行泰勒展开，故可用<span class="math inline">\(logS\)</span>的多项式展开来拟合<span class="math inline">\(logP\)</span>： <span class="math display">\[\begin{equation}\label{eq1}
+logP=\sum_{i=0}^{n}\alpha_i(logS)^i
+\end{equation}\]</span>
+其中n为多项式的最高阶，是待定参数。毫无疑问随着n的增大，可以拟合得越好，本文假定n为较小的整数（10以内）。</p>
+<p>n=1的拟合情况如下：</p>
+<figure>
+<img src="230924-比特币对数价格1阶拟合.jpg" alt="比特币对数价格1阶拟合">
+<figcaption aria-hidden="true">比特币对数价格1阶拟合</figcaption>
+</figure>
+<p>可见拟合的效果很好，<span class="math inline">\(R^2\)</span>达到0.91，其中<span class="math inline">\(R^2\)</span>的定义如下： <span class="math display">\[\begin{equation}\label{eq2}
+R^2=1-\frac{SS_{res}}{SS_{tot}}
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}\label{eq3}
+SS_{tot}=\sum_i(y_i-\bar{y})^2
+\end{equation}\]</span></p>
+<p><span class="math display">\[\begin{equation}\label{eq4}
+SS_{res}=\sum_i(y_i-f_i)^2
+\end{equation}\]</span></p>
+<p><span class="math inline">\(f_i\)</span>为函数拟合的相应值。</p>
+<p>由上图可知，一阶拟合下的回归关系为： <span class="math display">\[\begin{equation}\label{eq5}
+logP=-131.5+8.4*logS
+\end{equation}\]</span>
+如果比特币对数价格与对数供给量符合上述的1阶拟合，则根据拟合，最终比特币价格约为<span class="math inline">\(\$26,974.33\)</span>，这似乎不让人满意。</p>
+<p>n=2的拟合如下：</p>
+<figure>
+<img src="230924-比特币对数价格2阶拟合.jpg" alt="比特币对数价格2阶拟合">
+<figcaption aria-hidden="true">比特币对数价格2阶拟合</figcaption>
+</figure>
+<p><span class="math inline">\(R^2\)</span>高达0.94，拟合结果如下：
+<span class="math display">\[\begin{equation}\label{eq6}
+\begin{aligned}
+logP=&amp;750.85-101.07*logS+\\&amp;3.39*logS^2
+\end{aligned}
+\end{equation}\]</span></p>
+<p>如果2阶拟合满足，则比特币最终价格约为<span class="math inline">\(\$70,070.92\)</span>。</p>
+<p>n=3时，拟合效果如下：</p>
+<figure>
+<img src="230924-比特币对数价格3阶拟合.jpg" alt="比特币对数价格3阶拟合">
+<figcaption aria-hidden="true">比特币对数价格3阶拟合</figcaption>
+</figure>
+<p><span class="math inline">\(R^2\)</span>为0.95，此时的拟合关系为：
+<span class="math display">\[\begin{equation}\label{eq7}
+\begin{aligned}
+logP=&amp;-16643.2+3153.22*logS-\\&amp;199.43*logS^2+4.21*logS^3
+\end{aligned}
+\end{equation}\]</span></p>
+<p>3阶的比特币最终预测价格为<span class="math inline">\(\$151,235.78\)</span>。</p>
+<p>可见参数越多，<span class="math inline">\(R^2\)</span>越高，拟合效果越好，但也越可能是过拟合。</p>
+<p>尝试到6阶，发现这种情况下的比特币最终价格预测最高，为<span class="math inline">\(\$954,987.44\)</span>，接近1百万美元。如果比特币能够替换美元的地位，其理论价格应该差不多为1百万美元。</p>
+<p>6阶拟合的曲线如下：</p>
+<figure>
+<img src="230924-比特币对数价格6阶拟合.jpg" alt="比特币对数价格6阶拟合">
+<figcaption aria-hidden="true">比特币对数价格6阶拟合</figcaption>
+</figure>
+<p>上图中的拟合公式如下： <span class="math display">\[\begin{equation}\label{eq8}
+\begin{aligned}
+logP=&amp;26.27*logS^6-2.52e3*logS^5+\\&amp;1.0e5*logS^4-2.14e6*logS^3+\\&amp;2.56e7*logS^2-1.63e8*logS+\\&amp;4.34e8
+\end{aligned}
+\end{equation}\]</span></p>
+<p>其中系数采用了科学记数法，<span class="math inline">\(1.0e5\)</span>代表<span class="math inline">\(1.0\times10^5\)</span>。采用6阶拟合，我们可以做出未来的价格预期曲线，如下：</p>
+<figure>
+<img src="230924比特币对数价格6阶拟合未来走势.jpg" alt="比特币对数价格6阶拟合未来走势">
+<figcaption aria-hidden="true">比特币对数价格6阶拟合未来走势</figcaption>
+</figure>
+<p>由上述拟合可见，目前比特币还处在较早期的阶段，其价格尚未到达趋于稳定的时候。大约在2042年之后，比特币价格会开始逐渐趋于稳定。</p>
+<p>需要指出的是：</p>
+<blockquote>
+<ol type="1">
+<li>影响比特币价格的因素可能有很多，本文只是对其中可能的一种进行了回归分析，可能有失偏颇；</li>
+<li>多项式拟合的参数会对样本很敏感，随着未来价格的大幅变大或变小，再次拟合的曲线肯定会相应的变化。</li>
+</ol>
+</blockquote>
+<p><strong>值得一提的是，按照对数供给量的多项式拟合，随着时间推移，比特币的供给量会趋于定值（具体为自2140年后不再减半），从而价格也会趋于某个定值。这与比特币创始的初衷相吻合，即按照当前价值不变的美元（实质上就是总美元M2量限定在约20万亿水平上）计算，最终比特币的价格会收敛，正如比特币的热爱者预期该价格会收敛于1百万美元/BTC那样。</strong></p>
+<p><strong>之前的模型，如<a href="https://bitcointalk.org/index.php?topic=831547.0">彩虹图</a>所预言的价格（或对数价格）会以某种形式单调增长、直至永远，又如<a href="https://twitter.com/100trillionusd?s=21&amp;t=I28yqKWNbjQZue_4ZlkrLw">planB</a>的<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F</a>预言的每轮减半价格涨幅约10倍。这些理论，均认为比特币价格会近乎无限上涨，显然与实际情况有悖。</strong></p>
+<p><strong>本文与他们的结论不同，按照本文的拟合，比特币按当前美元价值计算，是存在极限价格的</strong>。</p>
+<p>由于比特币的总供给量随着时间推移基本上是确定的，上述回归自然是对未来价格的一种预测。</p>
+<p>更详细的推测需要参考重要的时间节点及牛熊涨跌幅等规律，故本文接下来分析比特币减半周期，再进行价格区间及时间跨度相关的推测。</p>
+<h2 id="比特币周期">比特币周期</h2>
+<p>为了划分出减半周期的阶段，需要先观察价格在逐年的表现，再根据表现划分出牛熊周期。</p>
+<h3 id="逐年走势">逐年走势</h3>
+<blockquote>
+<p><font color="red">注：本小节只是想从价格逐年走势图分析牛熊大致区间，读者可以选择跳过，不影响后续阅读。后续需要对照行情可参考此节。</font></p>
+</blockquote>
+<p>每3年汇在一张图中，做出逐年的价格走势及基本统计指标，如下：</p>
+<p>2010.7.13--2012.12.31价格走势：</p>
+<figure>
+<img src="20100713-20121231_btc_price.jpg" alt="10-12年BTC价格走势">
+<figcaption aria-hidden="true">10-12年BTC价格走势</figcaption>
+</figure>
+<blockquote>
+<p><font size="2"><em>注意上图中左上第一张为全3年时间段的价格走势，后续3张为逐年走势，下同。</em></font></p>
+</blockquote>
+<p>2013.01.01-2015.12.31价格走势：</p>
+<figure>
+<img src="20130101-20151231_btc_price.jpg" alt="13-16年btc价格">
+<figcaption aria-hidden="true">13-16年btc价格</figcaption>
+</figure>
+<p>2016.01.01-2018.12.31价格走势：</p>
+<figure>
+<img src="20160101-20181231_btc_price.jpg" alt="16-18年btc走势">
+<figcaption aria-hidden="true">16-18年btc走势</figcaption>
+</figure>
+<p>2019.01.01-2021.12.31走势：</p>
+<figure>
+<img src="20190101-20211231_btc_price.jpg" alt="19-21年btc价格走势">
+<figcaption aria-hidden="true">19-21年btc价格走势</figcaption>
+</figure>
+<p>2022.01.01-2023.09.16走势：</p>
+<figure>
+<img src="20220101-20230916_btc_price.jpg" alt="22-23年btc价格走势">
+<figcaption aria-hidden="true">22-23年btc价格走势</figcaption>
+</figure>
+<p>减半对应的牛熊周期一般需要经历完整的<code>盘整 -&gt; 启动 -&gt; 牛市 -&gt; 崩盘 -&gt; 熊市 -&gt; 盘整</code>过程。依照大约4年的周期，比特币历史减半周期大致可如下划分：</p>
+<blockquote>
+<ol type="1">
+<li>2010.07.13 - 2015.05.01，对应2012.11.28日第一次减半的行情；</li>
+<li>2015.01.01 - 2019.05.01，对应2016.07.09日第二次减半的行情；</li>
+<li>2018.11.01 - 2023.03.01，对应2020.05.11日第三次减半的行情；</li>
+<li>2022.10.01 -
+今，对应约2024.04.16日第四次减半的行情，持续时间未知。</li>
+</ol>
+</blockquote>
+<p>上述划分有重叠，是为了观察牛市启动前的最低价前和本轮周期最大回撤后的情况。</p>
+<p>当然，上述划分不一定合理，毕竟23年之后的行情还没结束。</p>
+<h3 id="减半周期">减半周期</h3>
+<h4 id="四轮减半周期走势情况">四轮减半周期走势情况</h4>
+<p>有了上面的划分，可以对应的做出每轮减半走势的图。</p>
+<p>2010.07.13 - 2015.05.01第一轮走势：</p>
+<figure>
+<img src="第一轮牛熊比特币价格走势图.jpg" alt="第一轮牛熊比特币价格走势图">
+<figcaption aria-hidden="true">第一轮牛熊比特币价格走势图</figcaption>
+</figure>
+<blockquote>
+<p><font size="2" color="red"><em>注意：上图中的最大回撤出现在减半之前，不是后续讨论的减半后最大回撤。</em></font></p>
+</blockquote>
+<p>2015.01.01 - 2019.05.01第二轮走势：</p>
+<figure>
+<img src="第二轮牛熊比特币价格走势图.jpg" alt="第二轮牛熊比特币价格走势图">
+<figcaption aria-hidden="true">第二轮牛熊比特币价格走势图</figcaption>
+</figure>
+<p>2018.11.01 - 2023.03.01第三轮走势：</p>
+<figure>
+<img src="第三轮牛熊比特币价格走势图.jpg" alt="第三轮牛熊比特币价格走势图">
+<figcaption aria-hidden="true">第三轮牛熊比特币价格走势图</figcaption>
+</figure>
+<p>2022.10.01 - 今第四轮走势：</p>
+<figure>
+<img src="第四轮牛熊比特币价格走势图.jpg" alt="第四轮牛熊比特币价格走势图">
+<figcaption aria-hidden="true">第四轮牛熊比特币价格走势图</figcaption>
+</figure>
+<h4 id="减半周期规律总结">减半周期规律总结</h4>
+<p>本文定义如下一些概念：</p>
+<blockquote>
+<ul>
+<li>行情启动：上一轮回撤的最低价格为行情启动价，该日为行情启动日，第一次减半也采用减半前的最大回撤作为行情启动点；</li>
+<li>最高涨幅：本轮减半之后的最高价与行情启动价之比；</li>
+<li>盘整期：在上一轮牛市结束后的最低价到本轮减半的最高价之间，持续时间最长的回视最高价（阻力位）对应的时间段；</li>
+<li>牛市：衡量的为减半行情中的牛市，定义为盘整期结束到本轮最高价之间的时间段，类似2011年的上涨不在本定义内；</li>
+<li>熊市：衡量的减半行情后的熊市，定义为本轮减半后，最高价到最大回撤之间的时间段；</li>
+<li>最大回撤：指的是本轮减半后的最大回撤，即从减半后最高价到最低价的跌幅。</li>
+</ul>
+</blockquote>
+<p>可以总结每轮牛熊的统计值，如下表：</p>
+<blockquote>
+<p><font size="2"><em>各减半周期统计总结表</em></font></p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 26%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+<col style="width: 18%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;">第一轮减半</th>
+<th style="text-align: center;">第二轮减半</th>
+<th style="text-align: center;">第三轮减半</th>
+<th style="text-align: center;">第四轮减半</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">减半日</td>
+<td style="text-align: center;">2012-11-28</td>
+<td style="text-align: center;">2016-07-09</td>
+<td style="text-align: center;">2020-05-11</td>
+<td style="text-align: center;">2024-04-16</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">减半价</td>
+<td style="text-align: center;">12.377</td>
+<td style="text-align: center;">650.96</td>
+<td style="text-align: center;">8601.796</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">减半预测价</td>
+<td style="text-align: center;">33.736</td>
+<td style="text-align: center;">1399.326</td>
+<td style="text-align: center;">12895.33</td>
+<td style="text-align: center;">76458.321</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">减半预测真实价格比</td>
+<td style="text-align: center;">2.726</td>
+<td style="text-align: center;">2.15</td>
+<td style="text-align: center;">1.499</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">行情启动日</td>
+<td style="text-align: center;">2011-11-18</td>
+<td style="text-align: center;">2015-01-14</td>
+<td style="text-align: center;">2018-12-15</td>
+<td style="text-align: center;">2022-11-21</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">启动时距减半天数</td>
+<td style="text-align: center;">376</td>
+<td style="text-align: center;">542</td>
+<td style="text-align: center;">513</td>
+<td style="text-align: center;">512</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">启动价格</td>
+<td style="text-align: center;">2.051</td>
+<td style="text-align: center;">178.103</td>
+<td style="text-align: center;">3236.762</td>
+<td style="text-align: center;">15787.284</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">盘整开始日</td>
+<td style="text-align: center;">2011-12-05</td>
+<td style="text-align: center;">2016-06-04</td>
+<td style="text-align: center;">2019-05-14</td>
+<td style="text-align: center;">NaT</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">盘整结束日</td>
+<td style="text-align: center;">2012-06-29</td>
+<td style="text-align: center;">2016-11-19</td>
+<td style="text-align: center;">2020-09-10</td>
+<td style="text-align: center;">NaT</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">盘整最高价</td>
+<td style="text-align: center;">228.199</td>
+<td style="text-align: center;">766.308</td>
+<td style="text-align: center;">13016.232</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">最高价格日</td>
+<td style="text-align: center;">2013-12-04</td>
+<td style="text-align: center;">2017-12-16</td>
+<td style="text-align: center;">2021-11-08</td>
+<td style="text-align: center;">NaT</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">最高价格</td>
+<td style="text-align: center;">1151.17</td>
+<td style="text-align: center;">19497.4</td>
+<td style="text-align: center;">67566.83</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">最高涨幅</td>
+<td style="text-align: center;">561.261</td>
+<td style="text-align: center;">109.473</td>
+<td style="text-align: center;">20.875</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">最大回撤日</td>
+<td style="text-align: center;">2015-01-14</td>
+<td style="text-align: center;">2018-12-15</td>
+<td style="text-align: center;">2022-11-21</td>
+<td style="text-align: center;">NaT</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">最大回撤价</td>
+<td style="text-align: center;">178.103</td>
+<td style="text-align: center;">3236.762</td>
+<td style="text-align: center;">15787.284</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">最大回撤</td>
+<td style="text-align: center;">-0.845</td>
+<td style="text-align: center;">-0.834</td>
+<td style="text-align: center;">-0.766</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">启动到盘整结束天数</td>
+<td style="text-align: center;">224</td>
+<td style="text-align: center;">675</td>
+<td style="text-align: center;">635</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">启动到最高价天数</td>
+<td style="text-align: center;">747</td>
+<td style="text-align: center;">1067</td>
+<td style="text-align: center;">1059</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">盘整结束距减半天数</td>
+<td style="text-align: center;">-152</td>
+<td style="text-align: center;">133</td>
+<td style="text-align: center;">122</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">盘整持续天数</td>
+<td style="text-align: center;">207</td>
+<td style="text-align: center;">168</td>
+<td style="text-align: center;">485</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">牛市持续天数</td>
+<td style="text-align: center;">523</td>
+<td style="text-align: center;">392</td>
+<td style="text-align: center;">424</td>
+<td style="text-align: center;">nan</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">熊市持续天数</td>
+<td style="text-align: center;">406</td>
+<td style="text-align: center;">364</td>
+<td style="text-align: center;">378</td>
+<td style="text-align: center;">nan</td>
+</tr>
+</tbody>
+</table>
+<p>关于上表的一些说明：</p>
+<blockquote>
+<ol type="1">
+<li>第四轮周期尚在进行中，没有完结，故数据有空缺。</li>
+<li>减半预测值是根据第二部分的6阶模拟值计算所得，历史已发生的减半日价格低于该值。</li>
+</ol>
+</blockquote>
+<p>从上表中可见如下有意思的结论（主要考虑最近两次已完成的减半周期）：</p>
+<blockquote>
+<ol type="1">
+<li><strong>行情在减半前1年半（500多天）左右启动；</strong></li>
+<li><strong>每轮减半的最高涨幅呈衰减的特点；</strong></li>
+<li><strong>减半价格与预测价之间的差异越来越小；</strong></li>
+<li><strong>每轮最大回撤呈现出变小的趋势；</strong></li>
+<li><strong>从行情启动到减半后的最高值大约需要1000天（近3年）左右；
+</strong></li>
+<li><strong>行情启动到盘整结束需要600天左右；</strong></li>
+<li><strong>最近两次减半，盘整结束于减半后约4个月之后；</strong></li>
+<li><strong>牛市持续时间在1年以上；</strong></li>
+<li><strong>熊市大约持续1年左右；</strong></li>
+<li><strong>盘整持续时间至少在半年左右，可以长达1年以上。</strong></li>
+</ol>
+</blockquote>
+<p>如上总结，比特币每轮周期都有很多相似的行情规律，且每轮的最高最低比、最大回撤均呈现减小趋势。不过，也需要指出的是，牛熊的划分方法有主观性、可以有很多种，周期本身也带有主观性。</p>
+<h4 id="比特币波动性在减小">比特币波动性在减小</h4>
+<p>为了验证比特币波动性确实是呈下降趋势的，可以做出比特币90日滚动年化波动率时序图，如下：</p>
+<figure>
+<img src="比特币90日滚动年化波动率.jpg" alt="比特币90日滚动年化波动率">
+<figcaption aria-hidden="true">比特币90日滚动年化波动率</figcaption>
+</figure>
+<p>从上图可见，<strong>若按照减半周期来看，比特币的波动是呈减小趋势的</strong>，这与Nassim
+Taleb所质疑的比特币波动性没有变小的结论不同（<a href="https://arxiv.org/pdf/2106.14204.pdf">参见此处</a>）。<strong>由此分析，我们可以合理的假定比特币价格最终会趋于稳定。</strong></p>
+<p>上图还有一个有意思的现象：比特币90日滚动年化波动率多次下降到0.23附近的位置，随着时间的推移，波动率纵然有所下降，但似乎始终没有低于此值。附带一提，0.23的年化波动率水平是低于大多数股票波动率的。</p>
+<h2 id="减半行情的极值建模">减半行情的极值建模</h2>
+<p>上一小节总结了一些减半的规律，本节将对减半的两个极值（最高涨幅、最大回撤）进行分析。</p>
+<p>当然，我们还可以对减半日价格、每轮周期的最高价、最低价进行建模。</p>
+<p>但是，最高价与最低价实际上是可以用历史价格、最高涨幅和最大回撤递推；随着减半次数的增加，第二部分预测的价格与减半价格之间的差距缩小，可以用其（对数总供给量6阶拟合函数）对减半价进行预测。</p>
+<p>故而，本小节只讨论2个极值。</p>
+<h3 id="最高涨幅拟合">最高涨幅拟合</h3>
+<p>中文比特币社区著名的九神（ahr999），曾撰写过《囤比特币》系列文章，在其“<a href="https://coxxa.github.io/bitcoin-ahr999-HODL/#/di-san-zhang?id=第三章-囤比特币：你离财富自由还有多远？">囤比特币：你离财富自由还有多远？</a>”一章中，提出一个很有意思的假设，即比特币每轮减半增长倍数呈线性或“指数递减”方式变化。</p>
+<p>如减半周期与最高涨幅之间呈线性关系，则应满足如下关系： <span class="math display">\[\begin{equation}\label{eq9}
+h_n=a+b*n
+\end{equation}\]</span> 其中h代表本轮减半行情的最高涨幅，n=1, 2, 3, ...,
+33为减半周期数，下同。</p>
+<p>历史上发生过的3次减半行情最高涨幅与周期的线性拟合如下：</p>
+<figure>
+<img src="历史减半周期与最高涨幅线性回归.jpg" alt="历史减半周期与最高涨幅线性回归">
+<figcaption aria-hidden="true">历史减半周期与最高涨幅线性回归</figcaption>
+</figure>
+<p>上图中x轴被替换成了日期，因为每个减半周期对应唯一的日期。虽然上图中的<span class="math inline">\(R^2\)</span>较好，因为样本太少，很难说周期与涨幅是否符合线性关系。</p>
+<p>如认可比特币2140年之后趋于稳定，则减半周期与减半行情最高涨幅的线性拟合如下：</p>
+<figure>
+<img src="趋于稳定的减半周期与最高涨幅线性回归.jpg" alt="趋于稳定的减半周期与最高涨幅线性回归">
+<figcaption aria-hidden="true">趋于稳定的减半周期与最高涨幅线性回归</figcaption>
+</figure>
+<p>可见此时线性拟合不是很合适。</p>
+<p>下面考虑最高涨幅与周期呈指数衰减关系，即： <span class="math display">\[\begin{equation}\label{eq10}
+h_n=a+b*e^{-c*n}
+\end{equation}\]</span> 拟合效果如下：</p>
+<figure>
+<img src="减半周期与最高涨幅指数衰减拟合.jpg" alt="减半周期与最高涨幅指数衰减拟合">
+<figcaption aria-hidden="true">减半周期与最高涨幅指数衰减拟合</figcaption>
+</figure>
+<p>图中的x轴也从周期被替换成了日期，这样方便对照日期。</p>
+<p>上图<span class="math inline">\(R^2\)</span>接近1的原因在于：</p>
+<ol type="1">
+<li>样本太少，3参数的指数衰减可以很好的拟合4个最高涨幅；</li>
+<li>样本的量级差异很大，作为分子的样本方差远远大于拟合值与真实值偏差的方差。</li>
+</ol>
+<p>指数衰减拟合结果显示，比特币价格趋于稳定后，最高涨幅小于1，这不合理，主要原因是样本太少。</p>
+<p>为了避免量级引起的误判，可采用对数最高涨幅拟合。对数最高涨幅与减半周期的线性回归关系如下：
+<span class="math display">\[\begin{equation}\label{eq11}
+ln(h_n)=a+b*n
+\end{equation}\]</span> 这一拟合的结果如下：</p>
+<figure>
+<img src="减半周期与对数最高涨幅线性回归.jpg" alt="减半周期与对数最高涨幅线性回归">
+<figcaption aria-hidden="true">减半周期与对数最高涨幅线性回归</figcaption>
+</figure>
+<p>可见对数涨幅与周期之间的线性拟合的效果有所下降。由上图，直观感觉对数最高涨幅是随着周期增大指数衰减的，即有如下关系：
+<span class="math display">\[\begin{equation}\label{eq12}
+ln(h_n)=a+b*e^{-c*n}
+\end{equation}\]</span> 拟合效果如下：</p>
+<figure>
+<img src="减半周期与对数最高涨幅指数衰减拟合.jpg" alt="减半周期与对数最高涨幅指数衰减拟合">
+<figcaption aria-hidden="true">减半周期与对数最高涨幅指数衰减拟合</figcaption>
+</figure>
+<p>可见这一拟合效果非常好，不过原因也是用了3个参数来模拟4个样本。该拟合是否符合实际，有待未来的行情进行验证。</p>
+<p>如将周期改为对数周期，进行如下关系的拟合： <span class="math display">\[\begin{equation}\label{eq13}
+ln(h_n)=a+b*ln(n)
+\end{equation}\]</span> 拟合结果如下：</p>
+<figure>
+<img src="对数减半周期与对数最高涨幅线性回归.jpg" alt="对数减半周期与对数最高涨幅线性回归">
+<figcaption aria-hidden="true">对数减半周期与对数最高涨幅线性回归</figcaption>
+</figure>
+<p>可见对数最高涨幅与对数周期之间的线性回归效果很好，在压低了量级影响后，线性关系（2参数拟合4个样本）仍然很显著。</p>
+<p>上述<span class="math inline">\(\eqref{eq11}\)</span>和<span class="math inline">\(\eqref{eq12}\)</span>的拟合都可以作为减半周期最高涨幅的模型，第四部分中我们选定对数最高涨幅与周期呈指数衰减的<span class="math inline">\(\eqref{eq12}\)</span>模型进行讨论。</p>
+<p>下面拟合每轮周期的最大回撤。</p>
+<h3 id="最大回撤拟合">最大回撤拟合</h3>
+<p>仍然假定比特币价格最终会趋于稳定，即2140年之后的最大回撤接近1。</p>
+<p>做出周期-最大回撤（绝对值）的附带线性回归的散点图，如下：</p>
+<figure>
+<img src="减半周期与最大回撤线性回归图.jpg" alt="减半周期与最大回撤线性回归图">
+<figcaption aria-hidden="true">减半周期与最大回撤线性回归图</figcaption>
+</figure>
+<p>可见2参数的最大回撤线性拟合效果很好，我们可以将其作为最大回撤的拟合模型，即：
+<span class="math display">\[\begin{equation}\label{eq14}
+mdd_n=0.87-0.026*n
+\end{equation}\]</span></p>
+<p>如上式，预期减半周期的最大回撤线性减小，每一轮比上一轮减小0.026。</p>
+<p>当然，随着未来样本量的增加，可进一步拟合模型参数，或更换其他函数进行拟合。</p>
+<h2 id="关于下一次减半的推测">关于下一次减半的推测</h2>
+<p>我们在上面第2部分详细讨论了价格模型，并采用<span class="math inline">\(\eqref{eq8}\)</span>进行价格模拟，在第4部分利用了第3部分总结的减半规律建立了极值模型<span class="math inline">\(\eqref{eq12}\)</span>和<span class="math inline">\(\eqref{eq14}\)</span>，有了这些模型基础，我们可以顺理成章的对接下来的减半周期进行推理。</p>
+<p>由于已经发生的减半次数过少，本文的模型不可能太精确。故本节仅粗略的预测下一轮减半日的价格、减半后的最高价、最高价后出现最大回撤的价格等。</p>
+<p>在本节的叙述中会对下一轮减半周期的过程进行部分推测性描述。</p>
+<h3 id="减半日价格预测">减半日价格预测</h3>
+<p>由于过去3次减半日的价格均低于预测价格，且预测价与实际价的比值呈减小趋势，最近的预测真实价格比为1.499，故可根据<span class="math inline">\(\eqref{eq8}\)</span>推测下次减半日（2024-04-16左右），价格会高于76,458.321/1.499，低于76,458.321，即：
+<span class="math display">\[\begin{equation}\label{eq15}
+P_{2024-04-16}\in[51006.21, 76458.321]
+\end{equation}\]</span></p>
+<p>这是纯粹按照上述逻辑预测的结果，当然这个预测值可能会有很大的误差，因为这一结论的得出有如下几个前提：</p>
+<blockquote>
+<ol type="1">
+<li>价格模型在一定时间内符合真实情况，且下一轮减半日的随机效应不太大、不至于抵消掉价格模型预期的减半上涨；</li>
+<li>预测值略高于真实值的效应仍然存在，不至于反转，且预测、真实价之比仍然呈减小趋势。</li>
+</ol>
+</blockquote>
+<h3 id="减半后最高价格预测">减半后最高价格预测</h3>
+<p>我们采用<span class="math inline">\(\eqref{eq12}\)</span>进行最高涨幅的预测。</p>
+<p>由于每轮减半的行情启动均出现在减半前510天上下，故基本可以确定2024年减半行情已经于2022-11-21日左右启动了，启动价格为<span class="math inline">\(\$15,787.284\)</span>。</p>
+<p>按照最高涨幅模型，下次减半的最高涨幅将达到9.33倍左右，从而最高涨幅对应的减半行情最高价在<span class="math inline">\(\$147,295.36\)</span>左右。</p>
+<p>之前的减半行情启动到最高价约1050天来估计，最高价格出现在2025-10-06前后，据6阶模型预估2025-10-06日价格在<span class="math inline">\(\$114,395\)</span>左右。</p>
+<p>过去盘整结束与行情启动间隔的天数大约在600天上下，按此规律，盘整结束的日期大约在2024-07-13左右。或者以减半后4个月（120天）来估计，大概在2024-08-14左右，盘整结束，正式进入牛市，并持续一年左右。</p>
+<h3 id="减半后最大回撤预测">减半后最大回撤预测</h3>
+<p>按照最大回撤线性模型<span class="math inline">\(\eqref{eq14}\)</span>，我们预期下次减半行情冲高后的最大回撤大约为0.763左右。</p>
+<p>照以往规律，最大回撤距离最高价日期大概在1年（365天）左右，如最高价（<span class="math inline">\(\$147,295.36\)</span>）出现在2025-10-06前后，则下次减半后比特币经过1年多的上涨，最终价格会持续约1年左右的下跌，跌幅76.3%左右、价格下跌到<span class="math inline">\(\$34,909\)</span>左右，日期约在2026-10-06日前后。</p>
+<p>至此，比特币的第4轮减半行情结束，开始新的一轮周期。</p>
+<h2 id="致谢">致谢</h2>
+<p>本文篇幅有些长，非常感谢你能耐心阅读到此。</p>
+<p>希望本文能或多或少对你有一些帮助，不至于辜负你认真的思考与耐心的探索。</p>
+<p>需要再次指出的是，本文中涉及的内容只是对未来的一种猜测，仅作参考，不构成投资建议，望读者自行斟酌。</p>
+<p>谢谢阅读！</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>减半</tag>
+      </tags>
+  </entry>
 </search>
