@@ -19,12 +19,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"btcrainmaker.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="本文首先分析加密全市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。">
+    <meta name="description" content="本文首先分析全加密市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="加密市场的市场因子">
 <meta property="og:url" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/index.html">
 <meta property="og:site_name" content="雨师的博客">
-<meta property="og:description" content="本文首先分析加密全市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。">
+<meta property="og:description" content="本文首先分析全加密市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
 <meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E5%89%8D100%E7%AD%89%E6%9D%83%E9%87%8D%E5%8A%A0%E6%9D%83%E5%AF%B9%E6%95%B0%E5%87%80%E5%80%BC%E8%B5%B0%E5%8A%BF%E5%9B%BE.jpg">
@@ -43,7 +43,7 @@
 <meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E4%B8%8D%E5%90%ABbtc%E7%9A%84%E5%90%84%E6%8E%92%E5%90%8D%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E5%8F%8Abtc%E5%87%80%E5%80%BC%E5%88%86%E6%AE%B5.jpg">
 <meta property="og:image" content="https://btcrainmaker.com/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/%E4%B8%8D%E5%90%ABbtc%E7%9A%84%E5%90%84%E6%8E%92%E5%90%8D%E5%B8%82%E5%80%BC%E5%8A%A0%E6%9D%83%E5%8F%8Abtc%E7%9B%B8%E5%85%B3%E6%80%A7.jpg">
 <meta property="article:published_time" content="2023-09-14T02:22:48.000Z">
-<meta property="article:modified_time" content="2023-10-30T08:27:13.617Z">
+<meta property="article:modified_time" content="2023-10-30T08:34:47.824Z">
 <meta property="article:author" content="雨师">
 <meta property="article:tag" content="加密货币">
 <meta property="article:tag" content="因子投资">
@@ -268,7 +268,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-10-30 16:27:13" itemprop="dateModified" datetime="2023-10-30T16:27:13+08:00">2023-10-30</time>
+      <time title="修改时间：2023-10-30 16:34:47" itemprop="dateModified" datetime="2023-10-30T16:34:47+08:00">2023-10-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -296,7 +296,7 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>本文首先分析加密全市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。</p>
+    <div class="post-body" itemprop="articleBody"><p>本文首先分析全加密市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。</p>
 <span id="more"></span>
 <h2 id="全市场情况">全市场情况</h2>
 <p>本节主要侧重分析收益率的情况。先分析了全市场的日收益率情况，然后为后续研究进行一定的数据过滤，最后进行了异常值处理。</p>
