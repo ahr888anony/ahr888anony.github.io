@@ -769,6 +769,7 @@ mad=median(abs(X-median(X)))
 rtn_{eq}^t=\sum_{j}^{N^t} \frac{1}{N^t}*rtn_j^t
 \end{equation}\]</span></p>
 <p>上式中的<span class="math inline">\(t\)</span>为第t个交易日，<span class="math inline">\(j\)</span>为截面上（第t个交易日内）收益率非空的第j个币种，<span class="math inline">\(N^t\)</span>为第t个交易日、收益率非空的币种总数。</p>
+<h4 id="含经过异常值处理的数据情况">含经过异常值处理的数据情况</h4>
 <p>如上计算的等权重加权收益率描述统计情况见下表：</p>
 <blockquote>
 <p><font size="2"><em>等权重加权下，各排名组及各异常值处理方式的收益率描述情况</em>
