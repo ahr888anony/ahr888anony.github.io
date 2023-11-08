@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"btcrainmaker.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="基金的净值管理是一个较复杂的问题，一般投资者在购买基金时，会对一些概念产生疑惑。本文对基金净值管理的一些概念及计算方法进行说明，供读者参考，以助理解净值、份额等的计算过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基金净值管理相关概念说明">
+<meta property="og:url" content="https://btcrainmaker.com/2023/11/07/%E5%9F%BA%E9%87%91%E5%87%80%E5%80%BC%E7%AE%A1%E7%90%86%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5%E8%AF%B4%E6%98%8E/index.html">
+<meta property="og:site_name" content="雨师的博客">
+<meta property="og:description" content="基金的净值管理是一个较复杂的问题，一般投资者在购买基金时，会对一些概念产生疑惑。本文对基金净值管理的一些概念及计算方法进行说明，供读者参考，以助理解净值、份额等的计算过程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-07T09:31:58.000Z">
+<meta property="article:modified_time" content="2023-11-08T11:55:21.613Z">
+<meta property="article:author" content="雨师">
+<meta property="article:tag" content="基金">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://btcrainmaker.com/2023/11/07/%E5%9F%BA%E9%87%91%E5%87%80%E5%80%BC%E7%AE%A1%E7%90%86%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5%E8%AF%B4%E6%98%8E/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://btcrainmaker.com/2023/11/07/%E5%9F%BA%E9%87%91%E5%87%80%E5%80%BC%E7%AE%A1%E7%90%86%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5%E8%AF%B4%E6%98%8E/","path":"2023/11/07/基金净值管理相关概念说明/","title":"基金净值管理相关概念说明"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>基金净值管理相关概念说明 | 雨师的博客</title>
+  
+
+
+
+
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.css"><style>
+#needsharebutton-postbottom {
+  cursor: pointer;
+  height: 26px;
+  margin-top: 10px;
+  position: relative;
+}
+#needsharebutton-postbottom .btn {
+  border: 1px solid $btn-default-border-color;
+  border-radius: 3px;
+  display: initial;
+  padding: 1px 4px;
+}
+</style><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">雨师的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">信马由缰，记录思考</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%B3%E8%B4%AD%E8%B5%84%E9%87%91"><span class="nav-number">1.</span> <span class="nav-text">申购资金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%8E%E5%9B%9E%E4%BB%BD%E9%A2%9D"><span class="nav-number">2.</span> <span class="nav-text">赎回份额</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E6%8A%95%E5%85%A5%E8%B5%84%E9%87%91"><span class="nav-number">3.</span> <span class="nav-text">总投入资金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%83%E7%9B%8A%E8%B5%84%E9%87%91"><span class="nav-number">4.</span> <span class="nav-text">权益资金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E9%87%91"><span class="nav-number">5.</span> <span class="nav-text">本金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%89%8D%E4%BB%BD%E9%A2%9D"><span class="nav-number">6.</span> <span class="nav-text">费前份额</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%89%8D%E5%87%80%E5%80%BC"><span class="nav-number">7.</span> <span class="nav-text">费前净值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%90%8E%E4%BB%BD%E9%A2%9D"><span class="nav-number">8.</span> <span class="nav-text">费后份额</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%90%8E%E5%87%80%E5%80%BC"><span class="nav-number">9.</span> <span class="nav-text">费后净值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%A0%87%E7%9A%84"><span class="nav-number">10.</span> <span class="nav-text">基准标的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E8%B5%84%E9%87%91"><span class="nav-number">11.</span> <span class="nav-text">基准资金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%94%B6%E7%9B%8A"><span class="nav-number">12.</span> <span class="nav-text">基准收益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B6%E7%9B%8A"><span class="nav-number">13.</span> <span class="nav-text">收益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E6%88%90"><span class="nav-number">14.</span> <span class="nav-text">提成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E7%AE%97"><span class="nav-number">15.</span> <span class="nav-text">结算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E8%B4%B9"><span class="nav-number">16.</span> <span class="nav-text">管理费</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%90%A5%E6%88%90%E6%9C%AC"><span class="nav-number">17.</span> <span class="nav-text">运营成本</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">雨师</p>
+  <div class="site-description" itemprop="description">一个为比特币摇旗呐喊的小兵</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/rainmaker23331" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;rainmaker23331" rel="noopener me" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://btcrainmaker.com/2023/11/07/%E5%9F%BA%E9%87%91%E5%87%80%E5%80%BC%E7%AE%A1%E7%90%86%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5%E8%AF%B4%E6%98%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="雨师">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="雨师的博客">
+      <meta itemprop="description" content="一个为比特币摇旗呐喊的小兵">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="基金净值管理相关概念说明 | 雨师的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基金净值管理相关概念说明
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-11-07 17:31:58" itemprop="dateCreated datePublished" datetime="2023-11-07T17:31:58+08:00">2023-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-08 19:55:21" itemprop="dateModified" datetime="2023-11-08T19:55:21+08:00">2023-11-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%8A%95%E8%B5%84/" itemprop="url" rel="index"><span itemprop="name">投资</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>基金的净值管理是一个较复杂的问题，一般投资者在购买基金时，会对一些概念产生疑惑。本文对基金净值管理的一些概念及计算方法进行说明，供读者参考，以助理解净值、份额等的计算过程。</p>
+<span id="more"></span>
+<h2 id="申购资金">申购资金</h2>
+<p>用来购买基金的资金，基金会将其投入到交易中，客户得到该资金对应的份额，份额分成费前、费后两种，详见下文。</p>
+<h2 id="赎回份额">赎回份额</h2>
+<p>赎回时由于涉及提成，会稍微有些复杂。为了方便计算，我们约定赎回份额为费前份额。</p>
+<p>如果客户全额赎回，即将剩余的费前份额全部赎回，则赎回资金计算如下：
+<span class="math display">\[
+全部赎回资金=费前份额*费后净值-总提成
+\]</span>
+上式所得的资金为客户所能赎回的最大资金，注意其中扣除了提成。</p>
+<p>如果只是部分赎回，即该客户在赎回后仍然有剩余的费前份额，则提成会按照赎回份额的比例进行。赎回资金如下计算：
+<span class="math display">\[
+赎回资金=赎回费前份额*费后净值-总提成*赎回费前份额/总费前份额
+\]</span> 提成的计算方法见下文。</p>
+<h2 id="总投入资金">总投入资金</h2>
+<p>申购赎回所投入的净资金为总投入资金。即： <span class="math display">\[
+总投入资金=总申购资金-总赎回资金
+\]</span> 如果基金盈利很高的话，可能出现总投入资金为负的情况。</p>
+<h2 id="权益资金">权益资金</h2>
+<p>权益资金与本金有区别，其随基金净值变动而变动。为客户实时可赎回的提成前资金。</p>
+<p>计算如下： <span class="math display">\[
+权益资金=客户费前份额*客户费后净值=客户费后份额*费前净值
+\]</span> 上式中的其他变量定义见下文。</p>
+<h2 id="本金">本金</h2>
+<p>本金是针对客户而言的。</p>
+<p>每次申购赎回或结算，都会造成本金的变化。本金不能为负值，最小为0。</p>
+<p>我们在这里列出了本金变化瞬间的计算方式。</p>
+<p>如果是申购，新的本金计算如下： <span class="math display">\[
+新的本金=旧的本金+新申购资金
+\]</span> 如果是赎回，新的本金计算如下： <span class="math display">\[
+新的本金=旧的本金*(1-赎回份额/总份额)
+\]</span>
+可见，赎回后的本金是按比例缩减旧本金，与提成或收益无关。如将全部份额赎回，则新的本金为0。如赎回的份额为0，则新的本金等于旧本金。</p>
+<p>如果是结算，则新的本金计算如下： <span class="math display">\[
+新的本金=新的客户权益资金=旧的本金+收益-提成
+\]</span></p>
+<h2 id="费前份额">费前份额</h2>
+<p>只跟客户申购赎回有关的份额，在基金结算前后保持不变。</p>
+<p>申购时费前份额会增加，计算如下： <span class="math display">\[
+费前份额增加=申购资金/费后净值
+\]</span></p>
+<p>赎回时，费前份额会减少，剩余费前份额计算如下： <span class="math display">\[
+剩余的费前份额=赎回前的费前份额-赎回的费前份额
+\]</span>
+上述为客户的费前份额，基金总的费前份额为各客户费前份额的加总。</p>
+<h2 id="费前净值">费前净值</h2>
+<p>是不受基金申购、赎回、结算影响的净值。它反应了基金真实的盈利能力。</p>
+<p>基金层面上的计算方式如下： <span class="math display">\[
+费前净值=基金总权益/基金总费后份额
+\]</span> 其中基金总权益即基金的实时总资金，会随着投资波动而波动。</p>
+<p>为什么结算前后基金的费前净值会保持不变呢？</p>
+<p>简单的，我们可以假设结算后基金管理人没有提出资金，而是以新的申购方式保留在基金中。这时，结算提成过程相当于费后份额从客户转移一部分到基金管理人，同时基金总权益也没变，从而基金总费后份额不变、费前净值也不变。</p>
+<p>如果基金管理人将提成资金从账户提出，也可证明费前净值是不变的。</p>
+<p>我们用<span class="math inline">\(C\)</span>表示基金总的权益、<span class="math inline">\(S\)</span>表示总的费后份额、<span class="math inline">\(\Delta S\)</span>表示费后份额的减少量、<span class="math inline">\(t\)</span>表示总的提成、<span class="math inline">\(n\)</span>表示结算前的费前净值、<span class="math inline">\(n&#39;\)</span>表示结算后的费前净值，用有下标<span class="math inline">\(i\)</span>的字母代表客户<span class="math inline">\(i\)</span>的相关值。</p>
+<p>总提成有： <span class="math display">\[
+t=\sum_{i=1}^Nt_i
+\]</span> 其中对每个客户： <span class="math display">\[
+t_i=n*\Delta S_i
+\]</span> 新的净值： <span class="math display">\[
+n&#39;=\frac{S*n-t}{S-\Delta S}=\frac{S*n-\sum_{i=1}^Nn*\Delta
+S_i}{S-\sum_{i=1}^N\Delta S_i}=n
+\]</span> 可见结算时费前净值保持不变。</p>
+<p>同样的分析可以发现申购、赎回时，费前净值也保持不变。</p>
+<p>或者从客户角度，计算如下： <span class="math display">\[
+费前净值=客户总权益/客户总费后份额
+\]</span> 当然上述分母项不能为0。</p>
+<p>各客户的费前净值与基金的费前净值相同。</p>
+<h2 id="费后份额">费后份额</h2>
+<p>由费前净值计算得到，客户申购、赎回及基金结算都会引起费后份额的变化。</p>
+<p>它的意义在于，可以将提成的影响转化成客户的份额缩减。</p>
+<p>申购时，费后份额如下增加： <span class="math display">\[
+费后份额增加=申购资金/费前净值
+\]</span> 赎回时，费后份额如下减少： <span class="math display">\[
+费后份额减少=赎回的费前份额*费后净值/费前净值
+\]</span> 结算时，客户的费后份额如下减少： <span class="math display">\[
+费后份额减少=提成/费前净值
+\]</span>
+上述为客户的费后份额计算方法，基金的费后份额为该基金下所有客户费后份额的加总。</p>
+<h2 id="费后净值">费后净值</h2>
+<p>为扣除了提成后的净值，在提成后、费后净值会减小。</p>
+<p>它的意义在于，将提成的影响转化成了净值的减小。</p>
+<p>需要指出的是费后净值对每个客户才有意义，对于基金而言，没有太大意义。原因可以参见下文，略显复杂。</p>
+<p>基金层面的费后净值是对客户的费前份额进行加总后计算得到的，其计算如下：
+<span class="math display">\[
+基金费后净值=基金总权益/基金总费前份额
+\]</span></p>
+<p>客户层面上，满足如下关系： <span class="math display">\[
+客户费后净值=客户总权益/客户总费前份额
+\]</span>
+我们接下来讨论基金的费后净值与客户的费后净值是否相等的问题。</p>
+<p>用<span class="math inline">\(n\)</span>代表基金费后净值，用<span class="math inline">\(S\)</span>代表费前总份额，<span class="math inline">\(\Delta S\)</span>代表费前份额的变化，<span class="math inline">\(t\)</span>代表提成资金，<span class="math inline">\(C\)</span>代表基金总资金（或总权益）。第<span class="math inline">\(i\)</span>个客户的总资金为<span class="math inline">\(C_i\)</span>，其费前份额为<span class="math inline">\(S_i\)</span>、客户可能与基金的费后净值不一样，用<span class="math inline">\(n_i\)</span>代表客户的费后净值，<span class="math inline">\(\Delta C_i\)</span>代表该客户总资金的变化。</p>
+<p>在没有一次提成之前，各客户的费前、费后净值相同，且均与基金费前净值相同（此时基金费前净值与费后净值也相等）。</p>
+<p>即有： <span class="math display">\[
+n=\frac{C}{S}=\frac{\sum_{i=1}^{N}C_i}{\sum_{i=1}^{N}S_i}=\frac{C_i}{S_i}=n_i
+\]</span> 此后分申购、赎回与结算三种情况讨论净值会如何变化。</p>
+<ul>
+<li>申购</li>
+</ul>
+<p>客户<span class="math inline">\(i\)</span>申购资金为<span class="math inline">\(\Delta C_i\)</span>，则其获得的费前份额为： <span class="math display">\[
+\Delta S_i=\frac{\Delta C_i}{n_i}
+\]</span>
+若基金层面的费后净值与客户的不一样，则客户的费前份额增加与基金的费前份额增加也会不一样。两者关系为：
+<span class="math display">\[
+\Delta S=\frac{\Delta C_i}{n}=\frac{n_i}{n}*\Delta S_i
+\]</span>
+此时，基金层面的费前份额增加不是直接对客户费前份额的增加进行加总，而是有一个比例变换。</p>
+<p>可见，只有客户的费后净值、费前份额才更重要，基金层面的费后净值、费前份额实际意义不大。</p>
+<p>申购时提成<span class="math inline">\(t=0\)</span>，对于客户<span class="math inline">\(i\)</span>而言，其新的总资金<span class="math inline">\(C_i&#39;=C_i+\Delta
+S_i*n_i\)</span>，新的费后净值为： <span class="math display">\[
+n_i&#39;=\frac{C_i+\Delta S_i*n_i}{S_i+\Delta S_i}=\frac{n_i*S_i+\Delta
+S_i*n_i}{S_i+\Delta S_i}=n_i
+\]</span>
+可见新的客户费后净值在申购前后保持不变，与上面类似，可得基金的费后净值在申购前后保持不变。</p>
+<ul>
+<li>赎回</li>
+</ul>
+<p>假定客户赎回<span class="math inline">\(\Delta
+S_i\)</span>份费前份额，则其对应的基金层面的费前份额减少为： <span class="math display">\[
+\Delta S=\frac{n_i*\Delta S_i}{n}
+\]</span>
+可见如果我们计算基金层面的费前份额、费后净值，那么赎回后的基金费前份额、不等于赎回前的费前份额减去客户赎回的份额，这样一来，基金的费后净值也就没有意义了。</p>
+<p>赎回时若有提成，提成部分全部从客户赎回资金里面扣除，故赎回后客户新的费后净值为：
+<span class="math display">\[
+n_i&#39;=\frac{n_i*S_i-n_i*\Delta S_i}{S_i-\Delta S_i}=n_i
+\]</span> 即赎回前后客户的费后净值不变。</p>
+<p>假设基金管理人的提成<span class="math inline">\(t\)</span>全部提出，则基金的费后净值计算如下：
+<span class="math display">\[
+n&#39;=\frac{n*S-n_i*\Delta S_i}{S-\Delta S}=\frac{n*S-n_i*\Delta
+S_i}{S-\frac{n_i}{n}*\Delta S_i}=n
+\]</span> 可见赎回前后基金的费后净值（若强行计算的话）也能保持一样。</p>
+<ul>
+<li>结算</li>
+</ul>
+<p>有结算时，假定结算前的基金费后净值为<span class="math inline">\(n\)</span>、基金总费前份额为<span class="math inline">\(S\)</span>，结算后为<span class="math inline">\(n&#39;\)</span>、费前份额为<span class="math inline">\(S&#39;\)</span>，总共的提成为<span class="math inline">\(t\)</span>。</p>
+<p>新的基金费后净值： <span class="math display">\[
+n&#39;=\frac{S*n-t}{S}
+\]</span> 可见此时若<span class="math inline">\(t&gt;0\)</span>，则<span class="math inline">\(n&#39;&lt;n\)</span>，即结算会导致费后净值变小。</p>
+<p>对于客户<span class="math inline">\(i\)</span>而言，其费前份额保持不变，有： <span class="math display">\[
+n_i&#39;=\frac{S_i*n_i-t_i}{S_i}
+\]</span>
+此时由于各客户在结算时、提成情况会有差异，如买在净值高点的客户可能没有盈利、故其提成部分为0，但买在净值低点的客户会被提成，又由于客户的费前份额在结算过程中保持不变，从而出现每个客户的费后净值不一样的情况。因而会引起客户的费后净值与基金的费后净值不一样。</p>
+<h2 id="基准标的">基准标的</h2>
+<p>对于赚取绝对收益的基金而言，没有基准标的。</p>
+<p>对于赚取相对收益的基金而言，基准标的为预先协商的投资品，如BTC、国债利率、标普500等。</p>
+<h2 id="基准资金">基准资金</h2>
+<p>在每次本金变动的瞬间，我们做了假想中的基准投资。即将本金变动后一瞬间的客户权益资金，全部投入到基准标的中，以产生基准收益。</p>
+<p>在两次本金变动之间的时间里，基准标的（如BTC等）价格会变化，但其数量保持不变，基准资金为相应的基准数量对应的资金、随基准价格变化而变化。</p>
+<p>计算如下： <span class="math display">\[
+基准资金=本金*(1+基准收益率)
+\]</span>
+上式中的本金为每次本金变动后一瞬间的新的本金，基准收益率也是相对于本金变化的那一瞬间的基准而言的。</p>
+<h2 id="基准收益">基准收益</h2>
+<p>对于赚取绝对收益的基金，基准收益为0。</p>
+<p>对于赚取相对收益的基金，两次本金变化之间的基准收益为： <span class="math display">\[
+基准收益=本金*基准收益率
+\]</span></p>
+<p>或： <span class="math display">\[
+基准收益=基准资金-本金
+\]</span></p>
+<h2 id="收益">收益</h2>
+<p>对于增强型基金，收益为相对于被增强标的（如BTC等）的相对收益。</p>
+<p>对于中性基金，收益为超过客户基准资金的部分，没有基准收益、从而也没有基准亏损。</p>
+<p>收益计算如下： <span class="math display">\[
+收益=客户权益资金-本金-基准收益
+\]</span></p>
+<p>或： <span class="math display">\[
+收益=客户权益资金-基准资金
+\]</span></p>
+<h2 id="提成">提成</h2>
+<p>提成会影响到客户的费后份额和基金的费后净值，但是对客户的费前份额和基金的费前净值没有影响。</p>
+<p>提成只对超过预先设定的基准的收益部分进行。我们假定提成比率为0.2，则提成公式如下：
+<span class="math display">\[
+提成资金=max([0,收益])*0.2
+\]</span>
+即如果客户没有相对于基准而言的收益（发生了相对亏损），则管理人不提成；如果有相对正收益，则对正收益部分的20%进行提成。</p>
+<h2 id="结算">结算</h2>
+<p>基金运营会定期结算，在结算时会对收益为正的客户进行部分提成，若客户没有正收益，则不会被提成。</p>
+<p>基金在结算完成后，会重新计算客户的本金：</p>
+<ul>
+<li><p>如果客户有盈利、被抽取了提成，则该客户的本金会相应的提高，下次结算时收益会用更高的本金来计算。</p></li>
+<li><p>如果客户没有盈利，则结算前后该客户的本金不会变化，下次结算时，仍用当前的本金计算收益。</p></li>
+</ul>
+<p>结算后的提成资金可以作为基金管理人的申购资金再次被投入到基金中，从而导致基金的总费前份额增加；也可以直接从账户中提出，不影响基金的费前份额，但会造成基金的总权益下降。</p>
+<p>结算</p>
+<h2 id="管理费">管理费</h2>
+<p>一般的基金运营会收取管理费，按客户权益资金的一定比例（管理费率）来计算，较常见的管理费收取为年化2%。</p>
+<h2 id="运营成本">运营成本</h2>
+<p>基金的运营成本一般涵盖基金成员工资、设备成本、资金负债利率、托管费等等，这些成本会在基金运营期间从基金总权益里扣除，会直接导致基金的净值相应的下降。一般基金会在其财务批示里列举相关的详细记录。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer"><div class="post-widgets">
+    <div class="likely">
+        <div class="twitter">Tweet</div>
+        <div class="facebook">Share</div>
+        <div class="linkedin">Link</div>
+        <div class="gplus">Plus</div>
+        <div class="vkontakte">Share</div>
+        <div class="odnoklassniki">Class</div>
+        <div class="telegram">Send</div>
+        <div class="whatsapp">Send</div>
+        <div class="pinterest">Pin</div>
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/ilyabirman-likely@2/release/likely.min.js"></script><div class="post-widgets">
+      <div id="needsharebutton-postbottom">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div><div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="share.title"
+      
+      
+        data-wechat-qrcode-helper="share.prompt"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+          <div class="followme">
+  <span>欢迎关注我的其它发布渠道</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <a target="_blank" class="social-link" href="https://twitter.com/rainmaker23331">
+            <span class="icon">
+              <i class="fab fa-twitter"></i>
+            </span>
+
+            <span class="label">Twitter</span>
+          </a>
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E9%87%91/" rel="tag"># 基金</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/" rel="prev" title="比特币S2F模型还适用吗">
+                  <i class="fa fa-angle-left"></i> 比特币S2F模型还适用吗
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">雨师</span>
+  </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+  <script src="//cdn.jsdelivr.net/gh/theme-next/theme-next-needmoreshare2@1/needsharebutton.min.js"></script>
+  <script>
+      pbOptions = {};
+        pbOptions.iconStyle = "box";
+        pbOptions.boxForm = "horizontal";
+        pbOptions.position = "bottomCenter";
+        pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+  </script>
+</body>
+</html>
