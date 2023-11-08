@@ -225,4 +225,11 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://btcrainmaker.com/categories/%E6%8A%80%E6%9C%AF/</loc>
+    <lastmod>2023-11-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 </urlset>
