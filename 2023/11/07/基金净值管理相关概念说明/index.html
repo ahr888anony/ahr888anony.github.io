@@ -27,7 +27,7 @@
 <meta property="og:description" content="基金的净值管理是一个较复杂的问题，一般投资者在购买基金时，会对一些概念产生疑惑。本文对基金净值管理的一些概念及计算方法进行说明，供读者参考，以助理解净值、份额等的计算过程。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-07T09:31:58.000Z">
-<meta property="article:modified_time" content="2023-11-09T08:12:06.205Z">
+<meta property="article:modified_time" content="2023-11-10T11:59:04.323Z">
 <meta property="article:author" content="雨师">
 <meta property="article:tag" content="基金">
 <meta name="twitter:card" content="summary">
@@ -157,7 +157,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%B3%E8%B4%AD%E8%B5%84%E9%87%91"><span class="nav-number">1.</span> <span class="nav-text">申购资金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%8E%E5%9B%9E%E4%BB%BD%E9%A2%9D"><span class="nav-number">2.</span> <span class="nav-text">赎回份额</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E6%8A%95%E5%85%A5%E8%B5%84%E9%87%91"><span class="nav-number">3.</span> <span class="nav-text">总投入资金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%83%E7%9B%8A%E8%B5%84%E9%87%91"><span class="nav-number">4.</span> <span class="nav-text">权益资金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E9%87%91"><span class="nav-number">5.</span> <span class="nav-text">本金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%89%8D%E4%BB%BD%E9%A2%9D"><span class="nav-number">6.</span> <span class="nav-text">费前份额</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%89%8D%E5%87%80%E5%80%BC"><span class="nav-number">7.</span> <span class="nav-text">费前净值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B3%E8%B4%AD%E8%B5%8E%E5%9B%9E%E7%BB%93%E7%AE%97%E5%89%8D%E5%90%8E%E8%B4%B9%E5%89%8D%E5%87%80%E5%80%BC%E4%BF%9D%E6%8C%81%E4%B8%8D%E5%8F%98"><span class="nav-number">7.1.</span> <span class="nav-text">申购、赎回、结算前后费前净值保持不变</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%90%8E%E4%BB%BD%E9%A2%9D"><span class="nav-number">8.</span> <span class="nav-text">费后份额</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%90%8E%E5%87%80%E5%80%BC"><span class="nav-number">9.</span> <span class="nav-text">费后净值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%B4%B9%E5%90%8E%E5%87%80%E5%80%BC%E7%9A%84%E8%AE%A8%E8%AE%BA"><span class="nav-number">9.1.</span> <span class="nav-text">关于费后净值的讨论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%8A%95%E8%B5%84"><span class="nav-number">10.</span> <span class="nav-text">基准投资</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%A0%87%E7%9A%84"><span class="nav-number">10.1.</span> <span class="nav-text">基准标的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%8C%81%E4%BB%93"><span class="nav-number">10.2.</span> <span class="nav-text">基准持仓</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E8%B5%84%E9%87%91"><span class="nav-number">10.3.</span> <span class="nav-text">基准资金</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%94%B6%E7%9B%8A"><span class="nav-number">10.4.</span> <span class="nav-text">基准收益</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B6%E7%9B%8A"><span class="nav-number">11.</span> <span class="nav-text">收益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E6%88%90"><span class="nav-number">12.</span> <span class="nav-text">提成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E7%AE%97"><span class="nav-number">13.</span> <span class="nav-text">结算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E8%B4%B9"><span class="nav-number">14.</span> <span class="nav-text">管理费</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%90%A5%E6%88%90%E6%9C%AC"><span class="nav-number">15.</span> <span class="nav-text">运营成本</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%B3%E8%B4%AD"><span class="nav-number">1.</span> <span class="nav-text">申购</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%8E%E5%9B%9E"><span class="nav-number">2.</span> <span class="nav-text">赎回</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E7%AE%97"><span class="nav-number">3.</span> <span class="nav-text">结算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E6%8A%95%E5%85%A5%E8%B5%84%E9%87%91"><span class="nav-number">4.</span> <span class="nav-text">总投入资金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%83%E7%9B%8A%E8%B5%84%E9%87%91"><span class="nav-number">5.</span> <span class="nav-text">权益资金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E9%87%91"><span class="nav-number">6.</span> <span class="nav-text">本金</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%89%8D%E4%BB%BD%E9%A2%9D"><span class="nav-number">7.</span> <span class="nav-text">费前份额</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%89%8D%E5%87%80%E5%80%BC"><span class="nav-number">8.</span> <span class="nav-text">费前净值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%B3%E8%B4%AD%E8%B5%8E%E5%9B%9E%E7%BB%93%E7%AE%97%E5%89%8D%E5%90%8E%E8%B4%B9%E5%89%8D%E5%87%80%E5%80%BC%E4%BF%9D%E6%8C%81%E4%B8%8D%E5%8F%98"><span class="nav-number">8.1.</span> <span class="nav-text">申购、赎回、结算前后费前净值保持不变</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%90%8E%E4%BB%BD%E9%A2%9D"><span class="nav-number">9.</span> <span class="nav-text">费后份额</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B4%B9%E5%90%8E%E5%87%80%E5%80%BC"><span class="nav-number">10.</span> <span class="nav-text">费后净值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E8%B4%B9%E5%90%8E%E5%87%80%E5%80%BC%E7%9A%84%E8%AE%A8%E8%AE%BA"><span class="nav-number">10.1.</span> <span class="nav-text">关于费后净值的讨论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%8A%95%E8%B5%84"><span class="nav-number">11.</span> <span class="nav-text">基准投资</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%A0%87%E7%9A%84"><span class="nav-number">11.1.</span> <span class="nav-text">基准标的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%8C%81%E4%BB%93"><span class="nav-number">11.2.</span> <span class="nav-text">基准持仓</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E8%B5%84%E9%87%91"><span class="nav-number">11.3.</span> <span class="nav-text">基准资金</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%94%B6%E7%9B%8A"><span class="nav-number">11.4.</span> <span class="nav-text">基准收益</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%B6%E7%9B%8A"><span class="nav-number">12.</span> <span class="nav-text">收益</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E6%88%90"><span class="nav-number">13.</span> <span class="nav-text">提成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E8%B4%B9"><span class="nav-number">14.</span> <span class="nav-text">管理费</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%90%A5%E6%88%90%E6%9C%AC"><span class="nav-number">15.</span> <span class="nav-text">运营成本</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -249,7 +249,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-11-09 16:12:06" itemprop="dateModified" datetime="2023-11-09T16:12:06+08:00">2023-11-09</time>
+      <time title="修改时间：2023-11-10 19:59:04" itemprop="dateModified" datetime="2023-11-10T19:59:04+08:00">2023-11-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -279,10 +279,11 @@
     
     <div class="post-body" itemprop="articleBody"><p>基金的净值管理是一个较复杂的问题，一般投资者在购买基金时，会对一些概念产生疑惑。本文对基金净值管理的一些概念及计算方法进行说明，供读者参考，以助理解净值、份额等的计算过程。</p>
 <span id="more"></span>
-<h2 id="申购资金">申购资金</h2>
-<p>用来购买基金的资金，基金会将其投入到交易中，客户得到该资金对应的份额，份额分成费前、费后两种，详见下文。</p>
-<h2 id="赎回份额">赎回份额</h2>
-<p>赎回时由于涉及提成，会稍微有些复杂。为了方便计算，我们约定赎回份额为费前份额。</p>
+<h2 id="申购">申购</h2>
+<p>用资金来购买基金的过程。基金会将申购资金投入到交易中，客户得到该资金对应的份额，份额分成费前、费后两种，详见下文。</p>
+<h2 id="赎回">赎回</h2>
+<p>赎回是客户将资金从基金中提取出来的过程。由于涉及提成，会稍微有些复杂。</p>
+<p>赎回需要指定期望赎回的份额（为了方便计算，我们约定赎回份额为费前份额）。</p>
 <p>如果客户全额赎回，即将剩余的费前份额全部赎回，则赎回资金计算如下：
 <span class="math display">\[
 全部赎回资金=费前份额*费后净值-总提成
@@ -292,6 +293,14 @@
 <span class="math display">\[
 赎回资金=赎回费前份额*费后净值-总提成*赎回费前份额/总费前份额
 \]</span> 提成的计算方法见下文。</p>
+<h2 id="结算">结算</h2>
+<p>基金运营会定期结算，在结算时会对收益为正的客户进行部分提成，若客户没有正收益，则不会被提成。</p>
+<p>基金在结算完成后，会重新计算客户的本金：</p>
+<ul>
+<li><p>如果客户有盈利、被抽取了提成，则该客户的本金会相应的提高，提高金额为该客户自上次结算以来的剩余盈利，下次结算时收益会用更高的本金来计算。</p></li>
+<li><p>如果客户没有盈利，则结算前后该客户的本金不会变化，下次结算时，仍用当前的本金计算收益。</p></li>
+</ul>
+<p>结算后的提成资金可以作为基金管理人的申购资金再次被投入到基金中，从而导致基金的总费前份额增加；也可以直接从账户中提出，不影响基金的费前份额，但会造成基金的总权益下降。</p>
 <h2 id="总投入资金">总投入资金</h2>
 <p>申购赎回所投入的净资金为总投入资金。即： <span class="math display">\[
 总投入资金=总申购资金-总赎回资金
@@ -465,16 +474,13 @@ n_i&#39;=\frac{S_i*n_i-t_i}{S_i}
 提成资金=max([0,收益])*0.2
 \]</span>
 即如果客户没有相对于基准而言的收益（发生了相对亏损），则管理人不提成；如果有相对正收益，则对正收益部分的20%进行提成。</p>
-<h2 id="结算">结算</h2>
-<p>基金运营会定期结算，在结算时会对收益为正的客户进行部分提成，若客户没有正收益，则不会被提成。</p>
-<p>基金在结算完成后，会重新计算客户的本金：</p>
-<ul>
-<li><p>如果客户有盈利、被抽取了提成，则该客户的本金会相应的提高，提高金额为该客户自上次结算以来的剩余盈利，下次结算时收益会用更高的本金来计算。</p></li>
-<li><p>如果客户没有盈利，则结算前后该客户的本金不会变化，下次结算时，仍用当前的本金计算收益。</p></li>
-</ul>
-<p>结算后的提成资金可以作为基金管理人的申购资金再次被投入到基金中，从而导致基金的总费前份额增加；也可以直接从账户中提出，不影响基金的费前份额，但会造成基金的总权益下降。</p>
 <h2 id="管理费">管理费</h2>
 <p>一般的基金运营会收取管理费，按客户权益资金的一定比例（管理费率）来计算，较常见的管理费收取为年化2%。</p>
+<p>每日收盘时（或次日开盘时），以当时客户的权益资金乘以日化管理费率计算管理费：
+<span class="math display">\[
+日管理费=客户权益资金*0.02/365
+\]</span>
+客户当日新申购的资金会在当日收盘（或次日开盘）时收取管理费，新赎回的资金当日收盘时不会再收取管理费。这是一个权衡，要么新申购的资金不收取管理费、要么新赎回的资金不收取管理费。采用新赎回不收取会更方便。</p>
 <h2 id="运营成本">运营成本</h2>
 <p>基金的运营成本一般涵盖基金成员工资、设备成本、资金负债利率、托管费等等，这些成本会在基金运营期间从基金总权益里扣除，会直接导致基金的净值相应的下降。一般基金会在其财务批示里列举相关的详细记录。</p>
 
