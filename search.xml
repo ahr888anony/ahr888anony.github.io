@@ -1920,41 +1920,6 @@ logP&amp;=a+b&#39;*logS
       </tags>
   </entry>
   <entry>
-    <title>怎么给pyecharts生成的图标增加滚动条</title>
-    <url>/2023/11/23/%E6%80%8E%E4%B9%88%E7%BB%99pyecharts%E7%94%9F%E6%88%90%E7%9A%84%E5%9B%BE%E6%A0%87%E5%A2%9E%E5%8A%A0%E6%BB%9A%E5%8A%A8%E6%9D%A1/</url>
-    <content><![CDATA[<p>我在用<a href="https://pyecharts.org/#/"><code>pyecharts</code></a>制作网页表格时，面临如下问题：</p>
-<ul>
-<li><p>当表格的列数比较多时，会溢出页面右边框，十分不雅观。</p></li>
-<li><p>不想抛弃<code>pyecharts</code>带来的便捷。</p></li>
-</ul>
-<p>于是经过查询，找到了解决办法，见下文。</p>
-<span id="more"></span>
-<h2 id="问题描述">问题描述</h2>
-<p>当我们使用<code>pyecharts</code>的<code>table</code>类来创建表格，嵌入到网页中时，发现表格数据会右溢出，滚动条出现在最下面，严重影响了页面的美观和整洁。</p>
-<p>我们希望滚动条出现在表格处、而不是页面底部，即希望表格可以滑动显示。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>在<a href="https://github.com/pyecharts/pyecharts"><code>pyecharts</code></a>的<code>github</code>上查找该问题，发现有人曾经提出过<a href="https://github.com/pyecharts/pyecharts/issues/1935">见此处</a>，该问题的回答没有详细说怎么解决，只是提到了需要修改<code>macro</code>模版。</p>
-<p>鉴于没有找到更好解决办法，于是动手修改了模块的宏文件。我安装的版本为<code>pyecharts==2.0.2</code>、<code>python==3.8.5</code>。具体修改如下：</p>
-<p>找到安装包所在路径：</p>
-<blockquote>
-<p><code>venv -&gt; lib -&gt; lib -&gt; python3.8 -&gt; site-packages -&gt; pyecharts -&gt; render -&gt; templates -&gt; macro</code></p>
-</blockquote>
-<p>打开<code>macro</code>文件，寻到<code>table</code>相关的<code>style</code>，在176行的<code>.fl-table</code>里增加两行：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">display</span>: block;</span><br><span class="line">       <span class="attribute">overflow</span>: scroll;</span><br></pre></td></tr></table></figure>
-<p>即变为</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.fl-table</span> &#123;</span><br><span class="line">                <span class="attribute">margin</span>: <span class="number">20px</span>;</span><br><span class="line">                <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">                <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">                <span class="attribute">border</span>: none;</span><br><span class="line">                <span class="attribute">border-collapse</span>: collapse;</span><br><span class="line">                <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">                <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">                <span class="attribute">word-break</span>: keep-all;</span><br><span class="line">                <span class="attribute">display</span>: block;</span><br><span class="line">                <span class="attribute">overflow</span>: scroll;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
-<p>然后重启项目，再次生成html文件，新生成的表格页面就限定为页面的大小，可以通过滚动条来拖动观看后续表格了。</p>
-<p>如有服务器，在服务器上也进行相同操作。</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pyecharts</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>基金净值管理相关概念说明</title>
     <url>/2023/11/07/%E5%9F%BA%E9%87%91%E5%87%80%E5%80%BC%E7%AE%A1%E7%90%86%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5%E8%AF%B4%E6%98%8E/</url>
     <content><![CDATA[<p>基金的净值管理是一个较复杂的问题，一般投资者在购买基金时，会对一些概念产生疑惑。本文对基金净值管理的一些概念及计算方法进行说明，供读者参考，以助理解净值、份额等的计算过程。</p>
@@ -2172,6 +2137,41 @@ n_i&#39;=\frac{S_i*n_i-t_i}{S_i}
       </categories>
       <tags>
         <tag>基金</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>怎么给pyecharts生成的表格增加滚动条</title>
+    <url>/2023/11/23/%E6%80%8E%E4%B9%88%E7%BB%99pyecharts%E7%94%9F%E6%88%90%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%A2%9E%E5%8A%A0%E6%BB%9A%E5%8A%A8%E6%9D%A1/</url>
+    <content><![CDATA[<p>我在用<a href="https://pyecharts.org/#/"><code>pyecharts</code></a>制作网页表格时，面临如下问题：</p>
+<ul>
+<li><p>当表格的列数比较多时，会溢出页面右边框，十分不雅观。</p></li>
+<li><p>不想抛弃<code>pyecharts</code>带来的便捷。</p></li>
+</ul>
+<p>于是经过查询，找到了解决办法，见下文。</p>
+<span id="more"></span>
+<h2 id="问题描述">问题描述</h2>
+<p>当我们使用<code>pyecharts</code>的<code>table</code>类来创建表格，嵌入到网页中时，发现表格数据会右溢出，滚动条出现在最下面，严重影响了页面的美观和整洁。</p>
+<p>我们希望滚动条出现在表格处、而不是页面底部，即希望表格可以滑动显示。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>在<a href="https://github.com/pyecharts/pyecharts"><code>pyecharts</code></a>的<code>github</code>上查找该问题，发现有人曾经提出过<a href="https://github.com/pyecharts/pyecharts/issues/1935">见此处</a>，该问题的回答没有详细说怎么解决，只是提到了需要修改<code>macro</code>模版。</p>
+<p>鉴于没有找到更好解决办法，于是动手修改了模块的宏文件。我安装的版本为<code>pyecharts==2.0.2</code>、<code>python==3.8.5</code>。具体修改如下：</p>
+<p>找到安装包所在路径：</p>
+<blockquote>
+<p><code>venv -&gt; lib -&gt; lib -&gt; python3.8 -&gt; site-packages -&gt; pyecharts -&gt; render -&gt; templates -&gt; macro</code></p>
+</blockquote>
+<p>打开<code>macro</code>文件，寻到<code>table</code>相关的<code>style</code>，在176行的<code>.fl-table</code>里增加两行：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">display</span>: block;</span><br><span class="line">       <span class="attribute">overflow</span>: scroll;</span><br></pre></td></tr></table></figure>
+<p>即变为</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.fl-table</span> &#123;</span><br><span class="line">                <span class="attribute">margin</span>: <span class="number">20px</span>;</span><br><span class="line">                <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">                <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">                <span class="attribute">border</span>: none;</span><br><span class="line">                <span class="attribute">border-collapse</span>: collapse;</span><br><span class="line">                <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">                <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">                <span class="attribute">word-break</span>: keep-all;</span><br><span class="line">                <span class="attribute">display</span>: block;</span><br><span class="line">                <span class="attribute">overflow</span>: scroll;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+<p>然后重启项目，再次生成html文件，新生成的表格页面就限定为页面的大小，可以通过滚动条来拖动观看后续表格了。</p>
+<p>如有服务器，在服务器上也进行相同操作。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pyecharts</tag>
       </tags>
   </entry>
 </search>
