@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>可以在比特币上计算一切的BitVM</title>
+    <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
+    <content><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">Robin
+Linus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p>
+<span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p>
+<h2 id="白皮书内容理解">白皮书内容理解</h2>
+<p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p>
+<p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考Bob
+Bodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p>
+<p>该白皮书（ TODO，待完成）</p>
+]]></content>
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>BitVM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>使用hexo遇到的坑</title>
     <url>/2023/08/31/%E4%BD%BF%E7%94%A8hexo%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/</url>
     <content><![CDATA[<p>在初次使用hexo时，遇到一系列问题。现在开启这篇文章记录之。</p>
@@ -66,6 +85,74 @@ hexo每次部署后均需要重新配置自定义域名</h2>
       <tags>
         <tag>hexo</tag>
         <tag>技术</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>acme.sh不能自动更新证书的问题</title>
+    <url>/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>本文描述了一种使用<code>acme.sh</code>颁发的证书始终不能正常自动更新的问题，并记录了解决过程。</p>
+<span id="more"></span>
+<p>在服务器上使用了<code>acme.sh</code>来颁发ssl证书，按照<a href="https://github.com/acmesh-official/acme.sh/blob/master/README.md">官方指导</a>在用户<code>user1</code>根目录下安装了<code>acme.sh</code>，并在<code>root</code>用户下执行如下命令（如不在root下执行，会报提醒，建议到root下执行），成功颁发了证书：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --set-default-ca --server letsencrypt --issue -d test_domain.com --standalone --keylength ec-256 --force</span><br></pre></td></tr></table></figure>
+<p>然后在<code>root</code>下执行了将证书安装到指定目录下的操作：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --install-cert -d test_domain.com --ecc \</span><br><span class="line">                          --fullchain-file /etc/v2ray/v2ray.crt \</span><br><span class="line">                          --key-file /etc/v2ray/v2ray.key \</span><br><span class="line">                          --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure>
+<p>一切正常的话，按照官方所描述的，<code>crontab</code>中会每日自动检查证书是否需要<code>renew</code>，然后根据情况在快要到期时（<code>acme.sh</code>默认证书有效期为90天，到期前30天会自动更新。注意有效期最多只有90天，不能延长，<a href="https://letsencrypt.org/docs/faq/">参见此处</a>）更新。</p>
+<p>但是在实际操作中，始终不能如预期正常更新证书。<code>user1</code>下检查定时任务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo crontab -l</span><br></pre></td></tr></table></figure>
+<p>查看结果：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
+<p>由于一直没找到原因，故每次到期后都需要手动更新证书：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ~/.acme.sh/acme.sh --renew -d test_domain.com --force --ecc --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure>
+<p>上述命令执行在用户<code>user1</code>下。最后的参数是在执行后重启<code>nginx</code>和<code>v2ray</code>。</p>
+<p>手动更新正常（这很奇怪，可能是因为在<code>root</code>与<code>user1</code>下都生成了证书，保留了两个目录下的参数与证书，并在根目录下生成证书时输入了错误的域名？检查发现<code>root</code>下也安装了<code>acme.sh</code>，将其卸载，并删除了<code>.acme.sh/</code>目录。）。</p>
+<p>一直对<code>acme.sh</code>定时更新的工作流程，特别是为什么不需要在<code>crontab</code>的定时任务里不需要传参的原因不是很理解，于是花了点时间检索，发现了<a href="https://github.com/acmesh-official/acme.sh/issues/3981">相关解答</a>。即在执行<code>--install-cert</code>后参数会保存，自动更新时调用之，故不需要在<code>crontab</code>中传参。</p>
+<p>然后尝试直接<code>debug</code>执行更新操作：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure>
+<p>发现执行日志有如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===Starting cron===</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Using config home:/home/user1/.acme.sh</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _stopRenewOnError</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] di=<span class="string">&#x27;/home/user1/.acme.sh/*.*/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Not a directory, skip: /home/user1/.acme.sh/*.*/</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _error_level=<span class="string">&#x27;3&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===End cron===</span><br></pre></td></tr></table></figure>
+<p>从上述内容可见问题出现在参数配置文件目录出错，导致找不到<code>.acme.sh/*.*/</code>文件。这才意识到安装<code>acme.sh</code>脚本的目录是在<code>user1</code>根目录下，但是在申请证书是在<code>root</code>根目录下操作的。执行了：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo su -</span><br></pre></td></tr></table></figure>
+<p>造成目录切换到了<code>root</code>根目录下，运行<code>--issue</code>域名的操作生成的文件直接保存在了<code>root</code>根目录下，即证书、配置的目录与脚本的目录不匹配。程序自动更新时在脚本目录<code>/home/user1/.acme.sh</code>下寻找不到所需的证书与参数，因而出错、忽略了。加上日志直接输到了<code>/dev/null</code>，故一直没找到原因。</p>
+<p>修改<code>--home</code>后<code>debug</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure>
+<p>发现结果显示包含如下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:47:17 UTC 2023] di=<span class="string">&#x27;/root/.acme.sh/test_domain_ecc/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] d=<span class="string">&#x27;test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] DOMAIN_PATH=<span class="string">&#x27;/root/.acme.sh/test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Renew: <span class="string">&#x27;test_domain.com&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Le_API=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Skip, Next renewal time is: Mon Dec 11 09:52:50 UTC 2023</span><br></pre></td></tr></table></figure>
+<p>显然，这次脚本成功检查了证书的有效期，并跳过了不需要更新的证书。可判断这回脚本能够正确运行了。</p>
+<p>在<code>root</code>下修改<code>crontab</code>中的任务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
+<p>将<code>--home</code>参数后的目录修改一下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
+<p>即可正常自动更新了。</p>
+]]></content>
+      <tags>
+        <tag>acme.sh</tag>
+        <tag>证书</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pycharm重装打不开的问题</title>
+    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
+m1电脑，重装最新版pycharm专业版后不能打开。</p>
+<span id="more"></span>
+<h2 id="背景介绍">背景介绍</h2>
+<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
+<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
+m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
+<p>网上找了很久，才最终解决该问题。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
+<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
+<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
+<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
+]]></content>
+      <tags>
+        <tag>技术</tag>
+        <tag>PyCharm</tag>
       </tags>
   </entry>
   <entry>
@@ -1136,219 +1223,6 @@ rtn_{mkt}^t=\sum_{i}^{N^{t-1}}
       </tags>
   </entry>
   <entry>
-    <title>pycharm重装打不开的问题</title>
-    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
-m1电脑，重装最新版pycharm专业版后不能打开。</p>
-<span id="more"></span>
-<h2 id="背景介绍">背景介绍</h2>
-<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
-<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
-m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
-<p>网上找了很久，才最终解决该问题。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
-<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
-<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
-<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
-]]></content>
-      <tags>
-        <tag>技术</tag>
-        <tag>PyCharm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>acme.sh不能自动更新证书的问题</title>
-    <url>/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>本文描述了一种使用<code>acme.sh</code>颁发的证书始终不能正常自动更新的问题，并记录了解决过程。</p>
-<span id="more"></span>
-<p>在服务器上使用了<code>acme.sh</code>来颁发ssl证书，按照<a href="https://github.com/acmesh-official/acme.sh/blob/master/README.md">官方指导</a>在用户<code>user1</code>根目录下安装了<code>acme.sh</code>，并在<code>root</code>用户下执行如下命令（如不在root下执行，会报提醒，建议到root下执行），成功颁发了证书：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --set-default-ca --server letsencrypt --issue -d test_domain.com --standalone --keylength ec-256 --force</span><br></pre></td></tr></table></figure>
-<p>然后在<code>root</code>下执行了将证书安装到指定目录下的操作：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/home/user1/.acme.sh/acme.sh --install-cert -d test_domain.com --ecc \</span><br><span class="line">                          --fullchain-file /etc/v2ray/v2ray.crt \</span><br><span class="line">                          --key-file /etc/v2ray/v2ray.key \</span><br><span class="line">                          --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure>
-<p>一切正常的话，按照官方所描述的，<code>crontab</code>中会每日自动检查证书是否需要<code>renew</code>，然后根据情况在快要到期时（<code>acme.sh</code>默认证书有效期为90天，到期前30天会自动更新。注意有效期最多只有90天，不能延长，<a href="https://letsencrypt.org/docs/faq/">参见此处</a>）更新。</p>
-<p>但是在实际操作中，始终不能如预期正常更新证书。<code>user1</code>下检查定时任务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo crontab -l</span><br></pre></td></tr></table></figure>
-<p>查看结果：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
-<p>由于一直没找到原因，故每次到期后都需要手动更新证书：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ~/.acme.sh/acme.sh --renew -d test_domain.com --force --ecc --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure>
-<p>上述命令执行在用户<code>user1</code>下。最后的参数是在执行后重启<code>nginx</code>和<code>v2ray</code>。</p>
-<p>手动更新正常（这很奇怪，可能是因为在<code>root</code>与<code>user1</code>下都生成了证书，保留了两个目录下的参数与证书，并在根目录下生成证书时输入了错误的域名？检查发现<code>root</code>下也安装了<code>acme.sh</code>，将其卸载，并删除了<code>.acme.sh/</code>目录。）。</p>
-<p>一直对<code>acme.sh</code>定时更新的工作流程，特别是为什么不需要在<code>crontab</code>的定时任务里不需要传参的原因不是很理解，于是花了点时间检索，发现了<a href="https://github.com/acmesh-official/acme.sh/issues/3981">相关解答</a>。即在执行<code>--install-cert</code>后参数会保存，自动更新时调用之，故不需要在<code>crontab</code>中传参。</p>
-<p>然后尝试直接<code>debug</code>执行更新操作：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure>
-<p>发现执行日志有如下内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===Starting cron===</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Using config home:/home/user1/.acme.sh</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _stopRenewOnError</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] di=<span class="string">&#x27;/home/user1/.acme.sh/*.*/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] Not a directory, skip: /home/user1/.acme.sh/*.*/</span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _error_level=<span class="string">&#x27;3&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] _set_level=<span class="string">&#x27;2&#x27;</span></span><br><span class="line">[Thu Oct 12 10:33:01 UTC 2023] ===End cron===</span><br></pre></td></tr></table></figure>
-<p>从上述内容可见问题出现在参数配置文件目录出错，导致找不到<code>.acme.sh/*.*/</code>文件。这才意识到安装<code>acme.sh</code>脚本的目录是在<code>user1</code>根目录下，但是在申请证书是在<code>root</code>根目录下操作的。执行了：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo su -</span><br></pre></td></tr></table></figure>
-<p>造成目录切换到了<code>root</code>根目录下，运行<code>--issue</code>域名的操作生成的文件直接保存在了<code>root</code>根目录下，即证书、配置的目录与脚本的目录不匹配。程序自动更新时在脚本目录<code>/home/user1/.acme.sh</code>下寻找不到所需的证书与参数，因而出错、忽略了。加上日志直接输到了<code>/dev/null</code>，故一直没找到原因。</p>
-<p>修改<code>--home</code>后<code>debug</code>：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure>
-<p>发现结果显示包含如下内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[Thu Oct 12 10:47:17 UTC 2023] di=<span class="string">&#x27;/root/.acme.sh/test_domain_ecc/&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] d=<span class="string">&#x27;test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme.zerossl.com/v2/DV90&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] DOMAIN_PATH=<span class="string">&#x27;/root/.acme.sh/test_domain.com_ecc&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Renew: <span class="string">&#x27;test_domain.com&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Le_API=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Using config home:/root/.acme.sh</span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] ACME_DIRECTORY=<span class="string">&#x27;https://acme-v02.api.letsencrypt.org/directory&#x27;</span></span><br><span class="line">[Thu Oct 12 10:47:17 UTC 2023] Skip, Next renewal time is: Mon Dec 11 09:52:50 UTC 2023</span><br></pre></td></tr></table></figure>
-<p>显然，这次脚本成功检查了证书的有效期，并跳过了不需要更新的证书。可判断这回脚本能够正确运行了。</p>
-<p>在<code>root</code>下修改<code>crontab</code>中的任务：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">crontab -e</span><br></pre></td></tr></table></figure>
-<p>将<code>--home</code>参数后的目录修改一下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">48 0 * * * <span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/root/.acme.sh&quot;</span> &gt; /dev/null</span><br></pre></td></tr></table></figure>
-<p>即可正常自动更新了。</p>
-]]></content>
-      <tags>
-        <tag>acme.sh</tag>
-        <tag>证书</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>比特币S2F模型还适用吗</title>
-    <url>/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/</url>
-    <content><![CDATA[<p>在上轮比特币减半（2020-05-11减半）周期中，<a href="https://twitter.com/100trillionusd/">PlanB</a>的<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F模型</a>扮演了非常重要的角色，<a href="https://charts.bitbo.io/stock-to-flow/">该模型预测</a>的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#对数供给量多项式模型">对数供给量多项式模型</a>的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与市值的关系。</p>
-<span id="more"></span>
-<h2 id="s2f模型的不足">S2F模型的不足</h2>
-<p>正如我之前的文章所指出的（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">比特币的价格模型</a>一节），按照S2F模型，比特币会无限上涨。更量化的，每4年减半一次都上涨接近10倍，没有尽头。特别是当比特币增量为0后（2140年后），按照S2F模型，<span class="math inline">\(stock/flow\)</span>会变为无穷大。按该模型预测，比特币的市值会趋于无穷大。</p>
-<p>众所周知，目前美元m2总量才21万亿左右，只要美元的计价地位不变（美元仍为本位货币），则比特币的市值不应该超过21万亿美元太多。</p>
-<p>PlanB的原始模型显然没有考虑这一限制，特别是其对涨幅衰减效应的欠考虑，引起模型与真实情况的偏离，最终导致预测上轮（对应2020-05-11减半）牛市的价格区间出错。这是该模型最大的一个不足之处。</p>
-<p>另外，该模型还进行了跨市场的验证，其中包含了黄金和白银等，得出S2F越大则市值越大的结论。照此推论，黄金的S2F值高于美元，那么为什么黄金的市值低于美元？这显然也不合理。</p>
-<p>最后，近年来大为流行的NFT产品，具有唯一性，这类产品的S2F理论上应该趋于无穷大，但现实中只有极少数NFT产品卖出了天价，这显然也与S2F模型所描述的规律不一样。</p>
-<h2 id="s2f简化模型建模">S2F简化模型建模</h2>
-<p>本节对S2F模型做了一些简化处理，得出与原始版本相当的结论。</p>
-<p>首先，与原文的方式不同，本文存量（stock）采用如下更简单的方式计算：</p>
-<p><span class="math display">\[\begin{equation}\label{eq1}
-stock_i=market\_cap_i/close_i
-\end{equation}\]</span></p>
-<p>其中i代表第i个交易日，下同。下文用<span class="math inline">\(M\)</span>代表市值、<span class="math inline">\(S\)</span>代表存量。另外，本文的数据采用日频数据，而非原本S2F模型的月度数据。</p>
-<p>流通量（flow）与PlanB的定义也不同，不采用年化的产量，而直接采用日产量（即stock的增量），计算方法如下：</p>
-<p><span class="math display">\[\begin{equation}\label{eq2}
-flow_i=\Delta S_i=S_i-S_{i-1}
-\end{equation}\]</span></p>
-<p>这种直接计算存量、流通量的方法更简单，理论上与原版模型只有常数（会略微有一点随机偏差）差异。</p>
-<p>有了存量、流通量后，自然有：</p>
-<p><span class="math display">\[\begin{equation}\label{eq3}
-S2F_i=S_i/flow_i
-\end{equation}\]</span></p>
-<p>如上计算出<span class="math inline">\(S2F\)</span>后，先观察未进行处理的对数<span class="math inline">\(S2F\)</span>值、即<span class="math inline">\(log(S2F)\)</span>（简计为<span class="math inline">\(logS2F\)</span>）与对数市值<span class="math inline">\(log(M)\)</span>（简记<span class="math inline">\(logM\)</span>）的走势图，如下：</p>
-<figure>
-<img src="logM与logS2F未处理走势图.jpg" alt="logM与logS2F未处理走势图">
-<figcaption aria-hidden="true">logM与logS2F未处理走势图</figcaption>
-</figure>
-<p>可见有不少异常数据。采用如下mad法来处理异常值：</p>
-<blockquote>
-<p>采用中位数绝对偏差法（mad法），选择1月滚动回视窗口，即<span class="math inline">\(window=30\)</span>，将与中位数（滚动median值）偏差超过3倍mad值的数值视为异常值，采用滚动<span class="math inline">\(median\pm
-3*mad\)</span>值替换异常值，即超出上限的用上限替换、超出下限的用下限替换。</p>
-</blockquote>
-<p>其中mad值的计算如下：</p>
-<p><span class="math display">\[\begin{equation}\label{eq4}
-mad=median(abs(X-median(X))
-\end{equation}\]</span></p>
-<p>采用上述方法、会将减半日的<span class="math inline">\(logS2F\)</span>跳跃效应延迟，在滞后约<span class="math inline">\(window/2=15\)</span>期后才会过渡到真实的<span class="math inline">\(logS2F\)</span>值。这一处理无伤大雅，不妨碍揭示出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的关系。</p>
-<p>做了异常值处理的<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>走势对比如下：</p>
-<figure>
-<img src="logM与logS2F进行异常值处理后的走势图.jpg" alt="logM与logS2F进行异常值处理后的走势图">
-<figcaption aria-hidden="true">logM与logS2F进行异常值处理后的走势图</figcaption>
-</figure>
-<p>可见减半日附近的<span class="math inline">\(logS2F\)</span>跳跃效应依然存在，曲线中的异常值被很好的处理了。下文中均采用处理过的<span class="math inline">\(logS2F\)</span>来建模及讨论。</p>
-<p>先做出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的线性回归图：</p>
-<figure>
-<img src="logM与异常值处理后的logS2F线性回归图.jpg" alt="logM与异常值处理后的logS2F线性回归图">
-<figcaption aria-hidden="true">logM与异常值处理后的logS2F线性回归图</figcaption>
-</figure>
-<p>图中的线性关系为：</p>
-<p><span class="math display">\[\begin{equation}\label{eq5}
-logM=-4.55+3.21*logS2F
-\end{equation}\]</span></p>
-<p>这一拟合结果与PlanB的结果非常相近（参见<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">此处</a>），他得到的系数为3.32。故本文采用的简单计算方式与原文的计算方式区别不大。</p>
-<p>从上图可以很明显的观察到：对应3次减半形成的4个时间区域，<span class="math inline">\(logS2F\)</span>数据形成了4个区分明显的阶梯。随着<span class="math inline">\(logS2F\)</span>的增大、对应减半次数的增加，<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的波动范围在缩小，波动性呈下降趋势。</p>
-<p>不管从哪种意义上来说，上图的结果都是让人震惊的。与原文采用月频数据（111个样本）不同，本文在考虑了包含最新数据的日频数据（样本更多，共4826个样本）、且更改了计算方法后，仍可得出如下结论：</p>
-<blockquote>
-<p><font color="red"><strong>在目前阶段，线性的S2F模型依然可以作为价格规律的一个比较有效的近似。</strong></font></p>
-</blockquote>
-<p>但仍然需要指出的是，在<span class="math inline">\(logS2F\)</span>的最右侧区域（对应的是2020-05-11减半之后的数据），阶梯上升有减小的趋势，如我在2023-09-25所写的<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#引言">文章</a>所指出的那样。</p>
-<p>由于减半次数太少（只发生了3次），这意味着目前有效的自变量变化范围尚且太小，线性拟合可以是很多种函数在局部区域的近似，并不能断言<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>两者就是线性关系。</p>
-<h2 id="s2f模型与多项式拟合的关系">S2F模型与多项式拟合的关系</h2>
-<p>下面我将讨论S2F模型与对数供给量多项式价格模型（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">此处</a>）的关系，得出多项式模型是对S2F模型的批判性继承的结论。</p>
-<p>我们将<span class="math inline">\(flow\)</span>简计为<span class="math inline">\(F\)</span>，S2F模型可以一般的表达为：</p>
-<p><span class="math display">\[\begin{equation}\label{eq6}
-\begin{aligned}
-logM &amp; =a+b*logS2F\\ &amp;=a+b*(logS-logF)\\
-&amp;=a+b*(logS-log\Delta S)
-\end{aligned}
-\end{equation}\]</span></p>
-<p>其中<span class="math inline">\(\Delta S\)</span>是<span class="math inline">\(S\)</span>的一阶小量，有如下特点：</p>
-<ol type="1">
-<li>随着减半次数的进一步增加<span class="math inline">\(\Delta
-S\)</span>会变得越来越小，直至减半终结而趋于0；</li>
-<li>在<span class="math inline">\(\Delta S&gt;1\)</span>时，<span class="math inline">\(log\Delta
-S\)</span>会随着减半次数增加而单调递减，对应的<span class="math inline">\(logS\)</span>项则会越来越大，此时<span class="math inline">\(log\Delta
-S\)</span>项的影响随着减半增加会越来越低，可作为微扰项，将其忽略影响不大；</li>
-<li>当<span class="math inline">\(\Delta S&lt;1\)</span>时，<span class="math inline">\(log\Delta
-S\)</span>会随着减半次数的进一步增加而变为负数、其绝对值越来越大、最终趋于无穷。此时该项的影响会超过<span class="math inline">\(logS\)</span>项，且其引入了与真实情况有悖的不可解释的效应，这些效应只在减半快要结束时才出现、并没有现实支撑。明显是不合理的，此时更应将该项舍弃；</li>
-</ol>
-<p>如上分析，<span class="math inline">\(\eqref{eq6}\)</span>最后的<span class="math inline">\(log\Delta
-S\)</span>项在减半周期较小时才有意义，将其舍弃后模型才更合理。</p>
-<p>结合市值的定义，上式可以如下转换：</p>
-<p><span class="math display">\[\begin{equation}\label{eq7}
-\begin{aligned}
-log(S*P)  &amp;=a+b*logS \\ \Rightarrow logS+logP &amp;= a+b*logS \\
-\Rightarrow logP &amp;=a+(b-1)*logS \\ \Rightarrow
-logP&amp;=a+b&#39;*logS
-\end{aligned}
-\end{equation}\]</span></p>
-<p>即舍弃了不合理部分的S2F模型化成了多项式拟合的1阶形式。</p>
-<p>下面做出<span class="math inline">\(logS\)</span>与<span class="math inline">\(logP\)</span>的线性回归图，以验证舍去<span class="math inline">\(log\Delta S\)</span>项是否合理：</p>
-<figure>
-<img src="logS与logP的线性回归图.jpg" alt="logS与logP的线性回归图">
-<figcaption aria-hidden="true">logS与logP的线性回归图</figcaption>
-</figure>
-<p>通过上图的数据实证可见，两者效果上基本等价（1阶多项式拟合的<span class="math inline">\(R^2\)</span>为0.91，S2F模型为0.93），印证了<span class="math inline">\(log\Delta S\)</span>项实际上是冗余的。</p>
-<p>从而，得出如下结论：</p>
-<blockquote>
-<p><font color="red"><strong>对数供给量多项式拟合可以被视为S2F模型的一种更合理的、可拓展的形式，其更适用于有极限价格的实际情况</strong>。</font></p>
-</blockquote>
-<h2 id="稀缺性与市值">稀缺性与市值</h2>
-<p>稀缺性（仍可用S2F值代表）与市值，是一个很复杂的问题，本文目前仅仅只做一些逻辑上的讨论，更量化的讨论留待将来进行。</p>
-<p>到目前为止，在流通性良好且为人们普遍接受的商品中，黄金的稀缺性是公认较高的，但其并没有超过以m2衡量的美元的市值，这或许与黄金不具有本位币地位有关。金本位的崩溃促使黄金退化为了一种普通商品，相较于可以购买一切的本位币而言，人们对黄金的潜在需求下降，导致其市值相较于美元缩水。</p>
-<p>这对比特币的警示意义在于：如果其最终不能取得本位币地位，则其市值不太可能超越以m2衡量的美元，从而2140年之后btc的价格可能达不到以当前美元价值衡量的100万美元/BTC。</p>
-<p>稀缺性高于黄金S2F值的商品，如古董、艺术品、NFT产品等，由于供给量限定，S2F会很高，但其价格的差别却很大、大多市值也很有限，并不完全遵循越稀缺市值越高的规律。显然，造成这一现象的主要的原因在于是否有足够的潜在购买者为其稀缺性买单。</p>
-<p>这对于比特币的警示意义在于：虽然目前btc的流通性很好，但如果比特币不能更多的为大众所接纳，其使用场景不能更近一步增加，则人们很难会进一步为其稀缺性买单，从而减半导致的稀缺性上升也不能很好的反映在市值上，即便最终其S2F趋近于无穷大，也不代表其市值就会上涨到很高的水平。</p>
-<h2 id="致谢与声明">致谢与声明</h2>
-<p>本文仅仅是在做技术上的尝试，不构成投资建议，望读者自行甄别。</p>
-<p>限于本人的水平，本文错谬之处在所难免，期待方家指正。</p>
-<p>感谢您的阅读！</p>
-<p>本文完。</p>
-]]></content>
-      <categories>
-        <category>投资</category>
-      </categories>
-      <tags>
-        <tag>bitcoin</tag>
-        <tag>减半</tag>
-        <tag>S2F模型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>可以在比特币上计算一切的BitVM</title>
-    <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
-    <content><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">Robin
-Linus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p>
-<span id="more"></span>
-<h2 id="前言">前言</h2>
-<p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p>
-<h2 id="白皮书内容理解">白皮书内容理解</h2>
-<p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p>
-<p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考Bob
-Bodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p>
-<p>该白皮书（ TODO，待完成）</p>
-]]></content>
-      <tags>
-        <tag>bitcoin</tag>
-        <tag>BitVM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>由比特币已实现价格进行的一些推理</title>
     <url>/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/</url>
     <content><![CDATA[<p>本文首先介绍了一些比特币早期价格的历史；接着分析了比特币对数价格（<span class="math inline">\(logP\)</span>）与对数供给量（<span class="math inline">\(logS\)</span>）可能的一些回归关系；然后总结了历史上的3次减半规律；进而对总结的规律进行极值建模；最后运用汇总的规律及构建的模型，对下一次减半周期几个极值（最低价、减半价、最高价）和对应的时间范围进行了一些推测。</p>
@@ -1886,6 +1760,201 @@ P_{2024-04-16}\in[51006.21, 76458.321]
       </tags>
   </entry>
   <entry>
+    <title>比特币S2F模型还适用吗</title>
+    <url>/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/</url>
+    <content><![CDATA[<p>在上轮比特币减半（2020-05-11减半）周期中，<a href="https://twitter.com/100trillionusd/">PlanB</a>的<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F模型</a>扮演了非常重要的角色，<a href="https://charts.bitbo.io/stock-to-flow/">该模型预测</a>的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#对数供给量多项式模型">对数供给量多项式模型</a>的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与市值的关系。</p>
+<span id="more"></span>
+<h2 id="s2f模型的不足">S2F模型的不足</h2>
+<p>正如我之前的文章所指出的（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">比特币的价格模型</a>一节），按照S2F模型，比特币会无限上涨。更量化的，每4年减半一次都上涨接近10倍，没有尽头。特别是当比特币增量为0后（2140年后），按照S2F模型，<span class="math inline">\(stock/flow\)</span>会变为无穷大。按该模型预测，比特币的市值会趋于无穷大。</p>
+<p>众所周知，目前美元m2总量才21万亿左右，只要美元的计价地位不变（美元仍为本位货币），则比特币的市值不应该超过21万亿美元太多。</p>
+<p>PlanB的原始模型显然没有考虑这一限制，特别是其对涨幅衰减效应的欠考虑，引起模型与真实情况的偏离，最终导致预测上轮（对应2020-05-11减半）牛市的价格区间出错。这是该模型最大的一个不足之处。</p>
+<p>另外，该模型还进行了跨市场的验证，其中包含了黄金和白银等，得出S2F越大则市值越大的结论。照此推论，黄金的S2F值高于美元，那么为什么黄金的市值低于美元？这显然也不合理。</p>
+<p>最后，近年来大为流行的NFT产品，具有唯一性，这类产品的S2F理论上应该趋于无穷大，但现实中只有极少数NFT产品卖出了天价，这显然也与S2F模型所描述的规律不一样。</p>
+<h2 id="s2f简化模型建模">S2F简化模型建模</h2>
+<p>本节对S2F模型做了一些简化处理，得出与原始版本相当的结论。</p>
+<p>首先，与原文的方式不同，本文存量（stock）采用如下更简单的方式计算：</p>
+<p><span class="math display">\[\begin{equation}\label{eq1}
+stock_i=market\_cap_i/close_i
+\end{equation}\]</span></p>
+<p>其中i代表第i个交易日，下同。下文用<span class="math inline">\(M\)</span>代表市值、<span class="math inline">\(S\)</span>代表存量。另外，本文的数据采用日频数据，而非原本S2F模型的月度数据。</p>
+<p>流通量（flow）与PlanB的定义也不同，不采用年化的产量，而直接采用日产量（即stock的增量），计算方法如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq2}
+flow_i=\Delta S_i=S_i-S_{i-1}
+\end{equation}\]</span></p>
+<p>这种直接计算存量、流通量的方法更简单，理论上与原版模型只有常数（会略微有一点随机偏差）差异。</p>
+<p>有了存量、流通量后，自然有：</p>
+<p><span class="math display">\[\begin{equation}\label{eq3}
+S2F_i=S_i/flow_i
+\end{equation}\]</span></p>
+<p>如上计算出<span class="math inline">\(S2F\)</span>后，先观察未进行处理的对数<span class="math inline">\(S2F\)</span>值、即<span class="math inline">\(log(S2F)\)</span>（简计为<span class="math inline">\(logS2F\)</span>）与对数市值<span class="math inline">\(log(M)\)</span>（简记<span class="math inline">\(logM\)</span>）的走势图，如下：</p>
+<figure>
+<img src="logM与logS2F未处理走势图.jpg" alt="logM与logS2F未处理走势图">
+<figcaption aria-hidden="true">logM与logS2F未处理走势图</figcaption>
+</figure>
+<p>可见有不少异常数据。采用如下mad法来处理异常值：</p>
+<blockquote>
+<p>采用中位数绝对偏差法（mad法），选择1月滚动回视窗口，即<span class="math inline">\(window=30\)</span>，将与中位数（滚动median值）偏差超过3倍mad值的数值视为异常值，采用滚动<span class="math inline">\(median\pm
+3*mad\)</span>值替换异常值，即超出上限的用上限替换、超出下限的用下限替换。</p>
+</blockquote>
+<p>其中mad值的计算如下：</p>
+<p><span class="math display">\[\begin{equation}\label{eq4}
+mad=median(abs(X-median(X))
+\end{equation}\]</span></p>
+<p>采用上述方法、会将减半日的<span class="math inline">\(logS2F\)</span>跳跃效应延迟，在滞后约<span class="math inline">\(window/2=15\)</span>期后才会过渡到真实的<span class="math inline">\(logS2F\)</span>值。这一处理无伤大雅，不妨碍揭示出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的关系。</p>
+<p>做了异常值处理的<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>走势对比如下：</p>
+<figure>
+<img src="logM与logS2F进行异常值处理后的走势图.jpg" alt="logM与logS2F进行异常值处理后的走势图">
+<figcaption aria-hidden="true">logM与logS2F进行异常值处理后的走势图</figcaption>
+</figure>
+<p>可见减半日附近的<span class="math inline">\(logS2F\)</span>跳跃效应依然存在，曲线中的异常值被很好的处理了。下文中均采用处理过的<span class="math inline">\(logS2F\)</span>来建模及讨论。</p>
+<p>先做出<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的线性回归图：</p>
+<figure>
+<img src="logM与异常值处理后的logS2F线性回归图.jpg" alt="logM与异常值处理后的logS2F线性回归图">
+<figcaption aria-hidden="true">logM与异常值处理后的logS2F线性回归图</figcaption>
+</figure>
+<p>图中的线性关系为：</p>
+<p><span class="math display">\[\begin{equation}\label{eq5}
+logM=-4.55+3.21*logS2F
+\end{equation}\]</span></p>
+<p>这一拟合结果与PlanB的结果非常相近（参见<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">此处</a>），他得到的系数为3.32。故本文采用的简单计算方式与原文的计算方式区别不大。</p>
+<p>从上图可以很明显的观察到：对应3次减半形成的4个时间区域，<span class="math inline">\(logS2F\)</span>数据形成了4个区分明显的阶梯。随着<span class="math inline">\(logS2F\)</span>的增大、对应减半次数的增加，<span class="math inline">\(logS2F\)</span>与<span class="math inline">\(logM\)</span>的波动范围在缩小，波动性呈下降趋势。</p>
+<p>不管从哪种意义上来说，上图的结果都是让人震惊的。与原文采用月频数据（111个样本）不同，本文在考虑了包含最新数据的日频数据（样本更多，共4826个样本）、且更改了计算方法后，仍可得出如下结论：</p>
+<blockquote>
+<p><font color="red"><strong>在目前阶段，线性的S2F模型依然可以作为价格规律的一个比较有效的近似。</strong></font></p>
+</blockquote>
+<p>但仍然需要指出的是，在<span class="math inline">\(logS2F\)</span>的最右侧区域（对应的是2020-05-11减半之后的数据），阶梯上升有减小的趋势，如我在2023-09-25所写的<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#引言">文章</a>所指出的那样。</p>
+<p>由于减半次数太少（只发生了3次），这意味着目前有效的自变量变化范围尚且太小，线性拟合可以是很多种函数在局部区域的近似，并不能断言<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>两者就是线性关系。</p>
+<h2 id="s2f模型与多项式拟合的关系">S2F模型与多项式拟合的关系</h2>
+<p>下面我将讨论S2F模型与对数供给量多项式价格模型（参见<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#比特币的价格模型">此处</a>）的关系，得出多项式模型是对S2F模型的批判性继承的结论。</p>
+<p>我们将<span class="math inline">\(flow\)</span>简计为<span class="math inline">\(F\)</span>，S2F模型可以一般的表达为：</p>
+<p><span class="math display">\[\begin{equation}\label{eq6}
+\begin{aligned}
+logM &amp; =a+b*logS2F\\ &amp;=a+b*(logS-logF)\\
+&amp;=a+b*(logS-log\Delta S)
+\end{aligned}
+\end{equation}\]</span></p>
+<p>其中<span class="math inline">\(\Delta S\)</span>是<span class="math inline">\(S\)</span>的一阶小量，有如下特点：</p>
+<ol type="1">
+<li>随着减半次数的进一步增加<span class="math inline">\(\Delta
+S\)</span>会变得越来越小，直至减半终结而趋于0；</li>
+<li>在<span class="math inline">\(\Delta S&gt;1\)</span>时，<span class="math inline">\(log\Delta
+S\)</span>会随着减半次数增加而单调递减，对应的<span class="math inline">\(logS\)</span>项则会越来越大，此时<span class="math inline">\(log\Delta
+S\)</span>项的影响随着减半增加会越来越低，可作为微扰项，将其忽略影响不大；</li>
+<li>当<span class="math inline">\(\Delta S&lt;1\)</span>时，<span class="math inline">\(log\Delta
+S\)</span>会随着减半次数的进一步增加而变为负数、其绝对值越来越大、最终趋于无穷。此时该项的影响会超过<span class="math inline">\(logS\)</span>项，且其引入了与真实情况有悖的不可解释的效应，这些效应只在减半快要结束时才出现、并没有现实支撑。明显是不合理的，此时更应将该项舍弃；</li>
+</ol>
+<p>如上分析，<span class="math inline">\(\eqref{eq6}\)</span>最后的<span class="math inline">\(log\Delta
+S\)</span>项在减半周期较小时才有意义，将其舍弃后模型才更合理。</p>
+<p>结合市值的定义，上式可以如下转换：</p>
+<p><span class="math display">\[\begin{equation}\label{eq7}
+\begin{aligned}
+log(S*P)  &amp;=a+b*logS \\ \Rightarrow logS+logP &amp;= a+b*logS \\
+\Rightarrow logP &amp;=a+(b-1)*logS \\ \Rightarrow
+logP&amp;=a+b&#39;*logS
+\end{aligned}
+\end{equation}\]</span></p>
+<p>即舍弃了不合理部分的S2F模型化成了多项式拟合的1阶形式。</p>
+<p>下面做出<span class="math inline">\(logS\)</span>与<span class="math inline">\(logP\)</span>的线性回归图，以验证舍去<span class="math inline">\(log\Delta S\)</span>项是否合理：</p>
+<figure>
+<img src="logS与logP的线性回归图.jpg" alt="logS与logP的线性回归图">
+<figcaption aria-hidden="true">logS与logP的线性回归图</figcaption>
+</figure>
+<p>通过上图的数据实证可见，两者效果上基本等价（1阶多项式拟合的<span class="math inline">\(R^2\)</span>为0.91，S2F模型为0.93），印证了<span class="math inline">\(log\Delta S\)</span>项实际上是冗余的。</p>
+<p>从而，得出如下结论：</p>
+<blockquote>
+<p><font color="red"><strong>对数供给量多项式拟合可以被视为S2F模型的一种更合理的、可拓展的形式，其更适用于有极限价格的实际情况</strong>。</font></p>
+</blockquote>
+<h2 id="稀缺性与市值">稀缺性与市值</h2>
+<p>稀缺性（仍可用S2F值代表）与市值，是一个很复杂的问题，本文目前仅仅只做一些逻辑上的讨论，更量化的讨论留待将来进行。</p>
+<p>到目前为止，在流通性良好且为人们普遍接受的商品中，黄金的稀缺性是公认较高的，但其并没有超过以m2衡量的美元的市值，这或许与黄金不具有本位币地位有关。金本位的崩溃促使黄金退化为了一种普通商品，相较于可以购买一切的本位币而言，人们对黄金的潜在需求下降，导致其市值相较于美元缩水。</p>
+<p>这对比特币的警示意义在于：如果其最终不能取得本位币地位，则其市值不太可能超越以m2衡量的美元，从而2140年之后btc的价格可能达不到以当前美元价值衡量的100万美元/BTC。</p>
+<p>稀缺性高于黄金S2F值的商品，如古董、艺术品、NFT产品等，由于供给量限定，S2F会很高，但其价格的差别却很大、大多市值也很有限，并不完全遵循越稀缺市值越高的规律。显然，造成这一现象的主要的原因在于是否有足够的潜在购买者为其稀缺性买单。</p>
+<p>这对于比特币的警示意义在于：虽然目前btc的流通性很好，但如果比特币不能更多的为大众所接纳，其使用场景不能更近一步增加，则人们很难会进一步为其稀缺性买单，从而减半导致的稀缺性上升也不能很好的反映在市值上，即便最终其S2F趋近于无穷大，也不代表其市值就会上涨到很高的水平。</p>
+<h2 id="致谢与声明">致谢与声明</h2>
+<p>本文仅仅是在做技术上的尝试，不构成投资建议，望读者自行甄别。</p>
+<p>限于本人的水平，本文错谬之处在所难免，期待方家指正。</p>
+<p>感谢您的阅读！</p>
+<p>本文完。</p>
+]]></content>
+      <categories>
+        <category>投资</category>
+      </categories>
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>减半</tag>
+        <tag>S2F模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用python压缩pdf文件</title>
+    <url>/2023/11/08/%E7%94%A8python%E5%8E%8B%E7%BC%A9pdf%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<p>由于某些不可避免的原因，需要在某些网站上传一些<code>.pdf</code>文件，那些奇葩的网站对文件大小做了限制，所以需要对较大的<code>.pdf</code>文件进行压缩处理，而一般免费的阅读器都不能随意的压缩（要么需要你交很高的会员费），好在这些任务<code>python</code>都可以很好的处理。</p>
+<p>本文编写了相关的<code>python</code>脚本，有需要的可以参考。</p>
+<span id="more"></span>
+<h2 id="一些说明">一些说明</h2>
+<p>本文的内容参考了其他博客（如<a href="https://www.cnblogs.com/liangxuran/p/16639561.html">此处</a>），但对其中脚本进行了一些修改。</p>
+<p>我使用的操作系统是<code>MacOS</code>，如果是其他系统，可能需要你自己动手进行一些修改。</p>
+<h2 id="安装pymupdf">安装PyMuPDF</h2>
+<p>首先我们安装<code>PyMuPDF</code>包，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install pymupdf=1.20.2</span><br></pre></td></tr></table></figure>
+<p>上述命令指定了版本，是为了避免因为版本不同导致的问题。</p>
+<h2 id="压缩脚本">压缩脚本</h2>
+<p>编写的脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> fitz</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdf2pic</span>(<span class="params">file_root, filename: <span class="built_in">str</span>, out_name: <span class="built_in">str</span> = <span class="literal">None</span>, zoom=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将pdf逐页转化为png图片</span></span><br><span class="line"><span class="string">    :param file_root: 文件根目录</span></span><br><span class="line"><span class="string">    :param filename: 文件名，不带后缀</span></span><br><span class="line"><span class="string">    :param out_name: 输出文件名，默认为 filename+&#x27;_new&#x27;，用以存储pdf转化生成的 &#x27;png&#x27; 文件</span></span><br><span class="line"><span class="string">    :param zoom: 缩小的百分比比例</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.pdf&#x27;</span> <span class="keyword">in</span> filename:</span><br><span class="line">        filename = filename.split(<span class="string">&#x27;.pdf&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">    file = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;filename&#125;</span>.pdf&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(file):</span><br><span class="line">        <span class="keyword">raise</span> FileExistsError(<span class="string">f&quot;File <span class="subst">&#123;file&#125;</span> not exists&quot;</span>)</span><br><span class="line">    out_name = out_name <span class="keyword">or</span> <span class="string">f&quot;<span class="subst">&#123;filename&#125;</span>_new&quot;</span></span><br><span class="line">    out_file = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;out_name&#125;</span>&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)  <span class="comment"># 文件夹用以存储pdf转的图片</span></span><br><span class="line">    doc_f = fitz.Document(file)</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(out_file):</span><br><span class="line">        shutil.rmtree(out_file)</span><br><span class="line">    os.mkdir(out_file)</span><br><span class="line">    tq_t = tqdm(<span class="built_in">range</span>(doc_f.page_count))</span><br><span class="line">    <span class="keyword">for</span> pg <span class="keyword">in</span> tq_t:</span><br><span class="line">        tq_t.set_description(<span class="string">f&quot;Pdf to png. Page <span class="subst">&#123;pg&#125;</span>...&quot;</span>)</span><br><span class="line">        page = doc_f.load_page(pg)</span><br><span class="line">        zoom = <span class="built_in">int</span>(zoom)</span><br><span class="line">        lurl = <span class="string">f&quot;<span class="subst">&#123;out_file&#125;</span>/<span class="subst">&#123;pg&#125;</span>.png&quot;</span></span><br><span class="line">        trans = fitz.Matrix(zoom / <span class="number">100.0</span>, zoom / <span class="number">100.0</span>)</span><br><span class="line">        pm = page.get_pixmap(matrix=trans, alpha=<span class="literal">False</span>)</span><br><span class="line">        pm.save(lurl)</span><br><span class="line">    doc_f.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pic2pdf</span>(<span class="params">file_root, pic_filename, pdf_name: <span class="built_in">str</span> = <span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将图片合并成pdf</span></span><br><span class="line"><span class="string">    :param file_root: 文件存储的根目录</span></span><br><span class="line"><span class="string">    :param pic_filename: 图片保存的目录名</span></span><br><span class="line"><span class="string">    :param pdf_name: 转出的pdf名称，若不指定则采用pic_filename加上后缀&#x27;.pdf&#x27;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    pic_path = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;pic_filename&#125;</span>&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    pdf_name = pdf_name <span class="keyword">or</span> pic_filename</span><br><span class="line">    pdf_path = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;pdf_name&#125;</span>.pdf&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(pic_path):</span><br><span class="line">        <span class="keyword">raise</span> FileExistsError(<span class="string">f&quot;pic_path <span class="subst">&#123;pic_path&#125;</span> not exists.&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(pdf_path):</span><br><span class="line">        os.remove(pdf_path)</span><br><span class="line">    pics = os.listdir(pic_path)</span><br><span class="line">    pics = [file <span class="keyword">for</span> file <span class="keyword">in</span> pics <span class="keyword">if</span> <span class="string">&#x27;.png&#x27;</span> <span class="keyword">in</span> file]</span><br><span class="line">    doc = fitz.Document()</span><br><span class="line">    tq_t = tqdm(<span class="built_in">range</span>(<span class="built_in">len</span>(pics)))</span><br><span class="line">    <span class="keyword">for</span> pg <span class="keyword">in</span> tq_t:</span><br><span class="line">        tq_t.set_description(<span class="string">f&quot;Pic to pdf, processing <span class="subst">&#123;pg&#125;</span>...&quot;</span>)</span><br><span class="line">        img = <span class="string">f&#x27;<span class="subst">&#123;pic_path&#125;</span>/<span class="subst">&#123;pg&#125;</span>.png&#x27;</span></span><br><span class="line">        imgdoc = fitz.Document(img)</span><br><span class="line">        pdfbytes = imgdoc.convert_to_pdf()</span><br><span class="line">        imgpdf = fitz.Document(stream=pdfbytes, filetype=<span class="string">&#x27;pdf&#x27;</span>)</span><br><span class="line">        doc.insert_pdf(imgpdf)</span><br><span class="line">    doc.save(pdf_path)</span><br><span class="line">    doc.close()</span><br><span class="line">    shutil.rmtree(pic_path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdf_zoom</span>(<span class="params">file_path, out_name=<span class="literal">None</span>, zoom=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将pdf缩小</span></span><br><span class="line"><span class="string">    :param file_path: 待转换pdf文件的绝对路径</span></span><br><span class="line"><span class="string">    :param out_name: 输出的pdf名称（不带后缀）</span></span><br><span class="line"><span class="string">    :param zoom: 缩小的百分比</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    file_root, filename = os.path.split(file_path)</span><br><span class="line">    pdf2pic(file_root=file_root, filename=filename, out_name=out_name, zoom=zoom)</span><br><span class="line">    pic_filename = out_name <span class="keyword">or</span> <span class="string">f&quot;<span class="subst">&#123;filename.split(<span class="string">&#x27;.pdf&#x27;</span>)[<span class="number">0</span>]&#125;</span>_new&quot;</span></span><br><span class="line">    pic2pdf(file_root=file_root, pic_filename=pic_filename, pdf_name=out_name)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Finished to reduce size of <span class="subst">&#123;filename&#125;</span>, the new file is <span class="subst">&#123;pic_filename&#125;</span>.pdf&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    pdf_zoom(file_path=<span class="string">&#x27;/path/to/file/xxx.pdf&#x27;</span>, zoom=<span class="number">55</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上述脚本中还用到了<code>tqdm</code>包，用来显示进度条；<code>fitz</code>为<code>pymupdf</code>包下的内容。</p>
+</blockquote>
+<p>执行的时候：</p>
+<ul>
+<li><p>将最后一行的<code>file_path</code>参数的赋值改成自己需要转换文件的路径（需要绝对路径）即可。</p></li>
+<li><p>缩小的百分比通过<code>zoom</code>参数来控制调节，其可以取值范围为<span class="math inline">\([0, 100]\)</span>。</p></li>
+<li><p>先生成一个临时的图片文件夹（需要转换的<code>.pdf</code>文件根目录下），在完成转化后、该图片文件夹会被自动删除。</p></li>
+</ul>
+<p>最后输出的清晰度会降低。这是因为没有做任何优化，仅仅是通过降低清晰度来缩小文件大小的。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>怎么给pyecharts生成的图标增加滚动条</title>
+    <url>/2023/11/23/%E6%80%8E%E4%B9%88%E7%BB%99pyecharts%E7%94%9F%E6%88%90%E7%9A%84%E5%9B%BE%E6%A0%87%E5%A2%9E%E5%8A%A0%E6%BB%9A%E5%8A%A8%E6%9D%A1/</url>
+    <content><![CDATA[<p>我在用<a href="https://pyecharts.org/#/"><code>pyecharts</code></a>制作网页表格时，面临如下问题：</p>
+<ul>
+<li><p>当表格的列数比较多时，会溢出页面右边框，十分不雅观。</p></li>
+<li><p>不想抛弃<code>pyecharts</code>带来的便捷。</p></li>
+</ul>
+<p>于是经过查询，找到了解决办法，见下文。</p>
+<span id="more"></span>
+<h2 id="问题描述">问题描述</h2>
+<p>当我们使用<code>pyecharts</code>的<code>table</code>类来创建表格，嵌入到网页中时，发现表格数据会右溢出，滚动条出现在最下面，严重影响了页面的美观和整洁。</p>
+<p>我们希望滚动条出现在表格处、而不是页面底部，即希望表格可以滑动显示。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>在<a href="https://github.com/pyecharts/pyecharts"><code>pyecharts</code></a>的<code>github</code>上查找该问题，发现有人曾经提出过<a href="https://github.com/pyecharts/pyecharts/issues/1935">见此处</a>，该问题的回答没有详细说怎么解决，只是提到了需要修改<code>macro</code>模版。</p>
+<p>鉴于没有找到更好解决办法，于是动手修改了模块的宏文件。我安装的版本为<code>pyecharts==2.0.2</code>、<code>python==3.8.5</code>。具体修改如下：</p>
+<p>找到安装包所在路径：</p>
+<blockquote>
+<p><code>venv -&gt; lib -&gt; lib -&gt; python3.8 -&gt; site-packages -&gt; pyecharts -&gt; render -&gt; templates -&gt; macro</code></p>
+</blockquote>
+<p>打开<code>macro</code>文件，寻到<code>table</code>相关的<code>style</code>，在176行的<code>.fl-table</code>里增加两行：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">display</span>: block;</span><br><span class="line">       <span class="attribute">overflow</span>: scroll;</span><br></pre></td></tr></table></figure>
+<p>即变为</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.fl-table</span> &#123;</span><br><span class="line">                <span class="attribute">margin</span>: <span class="number">20px</span>;</span><br><span class="line">                <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">                <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">                <span class="attribute">border</span>: none;</span><br><span class="line">                <span class="attribute">border-collapse</span>: collapse;</span><br><span class="line">                <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">                <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">                <span class="attribute">word-break</span>: keep-all;</span><br><span class="line">                <span class="attribute">display</span>: block;</span><br><span class="line">                <span class="attribute">overflow</span>: scroll;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+<p>然后重启项目，再次生成html文件，新生成的表格页面就限定为页面的大小，可以通过滚动条来拖动观看后续表格了。</p>
+<p>如有服务器，在服务器上也进行相同操作。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pyecharts</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基金净值管理相关概念说明</title>
     <url>/2023/11/07/%E5%9F%BA%E9%87%91%E5%87%80%E5%80%BC%E7%AE%A1%E7%90%86%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5%E8%AF%B4%E6%98%8E/</url>
     <content><![CDATA[<p>基金的净值管理是一个较复杂的问题，一般投资者在购买基金时，会对一些概念产生疑惑。本文对基金净值管理的一些概念及计算方法进行说明，供读者参考，以助理解净值、份额等的计算过程。</p>
@@ -2103,40 +2172,6 @@ n_i&#39;=\frac{S_i*n_i-t_i}{S_i}
       </categories>
       <tags>
         <tag>基金</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用python压缩pdf文件</title>
-    <url>/2023/11/08/%E7%94%A8python%E5%8E%8B%E7%BC%A9pdf%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<p>由于某些不可避免的原因，需要在某些网站上传一些<code>.pdf</code>文件，那些奇葩的网站对文件大小做了限制，所以需要对较大的<code>.pdf</code>文件进行压缩处理，而一般免费的阅读器都不能随意的压缩（要么需要你交很高的会员费），好在这些任务<code>python</code>都可以很好的处理。</p>
-<p>本文编写了相关的<code>python</code>脚本，有需要的可以参考。</p>
-<span id="more"></span>
-<h2 id="一些说明">一些说明</h2>
-<p>本文的内容参考了其他博客（如<a href="https://www.cnblogs.com/liangxuran/p/16639561.html">此处</a>），但对其中脚本进行了一些修改。</p>
-<p>我使用的操作系统是<code>MacOS</code>，如果是其他系统，可能需要你自己动手进行一些修改。</p>
-<h2 id="安装pymupdf">安装PyMuPDF</h2>
-<p>首先我们安装<code>PyMuPDF</code>包，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install pymupdf=1.20.2</span><br></pre></td></tr></table></figure>
-<p>上述命令指定了版本，是为了避免因为版本不同导致的问题。</p>
-<h2 id="压缩脚本">压缩脚本</h2>
-<p>编写的脚本如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> fitz</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdf2pic</span>(<span class="params">file_root, filename: <span class="built_in">str</span>, out_name: <span class="built_in">str</span> = <span class="literal">None</span>, zoom=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将pdf逐页转化为png图片</span></span><br><span class="line"><span class="string">    :param file_root: 文件根目录</span></span><br><span class="line"><span class="string">    :param filename: 文件名，不带后缀</span></span><br><span class="line"><span class="string">    :param out_name: 输出文件名，默认为 filename+&#x27;_new&#x27;，用以存储pdf转化生成的 &#x27;png&#x27; 文件</span></span><br><span class="line"><span class="string">    :param zoom: 缩小的百分比比例</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.pdf&#x27;</span> <span class="keyword">in</span> filename:</span><br><span class="line">        filename = filename.split(<span class="string">&#x27;.pdf&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">    file = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;filename&#125;</span>.pdf&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(file):</span><br><span class="line">        <span class="keyword">raise</span> FileExistsError(<span class="string">f&quot;File <span class="subst">&#123;file&#125;</span> not exists&quot;</span>)</span><br><span class="line">    out_name = out_name <span class="keyword">or</span> <span class="string">f&quot;<span class="subst">&#123;filename&#125;</span>_new&quot;</span></span><br><span class="line">    out_file = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;out_name&#125;</span>&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)  <span class="comment"># 文件夹用以存储pdf转的图片</span></span><br><span class="line">    doc_f = fitz.Document(file)</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(out_file):</span><br><span class="line">        shutil.rmtree(out_file)</span><br><span class="line">    os.mkdir(out_file)</span><br><span class="line">    tq_t = tqdm(<span class="built_in">range</span>(doc_f.page_count))</span><br><span class="line">    <span class="keyword">for</span> pg <span class="keyword">in</span> tq_t:</span><br><span class="line">        tq_t.set_description(<span class="string">f&quot;Pdf to png. Page <span class="subst">&#123;pg&#125;</span>...&quot;</span>)</span><br><span class="line">        page = doc_f.load_page(pg)</span><br><span class="line">        zoom = <span class="built_in">int</span>(zoom)</span><br><span class="line">        lurl = <span class="string">f&quot;<span class="subst">&#123;out_file&#125;</span>/<span class="subst">&#123;pg&#125;</span>.png&quot;</span></span><br><span class="line">        trans = fitz.Matrix(zoom / <span class="number">100.0</span>, zoom / <span class="number">100.0</span>)</span><br><span class="line">        pm = page.get_pixmap(matrix=trans, alpha=<span class="literal">False</span>)</span><br><span class="line">        pm.save(lurl)</span><br><span class="line">    doc_f.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pic2pdf</span>(<span class="params">file_root, pic_filename, pdf_name: <span class="built_in">str</span> = <span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将图片合并成pdf</span></span><br><span class="line"><span class="string">    :param file_root: 文件存储的根目录</span></span><br><span class="line"><span class="string">    :param pic_filename: 图片保存的目录名</span></span><br><span class="line"><span class="string">    :param pdf_name: 转出的pdf名称，若不指定则采用pic_filename加上后缀&#x27;.pdf&#x27;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    pic_path = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;pic_filename&#125;</span>&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    pdf_name = pdf_name <span class="keyword">or</span> pic_filename</span><br><span class="line">    pdf_path = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;pdf_name&#125;</span>.pdf&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(pic_path):</span><br><span class="line">        <span class="keyword">raise</span> FileExistsError(<span class="string">f&quot;pic_path <span class="subst">&#123;pic_path&#125;</span> not exists.&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(pdf_path):</span><br><span class="line">        os.remove(pdf_path)</span><br><span class="line">    pics = os.listdir(pic_path)</span><br><span class="line">    pics = [file <span class="keyword">for</span> file <span class="keyword">in</span> pics <span class="keyword">if</span> <span class="string">&#x27;.png&#x27;</span> <span class="keyword">in</span> file]</span><br><span class="line">    doc = fitz.Document()</span><br><span class="line">    tq_t = tqdm(<span class="built_in">range</span>(<span class="built_in">len</span>(pics)))</span><br><span class="line">    <span class="keyword">for</span> pg <span class="keyword">in</span> tq_t:</span><br><span class="line">        tq_t.set_description(<span class="string">f&quot;Pic to pdf, processing <span class="subst">&#123;pg&#125;</span>...&quot;</span>)</span><br><span class="line">        img = <span class="string">f&#x27;<span class="subst">&#123;pic_path&#125;</span>/<span class="subst">&#123;pg&#125;</span>.png&#x27;</span></span><br><span class="line">        imgdoc = fitz.Document(img)</span><br><span class="line">        pdfbytes = imgdoc.convert_to_pdf()</span><br><span class="line">        imgpdf = fitz.Document(stream=pdfbytes, filetype=<span class="string">&#x27;pdf&#x27;</span>)</span><br><span class="line">        doc.insert_pdf(imgpdf)</span><br><span class="line">    doc.save(pdf_path)</span><br><span class="line">    doc.close()</span><br><span class="line">    shutil.rmtree(pic_path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdf_zoom</span>(<span class="params">file_path, out_name=<span class="literal">None</span>, zoom=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将pdf缩小</span></span><br><span class="line"><span class="string">    :param file_path: 待转换pdf文件的绝对路径</span></span><br><span class="line"><span class="string">    :param out_name: 输出的pdf名称（不带后缀）</span></span><br><span class="line"><span class="string">    :param zoom: 缩小的百分比</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    file_root, filename = os.path.split(file_path)</span><br><span class="line">    pdf2pic(file_root=file_root, filename=filename, out_name=out_name, zoom=zoom)</span><br><span class="line">    pic_filename = out_name <span class="keyword">or</span> <span class="string">f&quot;<span class="subst">&#123;filename.split(<span class="string">&#x27;.pdf&#x27;</span>)[<span class="number">0</span>]&#125;</span>_new&quot;</span></span><br><span class="line">    pic2pdf(file_root=file_root, pic_filename=pic_filename, pdf_name=out_name)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Finished to reduce size of <span class="subst">&#123;filename&#125;</span>, the new file is <span class="subst">&#123;pic_filename&#125;</span>.pdf&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    pdf_zoom(file_path=<span class="string">&#x27;/path/to/file/xxx.pdf&#x27;</span>, zoom=<span class="number">55</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>上述脚本中还用到了<code>tqdm</code>包，用来显示进度条；<code>fitz</code>为<code>pymupdf</code>包下的内容。</p>
-</blockquote>
-<p>执行的时候：</p>
-<ul>
-<li><p>将最后一行的<code>file_path</code>参数的赋值改成自己需要转换文件的路径（需要绝对路径）即可。</p></li>
-<li><p>缩小的百分比通过<code>zoom</code>参数来控制调节，其可以取值范围为<span class="math inline">\([0, 100]\)</span>。</p></li>
-<li><p>先生成一个临时的图片文件夹（需要转换的<code>.pdf</code>文件根目录下），在完成转化后、该图片文件夹会被自动删除。</p></li>
-</ul>
-<p>最后输出的清晰度会降低。这是因为没有做任何优化，仅仅是通过降低清晰度来缩小文件大小的。</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
       </tags>
   </entry>
 </search>
