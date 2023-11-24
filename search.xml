@@ -2214,5 +2214,38 @@ net_T^e=\prod_{t=1}^T(1+r_t^e)
 <p>因而，在基金运维层面上，仍然采用“买入并持有”的基准投资。</p>
 <p>为了避免基金净值与基准净值之间偏离过大造成的超额收益偏离，我们可采用定期（如3个月）结算、重新平衡基准与投资组合资金，从而近似的保持超额收益的准确。</p>
 ]]></content>
+      <categories>
+        <category>投资</category>
+      </categories>
+      <tags>
+        <tag>基金</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Debian11系统走socks代理流量报错&#39;Socket type must be stream or datagram, not 524289&#39;问题</title>
+    <url>/2023/11/24/Debian11%E7%B3%BB%E7%BB%9F%E8%B5%B0socks%E4%BB%A3%E7%90%86%E6%B5%81%E9%87%8F%E6%8A%A5%E9%94%99-Socket-type-must-be-stream-or-datagram-not-524289-%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>我在<code>Debian11</code>系统上使用<code>PySocks</code>包代理<code>python</code>脚本流量时，遇到流量不能正常通过<code>socks</code>进行代理的问题，该问题报错提示为：<code>“Socket type must be stream or datagram, not 524289”</code>。</p>
+<p>而在<code>Mac</code>系统上，采用相同的方式，是可以正常代理流量的。</p>
+<p>本文介绍了解决该问题的办法。</p>
+<span id="more"></span>
+<h2 id="问题产生的原因">问题产生的原因</h2>
+<p>我运行出错的代码为：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socks</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">socks.set_default_proxy(socks.SOCKS5, <span class="string">&quot;localhost&quot;</span>, <span class="number">1080</span>)</span><br><span class="line">socket.socket = socks.socksocket</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>如上描述的问题产生的原因是因为<code>Debian</code>系统的<code>socket.SocketKind</code>比<code>Mac</code>多出了<code>SocketKind.SOCK_NONBLOCK</code>和<code>SocketKind.SOCK_CLOEXEC</code>两类。</p>
+<p><code>PySocks</code>包是一个年久失修的包，并不能很好的兼容<code>Debian</code>系统。</p>
+<p>经过测试，不调用该包，是可以正确通过<code>socks</code>代理走流量，说明问题是由于该包引起的。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>找到了原因之后，自然可以通过改用其他包走<code>python</code>程序流量。我找到了一个<code>PySocks</code>的修复包：<a href="https://pypi.org/project/PySocksipyChain/"><code>PySocksipyChain</code></a>，</p>
+<p>改用这个包后，代理代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sockschain <span class="keyword">as</span> socks</span><br><span class="line">socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, <span class="string">&quot;localhost&quot;</span>, <span class="number">7891</span>)</span><br><span class="line">socket.socket = socks.socksocket</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>如上代理，即可正确通过<code>socks</code>走流量了。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>socks</tag>
+        <tag>Debian</tag>
+      </tags>
   </entry>
 </search>
