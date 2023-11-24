@@ -2237,7 +2237,7 @@ net_T^e=\prod_{t=1}^T(1+r_t^e)
 <h2 id="解决办法">解决办法</h2>
 <p>找到了原因之后，自然可以通过改用其他包走<code>python</code>程序流量。我找到了一个<code>PySocks</code>的修复包：<a href="https://pypi.org/project/PySocksipyChain/"><code>PySocksipyChain</code></a>，</p>
 <p>改用这个包后，代理代码如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sockschain <span class="keyword">as</span> socks</span><br><span class="line">socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, <span class="string">&quot;localhost&quot;</span>, <span class="number">7891</span>)</span><br><span class="line">socket.socket = socks.socksocket</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sockschain <span class="keyword">as</span> socks</span><br><span class="line">socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, <span class="string">&quot;localhost&quot;</span>, <span class="number">1080</span>)</span><br><span class="line">socket.socket = socks.socksocket</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <p>如上代理，即可正确通过<code>socks</code>走流量了。</p>
 ]]></content>
       <categories>
