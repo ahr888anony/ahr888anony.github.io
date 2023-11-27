@@ -105,7 +105,7 @@ hexo每次部署后均需要重新配置自定义域名</h2>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo ~/.acme.sh/acme.sh --renew -d test_domain.com --force --ecc --reloadcmd <span class="string">&quot;systemctl reload nginx ; systemctl restart v2ray&quot;</span></span><br></pre></td></tr></table></figure>
 <p>上述命令执行在用户<code>user1</code>下。最后的参数是在执行后重启<code>nginx</code>和<code>v2ray</code>。</p>
 <p>手动更新正常（这很奇怪，可能是因为在<code>root</code>与<code>user1</code>下都生成了证书，保留了两个目录下的参数与证书，并在根目录下生成证书时输入了错误的域名？检查发现<code>root</code>下也安装了<code>acme.sh</code>，将其卸载，并删除了<code>.acme.sh/</code>目录。）。</p>
-<p>一直对<code>acme.sh</code>定时更新的工作流程，特别是为什么不需要在<code>crontab</code>的定时任务里不需要传参的原因不是很理解，于是花了点时间检索，发现了<a href="https://github.com/acmesh-official/acme.sh/issues/3981">相关解答</a>。即在执行<code>--install-cert</code>后参数会保存，自动更新时调用之，故不需要在<code>crontab</code>中传参。</p>
+<p>一直对<code>acme.sh</code>定时更新的工作流程，特别是为什么在<code>crontab</code>的定时任务里不需要传参的原因不是很理解，于是花了点时间检索，发现了<a href="https://github.com/acmesh-official/acme.sh/issues/3981">相关解答</a>。即在执行<code>--install-cert</code>后参数会保存，自动更新时调用之，故不需要在<code>crontab</code>中传参。</p>
 <p>然后尝试直接<code>debug</code>执行更新操作：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;/home/user1/.acme.sh&quot;</span>/acme.sh --cron --home <span class="string">&quot;/home/user1/.acme.sh&quot;</span> --debug</span><br></pre></td></tr></table></figure>
 <p>发现执行日志有如下内容：</p>
