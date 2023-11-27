@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://btcrainmaker.com/2023/11/27/%E6%AF%94%E7%89%B9%E5%B8%81%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E4%BA%A4%E6%98%93%E6%89%80Bisq%E5%9C%A8Mac%E4%B8%8A%E8%BF%90%E8%A1%8C%E6%96%B9%E6%B3%95/</loc>
+    
+    <lastmod>2023-11-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://btcrainmaker.com/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/</loc>
     
     <lastmod>2023-11-27</lastmod>
@@ -259,6 +268,20 @@
   
   <url>
     <loc>https://btcrainmaker.com/tags/Debian/</loc>
+    <lastmod>2023-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://btcrainmaker.com/tags/Bitcoin/</loc>
+    <lastmod>2023-11-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://btcrainmaker.com/tags/Bisq/</loc>
     <lastmod>2023-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

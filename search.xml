@@ -2248,4 +2248,62 @@ net_T^e=\prod_{t=1}^T(1+r_t^e)
         <tag>Debian</tag>
       </tags>
   </entry>
+  <entry>
+    <title>比特币去中心化交易所Bisq在Mac上运行方法</title>
+    <url>/2023/11/27/%E6%AF%94%E7%89%B9%E5%B8%81%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E4%BA%A4%E6%98%93%E6%89%80Bisq%E5%9C%A8Mac%E4%B8%8A%E8%BF%90%E8%A1%8C%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://bisq.network">Bisq</a>作为最优秀的比特币去中心化交易平台，在中文圈的使用率很低，但是很值得推荐。</p>
+<p>该平台不需要任何认证、全匿名、利用买卖双方超额抵押解决交易信任问题，以点对点交易的方式护卫着比特币场外交易的安全。</p>
+<p>可以说，即便所有的中心化交易所都垮掉了，人们仍然可以利用<code>Bisq</code>将比特币置换成法币或其他资产。从某种意义上来说，该平台是比特币交易的压舱石，让人们不用过度顾虑无处交易比特币的问题。</p>
+<p>不过，鉴于该交易平台需要通过洋葱路由（<a href="https://en.wikipedia.org/wiki/Onion_routing">onion
+routing</a>）进行匿名交互，对于身处网络洼地的人们还是不太容易使用它的。可能正是因为上手的难度，导致了该平台在很多需要它的地方流行不起来。</p>
+<p>本文将介绍在Mac上运行<code>Bisq</code>交易软件的方法，主要聚焦在安装后不能打开的问题。</p>
+<span id="more"></span>
+<h2 id="问题描述">问题描述</h2>
+<p>本文主要介绍解决Mac用户安装好了<code>Bisq</code>（我安装的为最新版<code>Bisq-v1.9.14</code>。），但是不能正常打开的问题。</p>
+<p>首先你得确认自己能访问自由网络（或叫做科学上网），假定你本地代理<code>socks</code>流量的入口为1080端口。</p>
+<p>如果你不能访问自由网络，那么后面的解决办法暂时与你无关。</p>
+<p>安装<code>Bisq</code>完毕后，如果直接打开，如果提示文件破坏，则应执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo xattr -rd com.apple.quarantine /Applications/Bisq.app</span><br></pre></td></tr></table></figure>
+<p>执行后，你会发现程序一直卡在连接tor节点的环节。</p>
+<p>这意味着我们需要将流量通过代理之后才能正常使用该P2P交易软件。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>首先，你需要安装<code>java jdk</code>，用于操作<code>.jar</code>文件。</p>
+<p>下面的步骤先不打开<code>Bisq</code>。</p>
+<blockquote>
+<ol type="1">
+<li>找到<code>Bisq</code>应用的app路径，具体为：<code>/Applications/Bisq.app/Contents/app</code>；</li>
+<li>找到<code>tor-0.7.6.jar</code>文件，复制到其他本地文件夹。若为老版本，则为文件<code>desktop-version-all.jar</code>，其中<code>version</code>为版本号；</li>
+<li>终端切换到复制了<code>tor-0.7.6.jar</code>的文件夹下，执行：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar xf tor-0.7.6.jar torrc</span><br></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li><p>上述命令将<code>torrc</code>文件从<code>tor-0.7.6.jar</code>中提取出来，此时会得到两个文件<code>torrc</code>和<code>torrc.default</code>；</p></li>
+<li><p>编辑<code>torrc</code>（可用文本编辑器或<code>vi</code>命令进行操作），在文件的末尾添加一行、以进行流量转发：</p></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Socks5Proxy 127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+<ol start="6" type="1">
+<li>保存后，执行如下命令更新复制出来的<code>tor-0.7.6.jar</code>文件：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar uf desktop-1.9.12-all.jar torrc</span><br></pre></td></tr></table></figure>
+<ol start="7" type="1">
+<li>将更新了的<code>tor-0.7.6.jar</code>文件复制回<code>/Applications/Bisq.app/Contents/app</code>，替换原文件。</li>
+<li>此时打开<code>Bisq</code>，等待更新本地节点数据及配置tor网络。如果是连接的本地节点，大概等待5分钟左右。</li>
+</ol>
+</blockquote>
+<p>如果你想连接本地的全节点，可以如下打开：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=local_ip:8333 -useTorForBtc=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>上述<code>local_ip</code>为你的全节点的局域网ip地址，<code>8333</code>为默认的端口。</p>
+<p>如果你想通过<code>tor</code>连接指定的<code>.onion</code>地址，则应如下开启：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=you_onion_address.onion:8333 -useTorForBtc=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>上述<code>you_onion_address</code>为你指定的洋葱地址。</p>
+<p>成功打开之后的使用方法，则可以参考<a href="https://bisq.network/getting-started/">官方教程</a>，或<a href="https://raspibolt.org/guide/bonus/bitcoin/bisq.html"><code>RaspiBolt</code>的教程</a>。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>Bitcoin</tag>
+        <tag>Bisq</tag>
+      </tags>
+  </entry>
 </search>
