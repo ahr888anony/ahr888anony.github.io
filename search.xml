@@ -2262,7 +2262,7 @@ routing</a>）进行匿名交互，对于身处网络洼地的人们还是不太
 <p>本文主要介绍解决Mac用户安装好了<code>Bisq</code>（我安装的为最新版<code>Bisq-v1.9.14</code>。），但是不能正常打开的问题。</p>
 <p>首先你得确认自己能访问自由网络（或叫做科学上网），假定你本地代理<code>socks</code>流量的入口为1080端口。</p>
 <p>如果你不能访问自由网络，那么后面的解决办法暂时与你无关。</p>
-<p>安装<code>Bisq</code>完毕后，如果直接打开，如果提示文件破坏，则应执行：</p>
+<p>安装<code>Bisq</code>完毕后，如果直接打开，提示文件破坏，则应执行：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo xattr -rd com.apple.quarantine /Applications/Bisq.app</span><br></pre></td></tr></table></figure>
 <p>执行后，你会发现程序一直卡在连接tor节点的环节。</p>
 <p>这意味着我们需要将流量通过代理之后才能正常使用该P2P交易软件。</p>
