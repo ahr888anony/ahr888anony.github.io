@@ -69,6 +69,32 @@ hexo每次部署后均需要重新配置自定义域名</h2>
       </tags>
   </entry>
   <entry>
+    <title>pycharm重装打不开的问题</title>
+    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
+m1电脑，重装最新版pycharm专业版后不能打开。</p>
+<span id="more"></span>
+<h2 id="背景介绍">背景介绍</h2>
+<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
+<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
+m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
+<p>网上找了很久，才最终解决该问题。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
+<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
+<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
+<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
+]]></content>
+      <tags>
+        <tag>技术</tag>
+        <tag>PyCharm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>加密市场的市场因子</title>
     <url>/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/</url>
     <content><![CDATA[<p>本文首先分析全加密市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。</p>
@@ -1136,6 +1162,25 @@ rtn_{mkt}^t=\sum_{i}^{N^{t-1}}
       </tags>
   </entry>
   <entry>
+    <title>可以在比特币上计算一切的BitVM</title>
+    <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
+    <content><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">Robin
+Linus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p>
+<span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p>
+<h2 id="白皮书内容理解">白皮书内容理解</h2>
+<p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p>
+<p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考Bob
+Bodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p>
+<p>该白皮书（ TODO，待完成）</p>
+]]></content>
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>BitVM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>由比特币已实现价格进行的一些推理</title>
     <url>/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/</url>
     <content><![CDATA[<p>本文首先介绍了一些比特币早期价格的历史；接着分析了比特币对数价格（<span class="math inline">\(logP\)</span>）与对数供给量（<span class="math inline">\(logS\)</span>）可能的一些回归关系；然后总结了历史上的3次减半规律；进而对总结的规律进行极值建模；最后运用汇总的规律及构建的模型，对下一次减半周期几个极值（最低价、减半价、最高价）和对应的时间范围进行了一些推测。</p>
@@ -1673,51 +1718,6 @@ P_{2024-04-16}\in[51006.21, 76458.321]
       </tags>
   </entry>
   <entry>
-    <title>pycharm重装打不开的问题</title>
-    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
-m1电脑，重装最新版pycharm专业版后不能打开。</p>
-<span id="more"></span>
-<h2 id="背景介绍">背景介绍</h2>
-<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
-<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
-m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
-<p>网上找了很久，才最终解决该问题。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
-<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
-<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
-<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
-]]></content>
-      <tags>
-        <tag>技术</tag>
-        <tag>PyCharm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>可以在比特币上计算一切的BitVM</title>
-    <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
-    <content><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">Robin
-Linus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p>
-<span id="more"></span>
-<h2 id="前言">前言</h2>
-<p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p>
-<h2 id="白皮书内容理解">白皮书内容理解</h2>
-<p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p>
-<p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考Bob
-Bodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p>
-<p>该白皮书（ TODO，待完成）</p>
-]]></content>
-      <tags>
-        <tag>bitcoin</tag>
-        <tag>BitVM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>acme.sh不能自动更新证书的问题</title>
     <url>/2023/10/12/acme-sh%E4%B8%8D%E8%83%BD%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E8%AF%81%E4%B9%A6%E7%9A%84%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>本文描述了一种使用<code>acme.sh</code>颁发的证书始终不能正常自动更新的问题，并记录了解决过程。</p>
@@ -1883,75 +1883,6 @@ logP&amp;=a+b&#39;*logS
         <tag>bitcoin</tag>
         <tag>减半</tag>
         <tag>S2F模型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>用python压缩pdf文件</title>
-    <url>/2023/11/08/%E7%94%A8python%E5%8E%8B%E7%BC%A9pdf%E6%96%87%E4%BB%B6/</url>
-    <content><![CDATA[<p>由于某些不可避免的原因，需要在某些网站上传一些<code>.pdf</code>文件，那些奇葩的网站对文件大小做了限制，所以需要对较大的<code>.pdf</code>文件进行压缩处理，而一般免费的阅读器都不能随意的压缩（要么需要你交很高的会员费），好在这些任务<code>python</code>都可以很好的处理。</p>
-<p>本文编写了相关的<code>python</code>脚本，有需要的可以参考。</p>
-<span id="more"></span>
-<h2 id="一些说明">一些说明</h2>
-<p>本文的内容参考了其他博客（如<a href="https://www.cnblogs.com/liangxuran/p/16639561.html">此处</a>），但对其中脚本进行了一些修改。</p>
-<p>我使用的操作系统是<code>MacOS</code>，如果是其他系统，可能需要你自己动手进行一些修改。</p>
-<h2 id="安装pymupdf">安装PyMuPDF</h2>
-<p>首先我们安装<code>PyMuPDF</code>包，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install pymupdf=1.20.2</span><br></pre></td></tr></table></figure>
-<p>上述命令指定了版本，是为了避免因为版本不同导致的问题。</p>
-<h2 id="压缩脚本">压缩脚本</h2>
-<p>编写的脚本如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> fitz</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdf2pic</span>(<span class="params">file_root, filename: <span class="built_in">str</span>, out_name: <span class="built_in">str</span> = <span class="literal">None</span>, zoom=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将pdf逐页转化为png图片</span></span><br><span class="line"><span class="string">    :param file_root: 文件根目录</span></span><br><span class="line"><span class="string">    :param filename: 文件名，不带后缀</span></span><br><span class="line"><span class="string">    :param out_name: 输出文件名，默认为 filename+&#x27;_new&#x27;，用以存储pdf转化生成的 &#x27;png&#x27; 文件</span></span><br><span class="line"><span class="string">    :param zoom: 缩小的百分比比例</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.pdf&#x27;</span> <span class="keyword">in</span> filename:</span><br><span class="line">        filename = filename.split(<span class="string">&#x27;.pdf&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">    file = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;filename&#125;</span>.pdf&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(file):</span><br><span class="line">        <span class="keyword">raise</span> FileExistsError(<span class="string">f&quot;File <span class="subst">&#123;file&#125;</span> not exists&quot;</span>)</span><br><span class="line">    out_name = out_name <span class="keyword">or</span> <span class="string">f&quot;<span class="subst">&#123;filename&#125;</span>_new&quot;</span></span><br><span class="line">    out_file = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;out_name&#125;</span>&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)  <span class="comment"># 文件夹用以存储pdf转的图片</span></span><br><span class="line">    doc_f = fitz.Document(file)</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(out_file):</span><br><span class="line">        shutil.rmtree(out_file)</span><br><span class="line">    os.mkdir(out_file)</span><br><span class="line">    tq_t = tqdm(<span class="built_in">range</span>(doc_f.page_count))</span><br><span class="line">    <span class="keyword">for</span> pg <span class="keyword">in</span> tq_t:</span><br><span class="line">        tq_t.set_description(<span class="string">f&quot;Pdf to png. Page <span class="subst">&#123;pg&#125;</span>...&quot;</span>)</span><br><span class="line">        page = doc_f.load_page(pg)</span><br><span class="line">        zoom = <span class="built_in">int</span>(zoom)</span><br><span class="line">        lurl = <span class="string">f&quot;<span class="subst">&#123;out_file&#125;</span>/<span class="subst">&#123;pg&#125;</span>.png&quot;</span></span><br><span class="line">        trans = fitz.Matrix(zoom / <span class="number">100.0</span>, zoom / <span class="number">100.0</span>)</span><br><span class="line">        pm = page.get_pixmap(matrix=trans, alpha=<span class="literal">False</span>)</span><br><span class="line">        pm.save(lurl)</span><br><span class="line">    doc_f.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pic2pdf</span>(<span class="params">file_root, pic_filename, pdf_name: <span class="built_in">str</span> = <span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将图片合并成pdf</span></span><br><span class="line"><span class="string">    :param file_root: 文件存储的根目录</span></span><br><span class="line"><span class="string">    :param pic_filename: 图片保存的目录名</span></span><br><span class="line"><span class="string">    :param pdf_name: 转出的pdf名称，若不指定则采用pic_filename加上后缀&#x27;.pdf&#x27;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    pic_path = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;pic_filename&#125;</span>&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    pdf_name = pdf_name <span class="keyword">or</span> pic_filename</span><br><span class="line">    pdf_path = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;pdf_name&#125;</span>.pdf&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(pic_path):</span><br><span class="line">        <span class="keyword">raise</span> FileExistsError(<span class="string">f&quot;pic_path <span class="subst">&#123;pic_path&#125;</span> not exists.&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(pdf_path):</span><br><span class="line">        os.remove(pdf_path)</span><br><span class="line">    pics = os.listdir(pic_path)</span><br><span class="line">    pics = [file <span class="keyword">for</span> file <span class="keyword">in</span> pics <span class="keyword">if</span> <span class="string">&#x27;.png&#x27;</span> <span class="keyword">in</span> file]</span><br><span class="line">    doc = fitz.Document()</span><br><span class="line">    tq_t = tqdm(<span class="built_in">range</span>(<span class="built_in">len</span>(pics)))</span><br><span class="line">    <span class="keyword">for</span> pg <span class="keyword">in</span> tq_t:</span><br><span class="line">        tq_t.set_description(<span class="string">f&quot;Pic to pdf, processing <span class="subst">&#123;pg&#125;</span>...&quot;</span>)</span><br><span class="line">        img = <span class="string">f&#x27;<span class="subst">&#123;pic_path&#125;</span>/<span class="subst">&#123;pg&#125;</span>.png&#x27;</span></span><br><span class="line">        imgdoc = fitz.Document(img)</span><br><span class="line">        pdfbytes = imgdoc.convert_to_pdf()</span><br><span class="line">        imgpdf = fitz.Document(stream=pdfbytes, filetype=<span class="string">&#x27;pdf&#x27;</span>)</span><br><span class="line">        doc.insert_pdf(imgpdf)</span><br><span class="line">    doc.save(pdf_path)</span><br><span class="line">    doc.close()</span><br><span class="line">    shutil.rmtree(pic_path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdf_zoom</span>(<span class="params">file_path, out_name=<span class="literal">None</span>, zoom=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将pdf缩小</span></span><br><span class="line"><span class="string">    :param file_path: 待转换pdf文件的绝对路径</span></span><br><span class="line"><span class="string">    :param out_name: 输出的pdf名称（不带后缀）</span></span><br><span class="line"><span class="string">    :param zoom: 缩小的百分比</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    file_root, filename = os.path.split(file_path)</span><br><span class="line">    pdf2pic(file_root=file_root, filename=filename, out_name=out_name, zoom=zoom)</span><br><span class="line">    pic_filename = out_name <span class="keyword">or</span> <span class="string">f&quot;<span class="subst">&#123;filename.split(<span class="string">&#x27;.pdf&#x27;</span>)[<span class="number">0</span>]&#125;</span>_new&quot;</span></span><br><span class="line">    pic2pdf(file_root=file_root, pic_filename=pic_filename, pdf_name=out_name)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Finished to reduce size of <span class="subst">&#123;filename&#125;</span>, the new file is <span class="subst">&#123;pic_filename&#125;</span>.pdf&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    pdf_zoom(file_path=<span class="string">&#x27;/path/to/file/xxx.pdf&#x27;</span>, zoom=<span class="number">55</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>上述脚本中还用到了<code>tqdm</code>包，用来显示进度条；<code>fitz</code>为<code>pymupdf</code>包下的内容。</p>
-</blockquote>
-<p>执行的时候：</p>
-<ul>
-<li><p>将最后一行的<code>file_path</code>参数的赋值改成自己需要转换文件的路径（需要绝对路径）即可。</p></li>
-<li><p>缩小的百分比通过<code>zoom</code>参数来控制调节，其可以取值范围为<span class="math inline">\([0, 100]\)</span>。</p></li>
-<li><p>先生成一个临时的图片文件夹（需要转换的<code>.pdf</code>文件根目录下），在完成转化后、该图片文件夹会被自动删除。</p></li>
-</ul>
-<p>最后输出的清晰度会降低。这是因为没有做任何优化，仅仅是通过降低清晰度来缩小文件大小的。</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>怎么给pyecharts生成的表格增加滚动条</title>
-    <url>/2023/11/23/%E6%80%8E%E4%B9%88%E7%BB%99pyecharts%E7%94%9F%E6%88%90%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%A2%9E%E5%8A%A0%E6%BB%9A%E5%8A%A8%E6%9D%A1/</url>
-    <content><![CDATA[<p>我在用<a href="https://pyecharts.org/#/"><code>pyecharts</code></a>制作网页表格时，面临如下问题：</p>
-<ul>
-<li><p>当表格的列数比较多时，会溢出页面右边框，十分不雅观。</p></li>
-<li><p>不想抛弃<code>pyecharts</code>带来的便捷。</p></li>
-</ul>
-<p>于是经过查询，找到了解决办法，见下文。</p>
-<span id="more"></span>
-<h2 id="问题描述">问题描述</h2>
-<p>当我们使用<code>pyecharts</code>的<code>table</code>类来创建表格，嵌入到网页中时，发现表格数据会右溢出，滚动条出现在最下面，严重影响了页面的美观和整洁。</p>
-<p>我们希望滚动条出现在表格处、而不是页面底部，即希望表格可以滑动显示。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>在<a href="https://github.com/pyecharts/pyecharts"><code>pyecharts</code></a>的<code>github</code>上查找该问题，发现有人曾经提出过<a href="https://github.com/pyecharts/pyecharts/issues/1935">见此处</a>，该问题的回答没有详细说怎么解决，只是提到了需要修改<code>macro</code>模版。</p>
-<p>鉴于没有找到更好解决办法，于是动手修改了模块的宏文件。我安装的版本为<code>pyecharts==2.0.2</code>、<code>python==3.8.5</code>。具体修改如下：</p>
-<p>找到安装包所在路径：</p>
-<blockquote>
-<p><code>venv -&gt; lib -&gt; lib -&gt; python3.8 -&gt; site-packages -&gt; pyecharts -&gt; render -&gt; templates -&gt; macro</code></p>
-</blockquote>
-<p>打开<code>macro</code>文件，寻到<code>table</code>相关的<code>style</code>，在176行的<code>.fl-table</code>里增加两行：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">display</span>: block;</span><br><span class="line"><span class="attribute">overflow</span>: scroll;</span><br></pre></td></tr></table></figure>
-<p>即变为</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.fl-table</span> &#123;</span><br><span class="line">                <span class="attribute">margin</span>: <span class="number">20px</span>;</span><br><span class="line">                <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">                <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">                <span class="attribute">border</span>: none;</span><br><span class="line">                <span class="attribute">border-collapse</span>: collapse;</span><br><span class="line">                <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">                <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">                <span class="attribute">word-break</span>: keep-all;</span><br><span class="line">                <span class="attribute">display</span>: block;</span><br><span class="line">                <span class="attribute">overflow</span>: scroll;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
-<p>然后重启项目，再次生成html文件，新生成的表格页面就限定为页面的大小，可以通过滚动条来拖动观看后续表格了。</p>
-<p>如有服务器，在服务器上也进行相同操作。</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pyecharts</tag>
       </tags>
   </entry>
   <entry>
@@ -2175,6 +2106,75 @@ n_i&#39;=\frac{S_i*n_i-t_i}{S_i}
       </tags>
   </entry>
   <entry>
+    <title>用python压缩pdf文件</title>
+    <url>/2023/11/08/%E7%94%A8python%E5%8E%8B%E7%BC%A9pdf%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<p>由于某些不可避免的原因，需要在某些网站上传一些<code>.pdf</code>文件，那些奇葩的网站对文件大小做了限制，所以需要对较大的<code>.pdf</code>文件进行压缩处理，而一般免费的阅读器都不能随意的压缩（要么需要你交很高的会员费），好在这些任务<code>python</code>都可以很好的处理。</p>
+<p>本文编写了相关的<code>python</code>脚本，有需要的可以参考。</p>
+<span id="more"></span>
+<h2 id="一些说明">一些说明</h2>
+<p>本文的内容参考了其他博客（如<a href="https://www.cnblogs.com/liangxuran/p/16639561.html">此处</a>），但对其中脚本进行了一些修改。</p>
+<p>我使用的操作系统是<code>MacOS</code>，如果是其他系统，可能需要你自己动手进行一些修改。</p>
+<h2 id="安装pymupdf">安装PyMuPDF</h2>
+<p>首先我们安装<code>PyMuPDF</code>包，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install pymupdf=1.20.2</span><br></pre></td></tr></table></figure>
+<p>上述命令指定了版本，是为了避免因为版本不同导致的问题。</p>
+<h2 id="压缩脚本">压缩脚本</h2>
+<p>编写的脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> fitz</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdf2pic</span>(<span class="params">file_root, filename: <span class="built_in">str</span>, out_name: <span class="built_in">str</span> = <span class="literal">None</span>, zoom=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将pdf逐页转化为png图片</span></span><br><span class="line"><span class="string">    :param file_root: 文件根目录</span></span><br><span class="line"><span class="string">    :param filename: 文件名，不带后缀</span></span><br><span class="line"><span class="string">    :param out_name: 输出文件名，默认为 filename+&#x27;_new&#x27;，用以存储pdf转化生成的 &#x27;png&#x27; 文件</span></span><br><span class="line"><span class="string">    :param zoom: 缩小的百分比比例</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;.pdf&#x27;</span> <span class="keyword">in</span> filename:</span><br><span class="line">        filename = filename.split(<span class="string">&#x27;.pdf&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">    file = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;filename&#125;</span>.pdf&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(file):</span><br><span class="line">        <span class="keyword">raise</span> FileExistsError(<span class="string">f&quot;File <span class="subst">&#123;file&#125;</span> not exists&quot;</span>)</span><br><span class="line">    out_name = out_name <span class="keyword">or</span> <span class="string">f&quot;<span class="subst">&#123;filename&#125;</span>_new&quot;</span></span><br><span class="line">    out_file = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;out_name&#125;</span>&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)  <span class="comment"># 文件夹用以存储pdf转的图片</span></span><br><span class="line">    doc_f = fitz.Document(file)</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(out_file):</span><br><span class="line">        shutil.rmtree(out_file)</span><br><span class="line">    os.mkdir(out_file)</span><br><span class="line">    tq_t = tqdm(<span class="built_in">range</span>(doc_f.page_count))</span><br><span class="line">    <span class="keyword">for</span> pg <span class="keyword">in</span> tq_t:</span><br><span class="line">        tq_t.set_description(<span class="string">f&quot;Pdf to png. Page <span class="subst">&#123;pg&#125;</span>...&quot;</span>)</span><br><span class="line">        page = doc_f.load_page(pg)</span><br><span class="line">        zoom = <span class="built_in">int</span>(zoom)</span><br><span class="line">        lurl = <span class="string">f&quot;<span class="subst">&#123;out_file&#125;</span>/<span class="subst">&#123;pg&#125;</span>.png&quot;</span></span><br><span class="line">        trans = fitz.Matrix(zoom / <span class="number">100.0</span>, zoom / <span class="number">100.0</span>)</span><br><span class="line">        pm = page.get_pixmap(matrix=trans, alpha=<span class="literal">False</span>)</span><br><span class="line">        pm.save(lurl)</span><br><span class="line">    doc_f.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pic2pdf</span>(<span class="params">file_root, pic_filename, pdf_name: <span class="built_in">str</span> = <span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将图片合并成pdf</span></span><br><span class="line"><span class="string">    :param file_root: 文件存储的根目录</span></span><br><span class="line"><span class="string">    :param pic_filename: 图片保存的目录名</span></span><br><span class="line"><span class="string">    :param pdf_name: 转出的pdf名称，若不指定则采用pic_filename加上后缀&#x27;.pdf&#x27;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    pic_path = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;pic_filename&#125;</span>&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    pdf_name = pdf_name <span class="keyword">or</span> pic_filename</span><br><span class="line">    pdf_path = <span class="string">f&quot;<span class="subst">&#123;file_root&#125;</span>/<span class="subst">&#123;pdf_name&#125;</span>.pdf&quot;</span>.replace(<span class="string">&#x27;//&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(pic_path):</span><br><span class="line">        <span class="keyword">raise</span> FileExistsError(<span class="string">f&quot;pic_path <span class="subst">&#123;pic_path&#125;</span> not exists.&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> os.path.exists(pdf_path):</span><br><span class="line">        os.remove(pdf_path)</span><br><span class="line">    pics = os.listdir(pic_path)</span><br><span class="line">    pics = [file <span class="keyword">for</span> file <span class="keyword">in</span> pics <span class="keyword">if</span> <span class="string">&#x27;.png&#x27;</span> <span class="keyword">in</span> file]</span><br><span class="line">    doc = fitz.Document()</span><br><span class="line">    tq_t = tqdm(<span class="built_in">range</span>(<span class="built_in">len</span>(pics)))</span><br><span class="line">    <span class="keyword">for</span> pg <span class="keyword">in</span> tq_t:</span><br><span class="line">        tq_t.set_description(<span class="string">f&quot;Pic to pdf, processing <span class="subst">&#123;pg&#125;</span>...&quot;</span>)</span><br><span class="line">        img = <span class="string">f&#x27;<span class="subst">&#123;pic_path&#125;</span>/<span class="subst">&#123;pg&#125;</span>.png&#x27;</span></span><br><span class="line">        imgdoc = fitz.Document(img)</span><br><span class="line">        pdfbytes = imgdoc.convert_to_pdf()</span><br><span class="line">        imgpdf = fitz.Document(stream=pdfbytes, filetype=<span class="string">&#x27;pdf&#x27;</span>)</span><br><span class="line">        doc.insert_pdf(imgpdf)</span><br><span class="line">    doc.save(pdf_path)</span><br><span class="line">    doc.close()</span><br><span class="line">    shutil.rmtree(pic_path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">pdf_zoom</span>(<span class="params">file_path, out_name=<span class="literal">None</span>, zoom=<span class="number">50</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将pdf缩小</span></span><br><span class="line"><span class="string">    :param file_path: 待转换pdf文件的绝对路径</span></span><br><span class="line"><span class="string">    :param out_name: 输出的pdf名称（不带后缀）</span></span><br><span class="line"><span class="string">    :param zoom: 缩小的百分比</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    file_root, filename = os.path.split(file_path)</span><br><span class="line">    pdf2pic(file_root=file_root, filename=filename, out_name=out_name, zoom=zoom)</span><br><span class="line">    pic_filename = out_name <span class="keyword">or</span> <span class="string">f&quot;<span class="subst">&#123;filename.split(<span class="string">&#x27;.pdf&#x27;</span>)[<span class="number">0</span>]&#125;</span>_new&quot;</span></span><br><span class="line">    pic2pdf(file_root=file_root, pic_filename=pic_filename, pdf_name=out_name)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Finished to reduce size of <span class="subst">&#123;filename&#125;</span>, the new file is <span class="subst">&#123;pic_filename&#125;</span>.pdf&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    pdf_zoom(file_path=<span class="string">&#x27;/path/to/file/xxx.pdf&#x27;</span>, zoom=<span class="number">55</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>上述脚本中还用到了<code>tqdm</code>包，用来显示进度条；<code>fitz</code>为<code>pymupdf</code>包下的内容。</p>
+</blockquote>
+<p>执行的时候：</p>
+<ul>
+<li><p>将最后一行的<code>file_path</code>参数的赋值改成自己需要转换文件的路径（需要绝对路径）即可。</p></li>
+<li><p>缩小的百分比通过<code>zoom</code>参数来控制调节，其可以取值范围为<span class="math inline">\([0, 100]\)</span>。</p></li>
+<li><p>先生成一个临时的图片文件夹（需要转换的<code>.pdf</code>文件根目录下），在完成转化后、该图片文件夹会被自动删除。</p></li>
+</ul>
+<p>最后输出的清晰度会降低。这是因为没有做任何优化，仅仅是通过降低清晰度来缩小文件大小的。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>怎么给pyecharts生成的表格增加滚动条</title>
+    <url>/2023/11/23/%E6%80%8E%E4%B9%88%E7%BB%99pyecharts%E7%94%9F%E6%88%90%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%A2%9E%E5%8A%A0%E6%BB%9A%E5%8A%A8%E6%9D%A1/</url>
+    <content><![CDATA[<p>我在用<a href="https://pyecharts.org/#/"><code>pyecharts</code></a>制作网页表格时，面临如下问题：</p>
+<ul>
+<li><p>当表格的列数比较多时，会溢出页面右边框，十分不雅观。</p></li>
+<li><p>不想抛弃<code>pyecharts</code>带来的便捷。</p></li>
+</ul>
+<p>于是经过查询，找到了解决办法，见下文。</p>
+<span id="more"></span>
+<h2 id="问题描述">问题描述</h2>
+<p>当我们使用<code>pyecharts</code>的<code>table</code>类来创建表格，嵌入到网页中时，发现表格数据会右溢出，滚动条出现在最下面，严重影响了页面的美观和整洁。</p>
+<p>我们希望滚动条出现在表格处、而不是页面底部，即希望表格可以滑动显示。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>在<a href="https://github.com/pyecharts/pyecharts"><code>pyecharts</code></a>的<code>github</code>上查找该问题，发现有人曾经提出过<a href="https://github.com/pyecharts/pyecharts/issues/1935">见此处</a>，该问题的回答没有详细说怎么解决，只是提到了需要修改<code>macro</code>模版。</p>
+<p>鉴于没有找到更好解决办法，于是动手修改了模块的宏文件。我安装的版本为<code>pyecharts==2.0.2</code>、<code>python==3.8.5</code>。具体修改如下：</p>
+<p>找到安装包所在路径：</p>
+<blockquote>
+<p><code>venv -&gt; lib -&gt; lib -&gt; python3.8 -&gt; site-packages -&gt; pyecharts -&gt; render -&gt; templates -&gt; macro</code></p>
+</blockquote>
+<p>打开<code>macro</code>文件，寻到<code>table</code>相关的<code>style</code>，在176行的<code>.fl-table</code>里增加两行：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">display</span>: block;</span><br><span class="line"><span class="attribute">overflow</span>: scroll;</span><br></pre></td></tr></table></figure>
+<p>即变为</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.fl-table</span> &#123;</span><br><span class="line">                <span class="attribute">margin</span>: <span class="number">20px</span>;</span><br><span class="line">                <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">                <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">                <span class="attribute">border</span>: none;</span><br><span class="line">                <span class="attribute">border-collapse</span>: collapse;</span><br><span class="line">                <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">                <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">                <span class="attribute">word-break</span>: keep-all;</span><br><span class="line">                <span class="attribute">display</span>: block;</span><br><span class="line">                <span class="attribute">overflow</span>: scroll;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+<p>然后重启项目，再次生成html文件，新生成的表格页面就限定为页面的大小，可以通过滚动条来拖动观看后续表格了。</p>
+<p>如有服务器，在服务器上也进行相同操作。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>pyecharts</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Debian11系统走socks代理流量报错&#39;Socket type must be stream or datagram, not 524289&#39;问题</title>
     <url>/2023/11/24/Debian11%E7%B3%BB%E7%BB%9F%E8%B5%B0socks%E4%BB%A3%E7%90%86%E6%B5%81%E9%87%8F%E6%8A%A5%E9%94%99-Socket-type-must-be-stream-or-datagram-not-524289-%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<p>我在<code>Debian11</code>系统上使用<code>PySocks</code>包代理<code>python</code>脚本流量时，遇到流量不能正常通过<code>socks</code>进行代理的问题，该问题报错提示为：<code>“Socket type must be stream or datagram, not 524289”</code>。</p>
@@ -2246,64 +2246,6 @@ net_T^e=\prod_{t=1}^T(1+r_t^e)
       </categories>
       <tags>
         <tag>基金</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>比特币去中心化交易所Bisq在Mac上运行方法</title>
-    <url>/2023/11/27/%E6%AF%94%E7%89%B9%E5%B8%81%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E4%BA%A4%E6%98%93%E6%89%80Bisq%E5%9C%A8Mac%E4%B8%8A%E8%BF%90%E8%A1%8C%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p><a href="https://bisq.network">Bisq</a>作为最优秀的比特币去中心化交易平台，在中文圈的使用率很低，但是很值得推荐。</p>
-<p>该平台不需要任何认证、全匿名、利用买卖双方超额抵押解决交易信任问题，以点对点交易的方式护卫着比特币场外交易的安全。</p>
-<p>可以说，即便所有的中心化交易所都垮掉了，人们仍然可以利用<code>Bisq</code>将比特币置换成法币或其他资产。从某种意义上来说，它是比特币交易的压舱石，让人们不用过度顾虑无处交易比特币的问题。</p>
-<p>不过，鉴于其需要通过洋葱路由（<a href="https://en.wikipedia.org/wiki/Onion_routing">onion
-routing</a>）进行匿名交互，对于身处网络洼地的人们还是不太容易使用。可能正是因为上手的难度，导致了其在很多被需要的地方流行不起来。</p>
-<p>本文将介绍在Mac上运行<code>Bisq</code>交易软件的方法，主要聚焦在安装后不能打开的问题。</p>
-<span id="more"></span>
-<h2 id="问题描述">问题描述</h2>
-<p>本文主要介绍解决Mac用户安装好了<code>Bisq</code>（我安装的为最新版<code>Bisq-v1.9.14</code>），但是不能正常打开的问题。</p>
-<p>在进一步操作之前，你得确认自己能访问自由网络（或叫做科学上网），假定你本地代理<code>socks</code>流量的入口为1080端口。</p>
-<p>如果你不能访问自由网络，那么后面的解决办法暂时与你无关。</p>
-<p>安装<code>Bisq</code>完毕后，如果直接打开，提示文件破坏，则应执行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo xattr -rd com.apple.quarantine /Applications/Bisq.app</span><br></pre></td></tr></table></figure>
-<p>执行后，你会发现程序一直卡在连接tor节点的环节。</p>
-<p>这意味着我们需要将流量通过代理之后才能正常使用该P2P交易软件。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>首先，你需要安装<code>java jdk</code>，用于操作<code>.jar</code>文件。</p>
-<p>下面的步骤先不打开<code>Bisq</code>。</p>
-<blockquote>
-<ol type="1">
-<li>找到<code>Bisq</code>应用的app路径，具体为：<code>/Applications/Bisq.app/Contents/app</code>；</li>
-<li>找到<code>tor-0.7.6.jar</code>文件，复制到其他本地文件夹。若为老版本，则为文件<code>desktop-version-all.jar</code>，其中<code>version</code>为版本号；</li>
-<li>终端切换到复制了<code>tor-0.7.6.jar</code>的文件夹下，执行：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar xf tor-0.7.6.jar torrc</span><br></pre></td></tr></table></figure>
-<ol start="4" type="1">
-<li><p>上述命令将<code>torrc</code>文件从<code>tor-0.7.6.jar</code>中提取出来，此时会得到两个文件<code>torrc</code>和<code>torrc.default</code>；</p></li>
-<li><p>编辑<code>torrc</code>（可用文本编辑器或<code>vi</code>命令进行操作），在文件的末尾添加一行、以进行流量转发：</p></li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Socks5Proxy 127.0.0.1:1080</span><br></pre></td></tr></table></figure>
-<ol start="6" type="1">
-<li>保存后，执行如下命令更新复制出来的<code>tor-0.7.6.jar</code>文件：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar uf desktop-1.9.12-all.jar torrc</span><br></pre></td></tr></table></figure>
-<ol start="7" type="1">
-<li>将更新了的<code>tor-0.7.6.jar</code>文件复制回<code>/Applications/Bisq.app/Contents/app</code>，替换原文件。</li>
-<li>此时打开<code>Bisq</code>，等待更新本地节点数据及配置tor网络。如果是连接的本地节点，大概等待5分钟左右。</li>
-</ol>
-</blockquote>
-<p>如果你想连接本地的全节点，可以如下打开：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=local_ip:8333 -useTorForBtc=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
-<p>上述<code>local_ip</code>为你的全节点的局域网ip地址，<code>8333</code>为默认的端口。</p>
-<p>如果你想通过<code>tor</code>连接指定的<code>.onion</code>地址，则应如下开启：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=you_onion_address.onion:8333 -useTorForBtc=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>上述<code>you_onion_address</code>为你指定的洋葱地址。</p>
-<p>成功打开之后的使用方法，则可以参考<a href="https://bisq.network/getting-started/">官方教程</a>，或<a href="https://raspibolt.org/guide/bonus/bitcoin/bisq.html"><code>RaspiBolt</code>的教程</a>。</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>Bitcoin</tag>
-        <tag>Bisq</tag>
       </tags>
   </entry>
   <entry>
@@ -2770,6 +2712,64 @@ t}{\Delta S})
       <tags>
         <tag>bitcoin</tag>
         <tag>链上数据</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>比特币去中心化交易所Bisq在Mac上运行方法</title>
+    <url>/2023/11/27/%E6%AF%94%E7%89%B9%E5%B8%81%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E4%BA%A4%E6%98%93%E6%89%80Bisq%E5%9C%A8Mac%E4%B8%8A%E8%BF%90%E8%A1%8C%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://bisq.network">Bisq</a>作为最优秀的比特币去中心化交易平台，在中文圈的使用率很低，但是很值得推荐。</p>
+<p>该平台不需要任何认证、全匿名、利用买卖双方超额抵押解决交易信任问题，以点对点交易的方式护卫着比特币场外交易的安全。</p>
+<p>可以说，即便所有的中心化交易所都垮掉了，人们仍然可以利用<code>Bisq</code>将比特币置换成法币或其他资产。从某种意义上来说，它是比特币交易的压舱石，让人们不用过度顾虑无处交易比特币的问题。</p>
+<p>不过，鉴于其需要通过洋葱路由（<a href="https://en.wikipedia.org/wiki/Onion_routing">onion
+routing</a>）进行匿名交互，对于身处网络洼地的人们还是不太容易使用。可能正是因为上手的难度，导致了其在很多被需要的地方流行不起来。</p>
+<p>本文将介绍在Mac上运行<code>Bisq</code>交易软件的方法，主要聚焦在安装后不能打开的问题。</p>
+<span id="more"></span>
+<h2 id="问题描述">问题描述</h2>
+<p>本文主要介绍解决Mac用户安装好了<code>Bisq</code>（我安装的为最新版<code>Bisq-v1.9.14</code>），但是不能正常打开的问题。</p>
+<p>在进一步操作之前，你得确认自己能访问自由网络（或叫做科学上网），假定你本地代理<code>socks</code>流量的入口为1080端口。</p>
+<p>如果你不能访问自由网络，那么后面的解决办法暂时与你无关。</p>
+<p>安装<code>Bisq</code>完毕后，如果直接打开，提示文件破坏，则应执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo xattr -rd com.apple.quarantine /Applications/Bisq.app</span><br></pre></td></tr></table></figure>
+<p>执行后，你会发现程序一直卡在连接tor节点的环节。</p>
+<p>这意味着我们需要将流量通过代理之后才能正常使用该P2P交易软件。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>首先，你需要安装<code>java jdk</code>，用于操作<code>.jar</code>文件。</p>
+<p>下面的步骤先不打开<code>Bisq</code>。</p>
+<blockquote>
+<ol type="1">
+<li>找到<code>Bisq</code>应用的app路径，具体为：<code>/Applications/Bisq.app/Contents/app</code>；</li>
+<li>找到<code>tor-0.7.6.jar</code>文件，复制到其他本地文件夹。若为老版本，则为文件<code>desktop-version-all.jar</code>，其中<code>version</code>为版本号；</li>
+<li>终端切换到复制了<code>tor-0.7.6.jar</code>的文件夹下，执行：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar xf tor-0.7.6.jar torrc</span><br></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li><p>上述命令将<code>torrc</code>文件从<code>tor-0.7.6.jar</code>中提取出来，此时会得到两个文件<code>torrc</code>和<code>torrc.default</code>；</p></li>
+<li><p>编辑<code>torrc</code>（可用文本编辑器或<code>vi</code>命令进行操作），在文件的末尾添加一行、以进行流量转发：</p></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Socks5Proxy 127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+<ol start="6" type="1">
+<li>保存后，执行如下命令更新复制出来的<code>tor-0.7.6.jar</code>文件：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar uf desktop-1.9.12-all.jar torrc</span><br></pre></td></tr></table></figure>
+<ol start="7" type="1">
+<li>将更新了的<code>tor-0.7.6.jar</code>文件复制回<code>/Applications/Bisq.app/Contents/app</code>，替换原文件。</li>
+<li>此时打开<code>Bisq</code>，等待更新本地节点数据及配置tor网络。如果是连接的本地节点，大概等待5分钟左右。</li>
+</ol>
+</blockquote>
+<p>如果你想连接本地的全节点，可以如下打开：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=local_ip:8333 -useTorForBtc=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>上述<code>local_ip</code>为你的全节点的局域网ip地址，<code>8333</code>为默认的端口。</p>
+<p>如果你想通过<code>tor</code>连接指定的<code>.onion</code>地址，则应如下开启：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=you_onion_address.onion:8333 -useTorForBtc=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>上述<code>you_onion_address</code>为你指定的洋葱地址。</p>
+<p>成功打开之后的使用方法，则可以参考<a href="https://bisq.network/getting-started/">官方教程</a>，或<a href="https://raspibolt.org/guide/bonus/bitcoin/bisq.html"><code>RaspiBolt</code>的教程</a>。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>Bitcoin</tag>
+        <tag>Bisq</tag>
       </tags>
   </entry>
 </search>
