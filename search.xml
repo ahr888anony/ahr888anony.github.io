@@ -2618,7 +2618,7 @@ E_t=u_t*n_t
 电费会受到很多因素的影响，如技术进步导致的电能供给增加、通胀导致的购买力缩水、市场需求季节性变化、工业化进步导致的需求增加等。在这里，我简单的假定其他因素可以吸纳进电费通胀率（r）中，从而电费随时间如下变化：
 <span class="math display">\[\begin{equation} \label{eq04}
 E_t=E_0*(1+r)^t
-\end{equation}\]</span> 其中<span class="math inline">\(E_0\)</span>是初始时间对应的电费，是一个常数。</p>
+\end{equation}\]</span> 其中<span class="math inline">\(E_0\)</span>是初始时间对应的电费，是一个常数。值的一提的是，挖矿成本中的“矿机”成本，实际上也可以通过时间均摊的办法、吸收进上述通胀公式之中。</p>
 <p>另一方面，单位电能产生的算力应该遵循<a href="https://zh.wikipedia.org/wiki/摩尔定律">摩尔定律</a>： <span class="math display">\[\begin{equation} \label{eq05}
 u_t=\alpha *2^{t/\beta}
 \end{equation}\]</span> 其中<span class="math inline">\(\alpha\)</span>和<span class="math inline">\(\beta\)</span>是摩尔定律的两个常数，分别对应初始值和增倍周期。</p>
