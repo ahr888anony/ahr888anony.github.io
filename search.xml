@@ -2689,10 +2689,7 @@ x=\frac{x-x_{min}}{x_{max}-x_{min}}
 <p>可见两者贴合的很好，说明该模型很符合实际情况。</p>
 <p>进而，我们可以得到如下比特币均衡价格公式，该公式中各变量是没有归一化的原始值：
 <span class="math display">\[\begin{equation} \label{eq11}
-\begin{aligned}
-log(P)=&amp;2.65+2.2e(-4)*t+0.36*log(d_t) \\ &amp;+0.7*log(\frac{\Delta
-t}{\Delta S})
-\end{aligned}
+log(P)=2.65+2.2e(-4)*t+0.36*log(d_t)+0.7*log(\frac{\Delta t}{\Delta S})
 \end{equation}\]</span>
 原始值的对数价格、模型值以及标注了公式参数的时序图如下：</p>
 <figure>
