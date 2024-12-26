@@ -38,7 +38,7 @@
 <meta property="og:image" content="https://btcrainmaker.com/2024/12/19/%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E4%B8%8E%E6%8C%96%E7%9F%BF%E9%9A%BE%E5%BA%A6%E3%80%81%E6%97%B6%E9%97%B4%E3%80%81%E5%87%8F%E5%8D%8A%E7%9A%84%E5%85%B3%E7%B3%BB/%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BC%E4%B8%8E%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B%E7%9A%84%E5%AF%B9%E6%95%B0%E5%9D%87%E8%A1%A1%E4%BB%B7%E6%A0%BC%E5%85%B3%E7%B3%BB%E6%97%B6%E5%BA%8F%E5%9B%BE.png">
 <meta property="og:image" content="https://btcrainmaker.com/2024/12/19/%E6%AF%94%E7%89%B9%E5%B8%81%E4%BB%B7%E6%A0%BC%E4%B8%8E%E6%8C%96%E7%9F%BF%E9%9A%BE%E5%BA%A6%E3%80%81%E6%97%B6%E9%97%B4%E3%80%81%E5%87%8F%E5%8D%8A%E7%9A%84%E5%85%B3%E7%B3%BB/%E6%AF%94%E7%89%B9%E5%B8%81%E5%AF%B9%E6%95%B0%E4%BB%B7%E6%A0%BCvs%E6%A8%A1%E5%9E%8B%E9%A2%84%E6%B5%8B%E5%80%BC%E9%99%84%E5%85%AC%E5%BC%8F%E5%8F%82%E6%95%B0.png">
 <meta property="article:published_time" content="2024-12-19T06:28:24.000Z">
-<meta property="article:modified_time" content="2024-12-26T09:22:51.255Z">
+<meta property="article:modified_time" content="2024-12-26T09:45:24.735Z">
 <meta property="article:author" content="雨师">
 <meta property="article:tag" content="bitcoin">
 <meta property="article:tag" content="链上数据">
@@ -268,7 +268,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-12-26 17:22:51" itemprop="dateModified" datetime="2024-12-26T17:22:51+08:00">2024-12-26</time>
+      <time title="修改时间：2024-12-26 17:45:24" itemprop="dateModified" datetime="2024-12-26T17:45:24+08:00">2024-12-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -343,14 +343,14 @@ P=\frac{E_0*(1+r)^t}{\alpha
 上式最后一项是单位产量所需要的时间，我们在这里讨论一下这一项：</p>
 <ol type="1">
 <li><p>由于比特币大约每10分钟产生一个新区块，<span class="math inline">\(\Delta
-t\)</span>可以表示产生一个新区块的时间、约10分钟；</p></li>
+t\)</span>可以表示产生一个新区块的时间、约10分钟（本文后续采用的1天）；</p></li>
 <li><p><span class="math inline">\(\Delta
 S\)</span>包含区块奖励和区块打包手续费两部分，其中区块奖励部分会随着减半次数增加而指数减少；</p></li>
 <li><p>若区块的手续费为0，则在一个产量减半周期内，<span class="math inline">\(\frac{\Delta t}{\Delta
 S}\)</span>近似是一个常数，在不同减半周期间，该值会随着减半周期数增多而指数跳跃上升；</p></li>
 <li><p>若考虑了手续费，在较早的减半周期内，手续费的影响较小，随着减半数增加，这一项中手续费的影响越来越重要；</p></li>
 <li><p>随着比特币减半接近或已经完结（2140年），可以预期每个新区块都是满块，故每个区块的交易笔数近似固定，每笔交易的手续费是在最佳手续费率附近的随机数、总体上每个区块的手续费保持在某个均衡值（该值可能仍具有时间漂移）附近波动，因此减半完成后，<span class="math inline">\(\frac{\Delta t}{\Delta
-S}\)</span>可以被近似视为一个常数；</p></li>
+S}\)</span>可以被近似视为一个统计上的常数；</p></li>
 </ol>
 <p>可以将<span class="math inline">\(1+r\)</span>记为<span class="math inline">\(r&#39;\)</span>，从而上式化为： <span class="math display">\[\begin{equation} \label{eq08}
 P=E_0*r&#39;^t*\alpha ^{-1}*2^{-t/\beta}*\overline{u}_0*d_t*\frac{\Delta
@@ -367,7 +367,7 @@ log(P)=a+b*t+log(d_t)+log(\frac{\Delta t}{\Delta S})
 <li>由于最后一项的存在，比特币对数价格会受到减半周期的影响，每次减半都会造成最后一项跳跃上升，从而导致比特币价格出现阶跃分区，直至减半接近或已经完结；</li>
 <li>摩尔定律引起的基础算力（单位电能产生的算力）上升被吸收进了第二项中，与通胀一起决定比特币的时间价值，它反应的是技术进步引起的时间价值；</li>
 <li>若比特币减半后挖矿难度持续上升，则由于最后两部分的影响，比特币价格会呈现出指数乘以指数的增长，从而导致价格大幅上升；</li>
-<li>在减半接近完结时，手续费基本稳定，此后影响比特币价格的最大因素为算力。鉴于算力一般不太可能大幅跳跃性变化，从而价格会慢慢趋于平稳。</li>
+<li>在减半接近完结时，手续费基本稳定，此后影响比特币价格的最大因素为算力。鉴于此后的算力、一般不太可能大幅跳跃性变化，从而价格会慢慢趋于平稳。</li>
 </ol>
 <p>下面我将用数据来对此定价公式进行验证。</p>
 <h2 id="数据实证">数据实证</h2>
@@ -375,10 +375,11 @@ log(P)=a+b*t+log(d_t)+log(\frac{\Delta t}{\Delta S})
 <p>数据说明：</p>
 <blockquote>
 <ol type="1">
-<li><p>本文的链上数据是通过自建全节点、直接从全节点获取，价格数据采用的<a target="_blank" rel="noopener" href="https://coinmarketcap.com/currencies/bitcoin/historical-data/">coinmarketcap</a>所收录的比特币日频历史价格数据，比特币价格采用的日收盘价;</p></li>
-<li><p>后文中数据频率采用1天，对链上数据进行降频处理、采用的区块时间戳，对每日内的手续费和区块奖励进行加总，从而得到每日<span class="math inline">\(\Delta S\)</span>；</p></li>
+<li><p>本文的链上数据是通过自建全节点、直接从全节点获取；</p></li>
+<li><p>价格数据采用的<a target="_blank" rel="noopener" href="https://coinmarketcap.com/currencies/bitcoin/historical-data/">coinmarketcap</a>所收录的比特币日频历史收盘价格;</p></li>
+<li><p>后文中数据频率采用的“1天”，对链上数据根据区块时间戳进行降频处理，对每日内的手续费和区块奖励进行加总，从而可以得到每日<span class="math inline">\(\Delta S\)</span>；</p></li>
 <li><p>降频后保留当日最后一条难度数据作为当日难度值（<span class="math inline">\(d_t\)</span>）；</p></li>
-<li><p>简单起见，时间值采用日频的天数，<span class="math inline">\(\Delta t\)</span>值为1、代表1天。</p></li>
+<li><p>简单起见，时间值采用日频的天数，即<span class="math inline">\(\Delta t\)</span>值为1、代表1天。</p></li>
 </ol>
 </blockquote>
 <p>对数价格（<span class="math inline">\(log(P)\)</span>）的时序图（横轴为日期）如下：</p>
@@ -396,12 +397,12 @@ log(P)=a+b*t+log(d_t)+log(\frac{\Delta t}{\Delta S})
 <img src="比特币每日手续费时序图.png" alt="比特币每日手续费时序图">
 <figcaption aria-hidden="true">比特币每日手续费时序图</figcaption>
 </figure>
-<p>上图在近期的数据不是很直观，我将该图进行分段展示，效果如下：</p>
+<p>上图在近期的数据不是很直观，将该图进行分段展示，效果如下：</p>
 <figure>
 <img src="比特币每日区块奖励分段时序图.png" alt="比特币每日区块奖励分段时序图">
 <figcaption aria-hidden="true">比特币每日区块奖励分段时序图</figcaption>
 </figure>
-<p>可见区块奖励和手续费存在异常值（毛刺），可能会影响到模型的结论，需要对此进行修正，采用MAD法(<a href="https://btcrainmaker.com/2023/10/17/比特币S2F模型还适用吗/#s2f简化模型建模">具体参见此处</a>)对异常值进行过滤，滚动周期为30天、最小需要的观测数据量设定为10天。过滤后的每日区块奖励和每日手续费数据时序图如下：</p>
+<p>可见区块奖励和手续费存在异常值（毛刺），可能会影响到模型的结论，需要对此进行修正，采用MAD法(<a href="https://btcrainmaker.com/2023/10/17/比特币S2F模型还适用吗/#s2f简化模型建模">具体参见此处</a>)对异常值进行过滤，滚动周期为30天、最小需要的观测数据量设定为10天。过滤后的每日区块奖励和每日手续费时序图如下：</p>
 <figure>
 <img src="mad法处理异常值后的区块奖励时序图.png" alt="mad法处理异常值后的区块奖励时序图">
 <figcaption aria-hidden="true">mad法处理异常值后的区块奖励时序图</figcaption>
@@ -411,7 +412,7 @@ log(P)=a+b*t+log(d_t)+log(\frac{\Delta t}{\Delta S})
 <img src="mad法处理异常值后的区块手续费时序图.png" alt="mad法处理异常值后的区块手续费时序图">
 <figcaption aria-hidden="true">mad法处理异常值后的区块手续费时序图</figcaption>
 </figure>
-<p>调整后的奖励与手续费结合后的时序图如下：</p>
+<p>调整后的奖励与手续费结合后（即为日产量<span class="math inline">\(\Delta S\)</span>）的时序图如下：</p>
 <figure>
 <img src="mad法处理异常值后的日产量时序图.png" alt="mad法处理异常值后的日产量时序图">
 <figcaption aria-hidden="true">mad法处理异常值后的日产量时序图</figcaption>
@@ -434,14 +435,14 @@ t}{\Delta S})\)</span>的时序图，对于日数据而言<span class="math inli
 <p>进一步添加上天数和常数项，我们就可以进行多元线性回归了。</p>
 <p>回归结果如下：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">                            OLS Regression Results                            </span></span><br><span class="line"><span class="string">==============================================================================</span></span><br><span class="line"><span class="string">Dep. Variable:                   logP   R-squared:                       0.956</span></span><br><span class="line"><span class="string">Model:                            OLS   Adj. R-squared:                  0.956</span></span><br><span class="line"><span class="string">Method:                 Least Squares   F-statistic:                 3.814e+04</span></span><br><span class="line"><span class="string">Date:                Thu, 26 Dec 2024   Prob (F-statistic):               0.00</span></span><br><span class="line"><span class="string">Time:                        14:18:28   Log-Likelihood:                -5828.3</span></span><br><span class="line"><span class="string">No. Observations:                5280   AIC:                         1.166e+04</span></span><br><span class="line"><span class="string">Df Residuals:                    5276   BIC:                         1.169e+04</span></span><br><span class="line"><span class="string">Df Model:                           3                                         </span></span><br><span class="line"><span class="string">Covariance Type:            nonrobust                                         </span></span><br><span class="line"><span class="string">==============================================================================</span></span><br><span class="line"><span class="string">                 coef    std err          t      P&gt;|t|      [0.025      0.975]</span></span><br><span class="line"><span class="string">------------------------------------------------------------------------------</span></span><br><span class="line"><span class="string">Intercept      2.6466      0.452      5.861      0.000       1.761       3.532</span></span><br><span class="line"><span class="string">logD           0.3632      0.004     99.451      0.000       0.356       0.370</span></span><br><span class="line"><span class="string">days           0.0002   2.86e-05      7.612      0.000       0.000       0.000</span></span><br><span class="line"><span class="string">logtS          0.7010      0.047     14.823      0.000       0.608       0.794</span></span><br><span class="line"><span class="string">==============================================================================</span></span><br><span class="line"><span class="string">Omnibus:                      283.811   Durbin-Watson:                   0.017</span></span><br><span class="line"><span class="string">Prob(Omnibus):                  0.000   Jarque-Bera (JB):              329.880</span></span><br><span class="line"><span class="string">Skew:                           0.603   Prob(JB):                     2.33e-72</span></span><br><span class="line"><span class="string">Kurtosis:                       3.215   Cond. No.                     1.60e+05</span></span><br><span class="line"><span class="string">==============================================================================</span></span><br><span class="line"><span class="string">Notes:</span></span><br><span class="line"><span class="string">[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</span></span><br><span class="line"><span class="string">[2] The condition number is large, 1.6e+05. This might indicate that there are</span></span><br><span class="line"><span class="string">strong multicollinearity or other numerical problems.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
-<p>可见，所有项的回归参数都很显著，<span class="math inline">\(\eqref{eq09}\)</span>对应的模型的<span class="math inline">\(R^2\)</span>值高达0.956，说明该模型很显著。</p>
-<p>上述回归结果中提示条件数很大、可能存在强多重共线性。出现这一提示的原因是因为没有进行变量的归一化处理，这会导致数值的量级对条件数的影响很大。</p>
-<p>我们采用“min-max归一化”的办法对因变量与自变量进行归一化处理，即处理公式为：
+<p>可见，所有项的回归参数都很显著，<span class="math inline">\(\eqref{eq09}\)</span>对应的模型的<span class="math inline">\(R^2\)</span>值高达0.956，说明该模型很有效。</p>
+<p>上述回归结果中提示“条件数很大、可能存在强多重共线性”。出现这一提示的原因是因为没有进行变量的归一化处理，这会导致数值的量级对条件数计算产生很大的影响。下面我们将验证是否是这个原因导致的。</p>
+<p>本文采用“min-max归一化”的办法对因变量与自变量进行归一化处理，即处理公式为：
 <span class="math display">\[\begin{equation} \label{eq10}
 x=\frac{x-x_{min}}{x_{max}-x_{min}}
 \end{equation}\]</span> 归一化之后，再次回归，结果为：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">                            OLS Regression Results                            </span></span><br><span class="line"><span class="string">==============================================================================</span></span><br><span class="line"><span class="string">Dep. Variable:                   logP   R-squared:                       0.956</span></span><br><span class="line"><span class="string">Model:                            OLS   Adj. R-squared:                  0.956</span></span><br><span class="line"><span class="string">Method:                 Least Squares   F-statistic:                 3.814e+04</span></span><br><span class="line"><span class="string">Date:                Thu, 26 Dec 2024   Prob (F-statistic):               0.00</span></span><br><span class="line"><span class="string">Time:                        15:09:33   Log-Likelihood:                 8272.1</span></span><br><span class="line"><span class="string">No. Observations:                5280   AIC:                        -1.654e+04</span></span><br><span class="line"><span class="string">Df Residuals:                    5276   BIC:                        -1.651e+04</span></span><br><span class="line"><span class="string">Df Model:                           3                                         </span></span><br><span class="line"><span class="string">Covariance Type:            nonrobust                                         </span></span><br><span class="line"><span class="string">==============================================================================</span></span><br><span class="line"><span class="string">                 coef    std err          t      P&gt;|t|      [0.025      0.975]</span></span><br><span class="line"><span class="string">------------------------------------------------------------------------------</span></span><br><span class="line"><span class="string">Intercept      0.0199      0.003      6.182      0.000       0.014       0.026</span></span><br><span class="line"><span class="string">logD           0.7166      0.007     99.451      0.000       0.702       0.731</span></span><br><span class="line"><span class="string">days           0.0795      0.010      7.612      0.000       0.059       0.100</span></span><br><span class="line"><span class="string">logtS          0.1786      0.012     14.823      0.000       0.155       0.202</span></span><br><span class="line"><span class="string">==============================================================================</span></span><br><span class="line"><span class="string">Omnibus:                      283.811   Durbin-Watson:                   0.017</span></span><br><span class="line"><span class="string">Prob(Omnibus):                  0.000   Jarque-Bera (JB):              329.880</span></span><br><span class="line"><span class="string">Skew:                           0.603   Prob(JB):                     2.33e-72</span></span><br><span class="line"><span class="string">Kurtosis:                       3.215   Cond. No.                         32.5</span></span><br><span class="line"><span class="string">==============================================================================</span></span><br><span class="line"><span class="string">Notes:</span></span><br><span class="line"><span class="string">[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
-<p>可见“条件数很大、强多重共线性提示”已经没有了，进行归一化之后的回归效果与没有归一化的一样。</p>
+<p>可见“条件数很大、可能存在强多重共线性”提示已经没有了，这说明上一次回归结果中提示的异常正是因为没有归一化引起的。本处回归结果显示，进行归一化之后的回归效果与没有归一化的一样。</p>
 <p>作出归一化处理后的对数价格与模型拟合的对数均衡价格之间的对比图，如下：</p>
 <figure>
 <img src="比特币对数价格与模型预测的对数均衡价格关系时序图.png" alt="比特币对数价格与模型预测的对数均衡价格关系时序图">
@@ -453,7 +454,7 @@ x=\frac{x-x_{min}}{x_{max}-x_{min}}
 log(P)=2.647+0.000217*t+0.363*log(d_t)+0.701*log(\frac{\Delta t}{\Delta
 S})
 \end{equation}\]</span>
-原始值的对数价格与模型值以及标注了公式参数的时序图如下：</p>
+原始值的对数价格、模型值以及标注了公式参数的时序图如下：</p>
 <figure>
 <img src="比特币对数价格vs模型预测值附公式参数.png" alt="比特币对数价格vs模型预测值附公式参数">
 <figcaption aria-hidden="true">比特币对数价格vs模型预测值附公式参数</figcaption>
@@ -462,7 +463,7 @@ S})
 <h2 id="总结">总结</h2>
 <p>首先，本文从经济学基本原理出发，利用挖矿成本与比特币产量计算均衡价格，考虑了摩尔定律和通货膨胀对比特币挖矿算力成本的影响，推导得到了均衡价格与时间、挖矿难度、产量减半之间的关系。</p>
 <p>然后，本文利用数据验证了该公式各变量之间的关系，发现公式中的各自变量项都具有显著的回归参数，证明了模型的有效性。</p>
-<p>从而，利用该模型，可以解释为什么比特币减半后价格会跳跃式大幅增长，且反映出比特币具有正的时间价值，同时解释了比特币挖矿难度为什么至关重要的原因。该模型甚至还揭示了比特币价格最终会趋于平稳的内在驱动原因。</p>
+<p>如此，利用该模型，可以解释为什么比特币减半后价格会跳跃式大幅增长，且反映出比特币具有正的时间价值，同时解释了比特币挖矿难度为什么至关重要的原因。该模型甚至还揭示了比特币价格最终会趋于平稳的内在驱动原因。</p>
 <p>最后，我们可以利用本文得出的比特币定价模型，在市场价格大幅偏离该模型预测值时，进行模型偏离套利。</p>
 
     </div>
