@@ -2834,14 +2834,14 @@ log(P)=&amp;2.65+2.2e(-4)*t \\ &amp;+0.36*log(d_t) \\
 <p>限于能力，本文只对未来一个周期的行情进行预测。</p>
 <span id="more"></span>
 <h2 id="自变量建模">自变量建模</h2>
-<p>本文用<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系">参考文章</a>的公式（11）来对均衡价格进行预测，加上残差后、该公式重述如下：</p>
+<p>本文用<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系">参考文章</a>的公式（11）来对均衡价格进行预测，原式是一个截面模型，加上残差项后、该公式在时序上可表述如下：</p>
 <p><span class="math display">\[\begin{equation} \label{eq01}
 \begin{aligned}
 log(P_t)=&amp;2.65+2.2e(-4)*t \\ &amp;+0.36*log(d_t) \\
 &amp;+0.7*log(\Delta t/\Delta S_t) \\ &amp;+\epsilon_t
 \end{aligned}
 \end{equation}\]</span></p>
-<p>上式本身是一个截面模型，若是想要获得<span class="math inline">\(log(P_t)\)</span>的值，需要对<span class="math inline">\(log(d_t)\)</span>、<span class="math inline">\(log(\Delta t/\Delta S)\)</span>甚至<span class="math inline">\(\epsilon_t\)</span>进行建模。</p>
+<p>若是想要获得<span class="math inline">\(log(P_t)\)</span>的值，需要对<span class="math inline">\(log(d_t)\)</span>、<span class="math inline">\(log(\Delta t/\Delta S)\)</span>甚至<span class="math inline">\(\epsilon_t\)</span>进行建模。</p>
 <p>标注了减半日的模型拟合效果如下：</p>
 <figure>
 <img src="标注了减半日的模型值实际值及残差.png" alt="标注了减半日的模型值实际值及残差">
