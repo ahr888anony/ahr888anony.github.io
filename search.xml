@@ -2830,7 +2830,6 @@ log(P)=&amp;2.65+2.2e(-4)*t \\ &amp;+0.36*log(d_t) \\
     <title>利用比特币均衡价格模型进行未来价格预测</title>
     <url>/2024/12/31/%E5%88%A9%E7%94%A8%E6%AF%94%E7%89%B9%E5%B8%81%E5%9D%87%E8%A1%A1%E4%BB%B7%E6%A0%BC%E6%A8%A1%E5%9E%8B%E8%BF%9B%E8%A1%8C%E6%9C%AA%E6%9D%A5%E4%BB%B7%E6%A0%BC%E9%A2%84%E6%B5%8B/</url>
     <content><![CDATA[<p>本文利用最近提出的比特币均衡价格模型（<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系">参见此处</a>），结合对未来难度、产量、残差等变量的建模，对比特币未来均衡价格进行预测，并通过生成随机数残差差分对未来价格进行模拟。</p>
-<p>期望本文中的均衡价格模型、能够做成类似S2F（<a href="https://www.bitcoinmagazinepro.com/charts/stock-to-flow-model/">参见此处</a>）模型一样的、辅助投资者参考的工具。</p>
 <p>限于能力，本文只对未来一个周期的行情进行预测。</p>
 <span id="more"></span>
 <h2 id="自变量建模">自变量建模</h2>
