@@ -2829,7 +2829,7 @@ log(P)=&amp;2.65+2.2e(-4)*t \\ &amp;+0.36*log(d_t) \\
   <entry>
     <title>利用比特币均衡价格模型进行未来价格预测</title>
     <url>/2024/12/31/%E5%88%A9%E7%94%A8%E6%AF%94%E7%89%B9%E5%B8%81%E5%9D%87%E8%A1%A1%E4%BB%B7%E6%A0%BC%E6%A8%A1%E5%9E%8B%E8%BF%9B%E8%A1%8C%E6%9C%AA%E6%9D%A5%E4%BB%B7%E6%A0%BC%E9%A2%84%E6%B5%8B/</url>
-    <content><![CDATA[<p>本文利用最近我在文章（<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系">参见此处</a>）中提出的模型，结合对未来难度、产量、残差等变量的建模，来对比特币未来均衡价格进行预测，并通过生成随机数残差差分对未来价格进行模拟。</p>
+    <content><![CDATA[<p>本文利用最近提出的比特币均衡价格模型（<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系">参见此处</a>），结合对未来难度、产量、残差等变量的建模，对比特币未来均衡价格进行预测，并通过生成随机数残差差分对未来价格进行模拟。</p>
 <p>期望本文中的均衡价格模型、能够做成类似S2F（<a href="https://www.bitcoinmagazinepro.com/charts/stock-to-flow-model/">参见此处</a>）模型一样的、辅助投资者参考的工具。</p>
 <p>限于能力，本文只对未来一个周期的行情进行预测。</p>
 <span id="more"></span>
@@ -2841,7 +2841,7 @@ log(P_t)=&amp;2.65+2.2e(-4)*t \\ &amp;+0.36*log(d_t) \\
 &amp;+0.7*log(\Delta t/\Delta S_t) \\ &amp;+\epsilon_t
 \end{aligned}
 \end{equation}\]</span></p>
-<p>若是想要获得<span class="math inline">\(log(P_t)\)</span>的值，需要对<span class="math inline">\(log(d_t)\)</span>、<span class="math inline">\(log(\Delta t/\Delta S)\)</span>甚至<span class="math inline">\(\epsilon_t\)</span>进行建模。</p>
+<p>若是想要获得<span class="math inline">\(log(P_t)\)</span>的值，需要对<span class="math inline">\(log(d_t)\)</span>、<span class="math inline">\(log(\Delta t/\Delta S_t)\)</span>甚至<span class="math inline">\(\epsilon_t\)</span>进行建模。</p>
 <p>标注了减半日的模型拟合效果如下：</p>
 <figure>
 <img src="标注了减半日的模型值实际值及残差.png" alt="标注了减半日的模型值实际值及残差">
@@ -2885,7 +2885,7 @@ log(d_t)=24.08+0.0014*t
 </figure>
 <p>可见回归系数接近于0、且非常不显著（为0的概率很大），故可认为该项是在均值附近的白噪声。从而此项的未来值预估如下：
 <span class="math display">\[\begin{equation} \label{eq03}
-log(\Delta t/\Delta S)=-6.16
+log(\Delta t/\Delta S_t)=-6.16
 \end{equation}\]</span>
 至此，价格模型只剩下残差项了。该项具有随机性，在每个减半周期内呈现出一定的周期变化，波动范围呈现出减小的趋势。我们先对各减半周期的残差进行统计分析，统计汇总表如下：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">         周期<span class="number">1</span>    周期<span class="number">2</span>     周期<span class="number">3</span>     周期<span class="number">4</span>    周期<span class="number">5</span></span><br><span class="line">count  <span class="number">869.00</span>  <span class="number">1319.00</span>  <span class="number">1402.00</span>  <span class="number">1440.00</span>  <span class="number">255.00</span></span><br><span class="line">mean    -<span class="number">0.22</span>     <span class="number">0.19</span>    -<span class="number">0.13</span>     <span class="number">0.10</span>   -<span class="number">0.09</span></span><br><span class="line">std      <span class="number">0.77</span>     <span class="number">0.98</span>     <span class="number">0.60</span>     <span class="number">0.52</span>    <span class="number">0.18</span></span><br><span class="line"><span class="built_in">min</span>     -<span class="number">2.24</span>    -<span class="number">1.10</span>    -<span class="number">1.21</span>    -<span class="number">0.79</span>   -<span class="number">0.46</span></span><br><span class="line"><span class="number">25</span>%     -<span class="number">0.83</span>    -<span class="number">0.73</span>    -<span class="number">0.61</span>    -<span class="number">0.32</span>   -<span class="number">0.23</span></span><br><span class="line"><span class="number">50</span>%     -<span class="number">0.20</span>    -<span class="number">0.15</span>    -<span class="number">0.15</span>    -<span class="number">0.03</span>   -<span class="number">0.12</span></span><br><span class="line"><span class="number">75</span>%      <span class="number">0.29</span>     <span class="number">1.08</span>     <span class="number">0.22</span>     <span class="number">0.52</span>    <span class="number">0.04</span></span><br><span class="line"><span class="built_in">max</span>      <span class="number">2.33</span>     <span class="number">2.64</span>     <span class="number">1.86</span>     <span class="number">1.23</span>    <span class="number">0.31</span></span><br></pre></td></tr></table></figure>
@@ -2934,7 +2934,7 @@ log(\Delta t/\Delta S)=-6.16
 <ol type="1">
 <li>上述预测价格受到难度模型<span class="math inline">\(\eqref{eq02}\)</span>的影响，该模型忽略了因未来难度波动而偏离线性模型的可能性，且该线性回归过程包含了大量上一减半周期的数据（对应2022.01.01-2024.04.20之间的数据），这部分数据可能会影响减半（2024.04.20）后的线性回归效果，从而产生预测误差；</li>
 <li>在对产量相关项（<span class="math inline">\(log(\Delta t/\Delta
-S)\)</span>）建模时，将该项的随机波动成分忽略、直接采用的减半后均值来进行预估，这也可能带来预测误差。</li>
+S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用的减半后均值来进行预估，这也可能带来预测误差。</li>
 </ol>
 <p>最后，将残差项加入，仍采用前面的自变量模型、来模拟有随机涨落的未来价格。</p>
 <p>我们生成服从<span class="math inline">\(\eqref{eq06}\)</span>、长度为1182（对应预测天数）的随机数序列，该序列随机数累加后的残差序列需要满足条件<span class="math inline">\(\eqref{eq04}\)</span>。</p>
