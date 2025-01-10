@@ -2973,10 +2973,10 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
 <span id="more"></span>
 <h2 id="模型1月价格图">模型1月价格图</h2>
 <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
-<div id="echarts5808" style="width: 900;height: 500px;margin: 0 auto"></div>
+<div id="echarts2015" style="width: 500;height: 500px;margin: 0 auto"></div>
 <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('echarts5808'));
+        var myChart = echarts.init(document.getElementById('echarts2015'));
 
         // 指定图表的配置项和数据
         var option = {
