@@ -2973,10 +2973,10 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
 <span id="more"></span>
 <h2 id="模型1月价格图">模型1月价格图</h2>
 <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
-<div id="echarts2015" style="width: 500;height: 500px;margin: 0 auto"></div>
+<div id="echarts5104" style="width: 100%;height: 400px;margin: 0 auto"></div>
 <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('echarts2015'));
+        var myChart = echarts.init(document.getElementById('echarts5104'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -5719,7 +5719,6 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
     "xAxis": [
         {
             "type": "time",
-            "name": "Time",
             "show": true,
             "scale": false,
             "nameLocation": "end",
@@ -5728,7 +5727,6 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
             "inverse": false,
             "offset": 0,
             "splitNumber": 5,
-            "boundaryGap": false,
             "minInterval": 0,
             "splitLine": {
                 "show": true,
@@ -6013,37 +6011,18 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
             "triggerEvent": false
         }
     ],
-    "dataZoom": [
-        {
-            "show": true,
-            "type": "slider",
-            "showDetail": true,
-            "showDataShadow": true,
-            "realtime": true,
-            "start": 0,
-            "end": 100,
-            "orient": "horizontal",
-            "zoomLock": false,
-            "filterMode": "filter"
-        },
-        {
-            "show": true,
-            "type": "inside",
-            "showDetail": true,
-            "showDataShadow": true,
-            "realtime": true,
-            "start": 0,
-            "end": 100,
-            "orient": "horizontal",
-            "zoomLock": false,
-            "filterMode": "filter",
-            "disabled": false,
-            "zoomOnMouseWheel": true,
-            "moveOnMouseMove": true,
-            "moveOnMouseWheel": true,
-            "preventDefaultMouseMove": true
-        }
-    ]
+    "dataZoom": {
+        "show": true,
+        "type": "slider",
+        "showDetail": true,
+        "showDataShadow": true,
+        "realtime": true,
+        "start": 0,
+        "end": 100,
+        "orient": "horizontal",
+        "zoomLock": false,
+        "filterMode": "filter"
+    }
 };
 
         // 使用刚指定的配置项和数据显示图表。
