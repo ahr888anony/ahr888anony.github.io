@@ -6037,4 +6037,488 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
         <tag>模型</tag>
       </tags>
   </entry>
+  <entry>
+    <title>加密货币市场的beta、市值和动量三因子</title>
+    <url>/2025/04/02/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81%E5%B8%82%E5%9C%BA%E7%9A%84beta%E3%80%81%E5%B8%82%E5%80%BC%E5%92%8C%E5%8A%A8%E9%87%8F%E4%B8%89%E5%9B%A0%E5%AD%90/</url>
+    <content><![CDATA[<p>本文先介绍了因子分析研究的方法，然后聚焦于加密货币市场，对该市场的三个重要因子（beta、市值和动量）进行分析，并利用它们构建投资组合、进行回测，以验证是否能够获得显著且稳定的收益，最后进行总结。</p>
+<span id="more"></span>
+<h2 id="引文">引文</h2>
+<p>虽然关于因子投资的文章和书籍汗牛充栋，但相信大多数人看过那些资料之后、对如何运用因子进行交易仍然是一头雾水。</p>
+<p>正因如此，才有了本文的写作动机：期望读者能够通过本文，了解到如何真正的利用因子进行投资。</p>
+<p>当然，因子投资的应用方法肯定千差万别，本文阐述的仅仅只是其中一种。</p>
+<blockquote>
+<p><font color="red"><strong>声明：</strong></font></p>
+<p><font color="red"><strong>鉴于本人水平有限，错谬之处在所难免，望读者海涵。文中的观点和结论不构成投资建议，读者需自行甄别。</strong></font></p>
+</blockquote>
+<h2 id="前言">前言</h2>
+<p>多因子投资在股票市场上一直是主流的方法，但是在加密市场中可以查到的公开讨论文章数量较少。不过，这并不意味着多因子投资方法在加密货币市场不适用。</p>
+<p>加密市场各币种之间具有较高的相关性，表现出同涨同跌的特征。这种特性实际上很适合构建多空组合，赚取相对收益。多因子分析是筛选出截面相对优劣的绝佳方法。</p>
+<p>另外，在加密货币市场中有很多做空工具，如永续合约和杠杆交易等，能够获取到因子多空对冲收益。这一点是加密市场适合做多因子交易的又一个优势。</p>
+<p>加密市场与股票市场一样，可以构建出很多因子（可以参见LUCIDA的文章<a href="https://medium.com/@Lucida_and_Falcon/lucida-用多因子模型去选赛道-选币种-c514fec4d8b9">见此处</a>）。限于篇幅，本文只对Liu(2019)等人提出的3因子模型（原文参见<a href="https://www.nber.org/system/files/working_papers/w25882/w25882.pdf">此处</a>）中的beta、市值（size）和动量（mom）3个因子进行测试，探究这3个因子是否可以构建出具有显著超额收益的组合。其中动量因子只测试1日动量（mom_1）和1周（7天）动量（mom_7）两种。</p>
+<p>本文的重点不在于提出多因子模型或验证多因子模型的有效性，而在于弄清楚是否可以利用上述3个因子获得真实可交易、稳定且显著的收益。粗俗的讲，我们的目的是赚钱，是尽量在承担相同风险下、更稳定的赚取更多的收益，而不在于解释市场。</p>
+<p>本文首先将会对上述3因子进行统计分析，进而进行单因子及双因子排序分组测试，然后根据分组表现选择投资组合，接着择优进行考虑了交易成本的回测，最后得出结论。</p>
+<h2 id="分析方法">分析方法</h2>
+<p>现将本文用到的因子分析方法集中阐述如下，后文会适时的根据下面介绍的方法进行分析测试。</p>
+<h3 id="因子统计分析">因子统计分析</h3>
+<p>对所研究因子的IC/IR值、因子值统计量、因子相关性等进行分析。</p>
+<p>这些统计可以让我们对研究对象有个大概的把握。</p>
+<h3 id="单因子排序">单因子排序</h3>
+<p>根据单因子值在截面上的相对大小，按照从小到大的顺序，对币种进行分组，总共分成10组。</p>
+<p>用次期收益率根据市值和等权重两种加权方法进行组合，得到每组的收益率时间序列。</p>
+<p>展示出每组的期望收益率情况，作出单因子散点线性回归图，检查因子与收益率之间的关系。</p>
+<h3 id="双因子排序">双因子排序</h3>
+<p>通过控制其中一个因子的分组，对另一个因子进行二次排序，即可得到条件双排的分组。</p>
+<p>由于双排需要更多的合约数量，只需分成<span class="math inline">\(5\cross 5\)</span>的双排分组即可。</p>
+<p>双排后，作出各组通过等权重及市值加权两种方式的收益率期望的对比图，并适时有选择性的筛选一些重点组作出时序图。</p>
+<h3 id="投资组合选择">投资组合选择</h3>
+<p>在完成单、双排分析后，就需要挑选出投资组合，以构建多空组合。</p>
+<p>本文会优先挑选收益率期望值相对较高和较低的组合，做多（long）截面期望收益率较高组合、做空（short）较低组合，来构建市场中性的多空组合。</p>
+<p>再通过统计分析，验证这种组合的收益率是否具有显著溢价。</p>
+<p>要是在这种情况下，因子组合的表现不佳，足以说明该因子不能直接被用于获得超额收益。</p>
+<p>如果选择的组合表现优异，则可以用其组建因子收益率。可以进一步验证这种组合是否对截面各组具有很好的区分度。如果区分较好，则对它的暴露高低会反映组合期望收益率大小。不过限于篇幅，本文不进行这样的讨论。</p>
+<h3 id="模拟交易回测">模拟交易回测</h3>
+<p>在不考虑任何交易成本时，如果组合表现优异，还需要对其进行考虑了交易成本（包括手续费和滑点）的回测，本文进行的回测还会考虑资金费率对持仓的影响。</p>
+<p>在回测时采用复利滚动建仓，这样更能测试出任意时刻资金的收益和回撤情况。</p>
+<h2 id="数据说明">数据说明</h2>
+<ol type="1">
+<li>市值数据来源于<a href="https://coinmarketcap.com">coinmarketcap</a>，用每日收盘时市值（以USD衡量）的对数作为当日的size因子值；</li>
+<li>为了便于做空，标的范围及价格数据限定为币安USDT本位永续合约，包含了历史上已经下架的合约数据；</li>
+<li>数据频率为日频，价格为币安永续合约的收盘价；</li>
+<li>测试币种的范围选取规则为，选取每日在coinmarketcap市值排名前1000名的币，且该日在币安存在可交易U本位永续合约；</li>
+<li>市场因子用BTC来代理，原因可以参见<a href="https://btcrainmaker.com/2023/09/14/加密市场的市场因子/">此处</a>；</li>
+<li>本文将传统意义的无风险利率近似视为0，这样处理有两个原因：一是由于加密货币市场的收益率（绝对值）相对于无风险利率而言通常很大、无风险利率和0差不多；二是我们只关心收益，不关心相对无风险利率的超额收益；</li>
+<li>将各合约与BTC收益率以30天为滚动窗口进行线性回归，回归系数beta即为滚动期末对应合约的beta因子值；</li>
+<li>用1日收盘价格涨跌幅作为mom_1，7日收盘价涨跌幅作为mom_7。</li>
+</ol>
+<p>在进行因子分析之前，需要对数据有个大概了解，至少需要知道每日的交易池里有多少个币种（合约）。作出每日合约数量的时序图，如下：</p>
+<figure>
+<img src="每日合约数量分段时序图.png" alt="每日合约数量分段时序图">
+<figcaption aria-hidden="true">每日合约数量分段时序图</figcaption>
+</figure>
+<p>上图左上第一张图为全时序的合约数量走势，后面3张分别展示了将全时间段等分成3段的合约数量走势。</p>
+<p>可见符合条件的合约数量呈现增长趋势，大体上自2020年6月之后便有了25个以上的合约。</p>
+<h2 id="因子统计分析-1">因子统计分析</h2>
+<p>三因子的描述性统计值如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">             beta        size       mom_1       mom_7</span><br><span class="line">count  <span class="number">282147.000</span>  <span class="number">293893.000</span>  <span class="number">293517.000</span>  <span class="number">291106.000</span></span><br><span class="line">mean        <span class="number">1.213</span>      <span class="number">19.903</span>       <span class="number">0.001</span>       <span class="number">0.004</span></span><br><span class="line">std         <span class="number">0.510</span>       <span class="number">1.801</span>       <span class="number">0.066</span>       <span class="number">0.178</span></span><br><span class="line"><span class="built_in">min</span>        -<span class="number">3.541</span>      <span class="number">15.834</span>      -<span class="number">0.752</span>      -<span class="number">0.959</span></span><br><span class="line"><span class="number">25</span>%         <span class="number">0.918</span>      <span class="number">18.596</span>      -<span class="number">0.031</span>      -<span class="number">0.090</span></span><br><span class="line"><span class="number">50</span>%         <span class="number">1.187</span>      <span class="number">19.607</span>      -<span class="number">0.000</span>      -<span class="number">0.007</span></span><br><span class="line"><span class="number">75</span>%         <span class="number">1.506</span>      <span class="number">20.890</span>       <span class="number">0.029</span>       <span class="number">0.077</span></span><br><span class="line"><span class="built_in">max</span>         <span class="number">7.883</span>      <span class="number">28.374</span>       <span class="number">4.500</span>       <span class="number">5.592</span></span><br></pre></td></tr></table></figure>
+<p>计算三个因子的秩IC（下文的IC值均为秩IC），时序值的描述性统计结果如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">           beta      size     mom_1     mom_7</span><br><span class="line">count  <span class="number">1923.000</span>  <span class="number">1953.000</span>  <span class="number">1952.000</span>  <span class="number">1946.000</span></span><br><span class="line">mean     -<span class="number">0.011</span>     <span class="number">0.018</span>    -<span class="number">0.036</span>    -<span class="number">0.044</span></span><br><span class="line">std       <span class="number">0.249</span>     <span class="number">0.251</span>     <span class="number">0.224</span>     <span class="number">0.240</span></span><br><span class="line"><span class="built_in">min</span>      -<span class="number">1.000</span>    -<span class="number">1.000</span>    -<span class="number">1.000</span>    -<span class="number">1.000</span></span><br><span class="line"><span class="number">25</span>%      -<span class="number">0.154</span>    -<span class="number">0.128</span>    -<span class="number">0.150</span>    -<span class="number">0.187</span></span><br><span class="line"><span class="number">50</span>%      -<span class="number">0.012</span>     <span class="number">0.011</span>    -<span class="number">0.037</span>    -<span class="number">0.055</span></span><br><span class="line"><span class="number">75</span>%       <span class="number">0.131</span>     <span class="number">0.161</span>     <span class="number">0.080</span>     <span class="number">0.081</span></span><br><span class="line"><span class="built_in">max</span>       <span class="number">1.000</span>     <span class="number">1.000</span>     <span class="number">1.000</span>     <span class="number">1.000</span></span><br></pre></td></tr></table></figure>
+<p>IC、IC绝对值大于各临界值及IR值的汇总表如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">       |IC|&gt;<span class="number">0.02</span>  IC&gt;<span class="number">0.02</span>  |IC|&gt;<span class="number">0.05</span>  IC&gt;<span class="number">0.05</span>  |IC|&gt;<span class="number">0.1</span>  IC&gt;<span class="number">0.1</span>  |IC|&gt;<span class="number">0.2</span>  IC&gt;<span class="number">0.2</span>     IR</span><br><span class="line">beta       <span class="number">0.916</span>    <span class="number">0.431</span>      <span class="number">0.801</span>    <span class="number">0.381</span>     <span class="number">0.622</span>   <span class="number">0.296</span>     <span class="number">0.354</span>   <span class="number">0.165</span> -<span class="number">0.043</span></span><br><span class="line">size       <span class="number">0.937</span>    <span class="number">0.487</span>      <span class="number">0.814</span>    <span class="number">0.429</span>     <span class="number">0.632</span>   <span class="number">0.331</span>     <span class="number">0.353</span>   <span class="number">0.200</span>  <span class="number">0.071</span></span><br><span class="line">mom_1      <span class="number">0.915</span>    <span class="number">0.374</span>      <span class="number">0.774</span>    <span class="number">0.305</span>     <span class="number">0.564</span>   <span class="number">0.212</span>     <span class="number">0.261</span>   <span class="number">0.092</span> -<span class="number">0.159</span></span><br><span class="line">mom_7      <span class="number">0.933</span>    <span class="number">0.362</span>      <span class="number">0.816</span>    <span class="number">0.304</span>     <span class="number">0.627</span>   <span class="number">0.218</span>     <span class="number">0.341</span>   <span class="number">0.117</span> -<span class="number">0.184</span></span><br></pre></td></tr></table></figure>
+<p>可见3个因子的IC绝对值大于0.02的比例较高，信息比率绝对值最大的为周动量mom_7。</p>
+<p>作出IC值的累积和（cumsum）时序图如下：</p>
+<figure>
+<img src="三因子累积IC时序图.png" alt="三因子累积IC时序图">
+<figcaption aria-hidden="true">三因子累积IC时序图</figcaption>
+</figure>
+<p>可见几个因子的累积IC值均表现出持续上升或下降的趋势，表明这几个因子预测能力持续有效。</p>
+<p>用IC值衡量的三因子的相关性如下：</p>
+<figure>
+<img src="因子IC相关性热图.png" alt="因子IC相关性热图">
+<figcaption aria-hidden="true">因子IC相关性热图</figcaption>
+</figure>
+<p>可见：</p>
+<ol type="1">
+<li>beta因子与另几个因子呈现负IC相关性；</li>
+<li>mom_1与mom_7表现出较高的正相关；</li>
+<li>动量因子（mom_1、mom_7）与beta、size因子的相关性很低；</li>
+<li>beta因子与size因子呈现出较高的负相关性。</li>
+</ol>
+<h2 id="单因子">单因子</h2>
+<h3 id="beta因子">beta因子</h3>
+<p>将每日的beta值按照从大到小的顺序排序，分组成10个组进行组合，即为因子单排组合。</p>
+<p>下面分成等权重加权和市值加权两种情况分析。</p>
+<h4 id="等权重加权">等权重加权</h4>
+<p>B单因子等权重加权各组期望收益率:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">           B1        B2       B3       B4       B5       B6       B7       B8       B9     B10      HML</span><br><span class="line">stat                                                                                                   </span><br><span class="line">mean   <span class="number">0.127</span>   <span class="number">0.201</span> **   <span class="number">0.116</span>    <span class="number">0.153</span>    <span class="number">0.144</span>    <span class="number">0.175</span>    <span class="number">0.174</span>   <span class="number">0.216</span> *   <span class="number">0.191</span>   <span class="number">0.206</span>    <span class="number">0.078</span> </span><br><span class="line">t     (<span class="number">1.259</span>)    (<span class="number">1.97</span>)  (<span class="number">1.149</span>)  (<span class="number">1.371</span>)  (<span class="number">1.291</span>)  (<span class="number">1.522</span>)  (<span class="number">1.515</span>)  (<span class="number">1.777</span>)  (<span class="number">1.613</span>)  (<span class="number">1.59</span>)  (<span class="number">1.003</span>)</span><br></pre></td></tr></table></figure>
+<p>表中的t值为Newey-West调整后的值（下同），<span class="math inline">\(HML=B10-B1\)</span>。</p>
+<p>作出散点图：</p>
+<figure>
+<img src="beta因子各组期望收益率-等权重加权.png" alt="等权重加权beta因子各组期望收益率">
+<figcaption aria-hidden="true">等权重加权beta因子各组期望收益率</figcaption>
+</figure>
+<p>可见beta最小组也与BTC有0.56的相关性。各组的beta均值与期望收益率呈现出正相关性，这与CAPM模型描述的相似，但线性回归结果不是很显著。</p>
+<p>各组时序表现情况如下：</p>
+<figure>
+<img src="beta因子各组收益率时序图-等权重加权.png" alt="等权重加权beta因子各组收益率时序图">
+<figcaption aria-hidden="true">等权重加权beta因子各组收益率时序图</figcaption>
+</figure>
+<p>可见在上一轮牛市期间，B2和B8组表现出相对其他组更优异的收益。但是在熊市时，却都出现非常大的回撤。各分组的收益分层并不稳定。</p>
+<h4 id="市值加权">市值加权</h4>
+<p>B单因子市值加权各组期望收益率:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">           B1       B2       B3       B4       B5       B6       B7       B8      B9      B10       HML</span><br><span class="line">stat                                                                                                   </span><br><span class="line">mean  <span class="number">0.159</span> *  <span class="number">0.187</span> *   <span class="number">0.146</span>    <span class="number">0.164</span>    <span class="number">0.163</span>    <span class="number">0.153</span>    <span class="number">0.133</span>   <span class="number">0.195</span> *  <span class="number">0.122</span>    <span class="number">0.101</span>    -<span class="number">0.058</span> </span><br><span class="line">t     (<span class="number">1.775</span>)  (<span class="number">1.917</span>)  (<span class="number">1.535</span>)  (<span class="number">1.585</span>)  (<span class="number">1.404</span>)  (<span class="number">1.348</span>)  (<span class="number">1.145</span>)  (<span class="number">1.646</span>)  (<span class="number">1.06</span>)  (<span class="number">0.821</span>)  (-<span class="number">0.632</span>)</span><br></pre></td></tr></table></figure>
+<p>散点图如下：</p>
+<figure>
+<img src="beta因子各组期望收益率-市值加权.png" alt="市值加权beta因子各组期望收益率">
+<figcaption aria-hidden="true">市值加权beta因子各组期望收益率</figcaption>
+</figure>
+<p>各组时序图如下：</p>
+<figure>
+<img src="beta因子各组收益率时序图-市值加权.png" alt="市值加权beta因子各组收益率时序图">
+<figcaption aria-hidden="true">市值加权beta因子各组收益率时序图</figcaption>
+</figure>
+<h4 id="组合">组合</h4>
+<p>可见在等权重与市值两种加权方式下，beta因子各组的期望收益率差异很大，一个呈正相关、另一个呈负相关，说明市值对beta因子有影响。</p>
+<p>beta因子单排不论是市值还是等权重加权，均没有表现出稳定的收益分层。说明该因子是一个风险因子。</p>
+<p>我们可以尝试在等权重组合里选择如下多空组合：</p>
+<p><span class="math display">\[\begin{equation} \label{eq01}
+port01_B=(B2+B8)/2-B3
+\end{equation}\]</span></p>
+<p>在不考虑交易成本时收益效果如下：</p>
+<figure>
+<img src="beta因子组合1收益时序图.png" alt="beta因子组合1收益时序图">
+<figcaption aria-hidden="true">beta因子组合1收益时序图</figcaption>
+</figure>
+<p>可见虽然该组合各子组合的波动很大，但是多空组合后最大回撤显著降低。虽然正收益不是很稳定，但是该组合具有较显著的正收益，且在上述各分段时间内都具有正的夏普率，说明该因子具有一定的收益能力。</p>
+<p>虽然，组合收益不及预期，但是我们仍然进行考虑了交易成本的回测，以观察beta因子的换手率。考虑了0.001交易成本及资金费率的组合1的表现如下：</p>
+<figure>
+<img src="beta因子组合1收益时序图-1倍杠杆0.001成本.png" alt="beta因子组合1收益时序图-1倍杠杆0.001成本">
+<figcaption aria-hidden="true">beta因子组合1收益时序图-1倍杠杆0.001成本</figcaption>
+</figure>
+<p>可见该因子组合的换手率较高，这符合逻辑，因为通过30日收益率回归得到的beta因子本身不够稳定，每日分组变化较大。长期来看，组合的收益几乎完全被成本磨损掉了。</p>
+<h3 id="市值因子">市值因子</h3>
+<p>在股票市场里，小市值一般具有相对大市值而言更高的期望收益率。我们将讨论加密市场的市值因子是否表现出与股票市场相似的特征。</p>
+<p>仍然分为市值加权和等权重加权两种方法组合。</p>
+<h4 id="等权重加权-1">等权重加权</h4>
+<p>S单因子等权重加权各组期望收益率:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">            S1        S2       S3       S4       S5       S6      S7       S8       S9      S10      HML</span><br><span class="line">stat                                                                                                    </span><br><span class="line">mean  <span class="number">0.284</span> **  <span class="number">0.251</span> **   <span class="number">0.076</span>    <span class="number">0.118</span>   <span class="number">0.193</span> *    <span class="number">0.13</span>   <span class="number">0.178</span>    <span class="number">0.102</span>    <span class="number">0.111</span>   <span class="number">0.157</span> *  -<span class="number">0.126</span> </span><br><span class="line">t      (<span class="number">2.142</span>)   (<span class="number">2.023</span>)  (<span class="number">0.625</span>)  (<span class="number">1.004</span>)  (<span class="number">1.774</span>)  (<span class="number">1.139</span>)  (<span class="number">1.49</span>)  (<span class="number">0.964</span>)  (<span class="number">1.106</span>)   (<span class="number">1.74</span>)  (-<span class="number">1.45</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望值散点图如下：</p>
+<figure>
+<img src="size因子各组期望收益率-等权重加权.png" alt="等权重加权size因子各组期望收益率">
+<figcaption aria-hidden="true">等权重加权size因子各组期望收益率</figcaption>
+</figure>
+<p>可见等权重下，各组的size均值与期望收益率之间呈现负相关性，也就是说小市值的币种相较于大市值具有溢价，不过对这一相关性的线性回归不太显著。</p>
+<p>各组的时序图如下：</p>
+<figure>
+<img src="size因子各组收益率时序图-等权重加权.png" alt="等权重加权size因子各组收益率时序图">
+<figcaption aria-hidden="true">等权重加权size因子各组收益率时序图</figcaption>
+</figure>
+<p>可见各组的分层现象并不稳定，如：S7组在20-21年间的相对表现很好，但是在21-23年间S7的相对表现就非常糟糕；S1组在20-21年间的表现一般，但是在22-25年间的相对表现就变得很好；S3组在20-21年及23-25年相对表现很差，但是在21-23年间的相对表现有很长一段时间不太差。</p>
+<h4 id="市值加权-1">市值加权</h4>
+<p>S单因子市值加权各组期望收益率:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">           S1        S2       S3       S4       S5       S6       S7       S8       S9       S10       HML</span><br><span class="line">stat                                                                                                      </span><br><span class="line">mean  <span class="number">0.258</span> *  <span class="number">0.245</span> **   <span class="number">0.076</span>    <span class="number">0.122</span>   <span class="number">0.189</span> *   <span class="number">0.135</span>    <span class="number">0.182</span>    <span class="number">0.101</span>    <span class="number">0.118</span>   <span class="number">0.177</span> **   -<span class="number">0.081</span> </span><br><span class="line">t     (<span class="number">1.947</span>)   (<span class="number">1.976</span>)  (<span class="number">0.623</span>)  (<span class="number">1.038</span>)  (<span class="number">1.737</span>)  (<span class="number">1.186</span>)  (<span class="number">1.517</span>)  (<span class="number">0.956</span>)  (<span class="number">1.173</span>)   (<span class="number">2.276</span>)  (-<span class="number">0.859</span>)</span><br></pre></td></tr></table></figure>
+<p>散点图如下：</p>
+<figure>
+<img src="size因子各组期望收益率-市值加权.png" alt="市值加权size因子各组期望收益率">
+<figcaption aria-hidden="true">市值加权size因子各组期望收益率</figcaption>
+</figure>
+<p>可见市值因子在小市值区域有较显著的溢价。</p>
+<p>各组时序图：</p>
+<figure>
+<img src="size因子各组收益率时序图-市值加权.png" alt="市值加权size因子各组收益率时序图">
+<figcaption aria-hidden="true">市值加权size因子各组收益率时序图</figcaption>
+</figure>
+<p>可见，与等权重一样，各组的分层并不稳定。</p>
+<h4 id="组合-1">组合</h4>
+<p>与beta单因子分析一样，我们构建单size分组、等权重加权下、最优多空对冲投资组合，如下：</p>
+<p><span class="math display">\[\begin{equation} \label{eq02}
+port02_S=S1-B3
+\end{equation}\]</span></p>
+<p>在不考虑交易成本时，该组合的表现如下：</p>
+<figure>
+<img src="size因子组合2收益时序图.png" alt="size因子组合2收益时序图">
+<figcaption aria-hidden="true">size因子组合2收益时序图</figcaption>
+</figure>
+<p>可见组合2的效果较好，长期的几何平均年化收益率达到0.9、夏普率1.53、最大回撤0.37，这一组合似乎能够获得较显著稳健的收益。</p>
+<p>我们进一步考虑交易成本为0.001（手续费及滑点）时，组合2的表现，结果如下：</p>
+<figure>
+<img src="size因子组合2收益时序图-1倍杠杆0.001成本.png" alt="size因子组合2收益时序图-1倍杠杆0.001成本">
+<figcaption aria-hidden="true">size因子组合2收益时序图-1倍杠杆0.001成本</figcaption>
+</figure>
+<p>上图中ann指的几何平均年化收益率、MDD指的最大回撤、sharpe指的夏普率、tv指的是组合日度再平衡的换手率、fr指的是在回测区间内被收取的总资金费率值、com指的考虑了滑点的总交易成本。后文图中标注均与此同。</p>
+<p>可见组合2的换手率不高，该组合虽相较于0成本、0资金费率测试有所下降，但是总体而言仍然是比较好的，可以获得较稳定的正收益。</p>
+<p>分段展示：</p>
+<figure>
+<img src="size因子组合2收益时序图-1倍杠杆0.001成本-分段.png" alt="size因子组合2收益时序图-1倍杠杆0.001成本-分段">
+<figcaption aria-hidden="true">size因子组合2收益时序图-1倍杠杆0.001成本-分段</figcaption>
+</figure>
+<p>最近3年的逐年展示：</p>
+<figure>
+<img src="size因子组合2收益时序图-1倍杠杆0.001成本-逐年.png" alt="size因子组合2收益时序图-1倍杠杆0.001成本-逐年">
+<figcaption aria-hidden="true">size因子组合2收益时序图-1倍杠杆0.001成本-逐年</figcaption>
+</figure>
+<p>对数展示：</p>
+<figure>
+<img src="size因子组合2收益时序图-1倍杠杆0.001成本-对数.png" alt="size因子组合2收益时序图-1倍杠杆0.001成本-对数">
+<figcaption aria-hidden="true">size因子组合2收益时序图-1倍杠杆0.001成本-对数</figcaption>
+</figure>
+<p>上文中所采用的投资组合只是作为示例，已经可以看出即便是利用单市值因子就可以获得风险溢价。</p>
+<h3 id="mom1因子">mom1因子</h3>
+<p>动量因子是一个历史悠久的因子，广泛存在于各个市场，表现出优异的跨市场溢价能力。那么它在加密市场中是否也能大放异彩？我们对此进行研究。</p>
+<p>通过上文IC分析可见，动量因子的IC累积值比beta和size因子的更稳定、持续、陡峭，似乎意味着它能够获得更显著的收益。我们先从1日动量开始。</p>
+<h4 id="等权重加权-2">等权重加权</h4>
+<p>M1_单因子等权重加权各组期望收益率:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">         M1_1     M1_2     M1_3      M1_4      M1_5      M1_6      M1_7     M1_8     M1_9    M1_10      HML</span><br><span class="line">stat                                                                                                       </span><br><span class="line">mean    <span class="number">0.01</span>    <span class="number">0.18</span> *   <span class="number">0.106</span>   <span class="number">0.266</span> **  <span class="number">0.242</span> **  <span class="number">0.226</span> **  <span class="number">0.216</span> **    <span class="number">0.2</span> *   <span class="number">0.172</span>    <span class="number">0.031</span>    <span class="number">0.021</span> </span><br><span class="line">t     (<span class="number">0.084</span>)  (<span class="number">1.646</span>)  (<span class="number">0.954</span>)   (<span class="number">2.245</span>)    (<span class="number">2.26</span>)   (<span class="number">1.962</span>)   (<span class="number">2.021</span>)  (<span class="number">1.809</span>)  (<span class="number">1.471</span>)  (<span class="number">0.268</span>)  (<span class="number">0.279</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望值散点图如下：</p>
+<figure>
+<img src="mom1因子各组期望收益率-等权重加权.png" alt="mom1因子各组期望收益率-等权重加权">
+<figcaption aria-hidden="true">mom1因子各组期望收益率-等权重加权</figcaption>
+</figure>
+<p>各组时序图：</p>
+<figure>
+<img src="mom1因子各组收益率时序图-等权重加权.png" alt="mom1因子各组收益率时序图-等权重加权">
+<figcaption aria-hidden="true">mom1因子各组收益率时序图-等权重加权</figcaption>
+</figure>
+<p>可见1日动量因子的分层效应很显著，M1_4、M1_5组（中等动量组）在各时间段里基本上都处于表现很好的组，M1_1（动量最低组）、M1_10（动量最高组）的表现在各时间段的表现都处于最差组。说明在等权重加权下，1日动量表现出动量崩溃效应，这与很多其他市场中的结论一样。</p>
+<h4 id="市值加权-2">市值加权</h4>
+<p>M1_单因子市值加权各组期望收益率:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">          M1_1      M1_2     M1_3      M1_4      M1_5     M1_6      M1_7     M1_8     M1_9    M1_10       HML</span><br><span class="line">stat                                                                                                         </span><br><span class="line">mean   -<span class="number">0.031</span>   <span class="number">0.201</span> **   <span class="number">0.042</span>   <span class="number">0.237</span> **  <span class="number">0.189</span> **  <span class="number">0.189</span> *  <span class="number">0.229</span> **   <span class="number">0.18</span> *  <span class="number">0.194</span> *  <span class="number">0.215</span> *  <span class="number">0.246</span> **</span><br><span class="line">t     (-<span class="number">0.242</span>)   (<span class="number">2.034</span>)  (<span class="number">0.399</span>)   (<span class="number">2.327</span>)   (<span class="number">2.005</span>)  (<span class="number">1.753</span>)   (<span class="number">2.386</span>)  (<span class="number">1.732</span>)  (<span class="number">1.663</span>)  (<span class="number">1.711</span>)   (<span class="number">2.289</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望值散点图如下：</p>
+<figure>
+<img src="mom1因子各组期望收益率-市值加权.png" alt="mom1因子各组期望收益率-市值加权">
+<figcaption aria-hidden="true">mom1因子各组期望收益率-市值加权</figcaption>
+</figure>
+<p>可见在市值加权下，1日动量因子的表现与等权重加权的发生了变化，说明市值因子对动量因子有影响。但是在动量最小组（M1_1）、中等动量组（M1_4、M1_5等）的结论仍然成立，只是动量最大组（M1_10）的结论不成立了，没表现出显著的动量崩溃效应。</p>
+<p>各组时序图：</p>
+<figure>
+<img src="mom1因子各组收益率时序图-市值加权.png" alt="mom1因子各组收益率时序图-市值加权">
+<figcaption aria-hidden="true">mom1因子各组收益率时序图-市值加权</figcaption>
+</figure>
+<p>通过时序图可以看出在市值加权下，动量最高组M1_10在牛市阶段（20-21年）表现优异、好于其他组，呈现正的动量效应，但是在熊市（21末-23年）则表现很差。</p>
+<h4 id="组合-2">组合</h4>
+<p>对1日动量，我们以等权重加权分析为主。故本处以等权重方式构建投资组合，组合如下：</p>
+<p><span class="math display">\[\begin{equation} \label{eq03}
+port03_{M1}=(M1\_4+M1\_5)/2-(M1\_1+M1\_10)/2
+\end{equation}\]</span></p>
+<p>不考虑交易成本时的表现如下：</p>
+<figure>
+<img src="mom1因子组合3收益时序图.png" alt="mom1因子组合3收益时序图">
+<figcaption aria-hidden="true">mom1因子组合3收益时序图</figcaption>
+</figure>
+<p>可见在不考虑交易成本时，1日动量因子的表现非常优异，具有显著、稳定的溢价，组合的长期年化收益率达到116%、最大回撤43%、夏普率2.14。</p>
+<p>在考虑率0.001的交易成本和资金费率等因素后，组合3的表现如下：</p>
+<figure>
+<img src="mom1因子组合3收益时序图-1倍杠杆0.001成本.png" alt="mom1因子组合3收益时序图-1倍杠杆0.001成本">
+<figcaption aria-hidden="true">mom1因子组合3收益时序图-1倍杠杆0.001成本</figcaption>
+</figure>
+<p>可见，考虑了真实交易成本后，组合3的溢价能力消失。</p>
+<p>产生这样结果的原因是1日动量因子的变化太剧烈、频繁，导致投资组合每日交易的换手率高达2.82，产生过高的交易成本，收益不能覆盖交易成本，最后发生亏损。这是一个典型的不考虑交易成本和考虑交易成本后结论完全不一样的例子。</p>
+<p>由于最终效果不佳，没必要进一步作出分段图等。</p>
+<h3 id="mom7因子">mom7因子</h3>
+<p>上文对1日动量组合进行考虑了成本的测试，最终因为换手率过高，导致该因子组合不能直接在真实交易上获取稳定收益，促使我们思考通过更大周期的动量来降低换手率。因此本处对7日（1周）动量进行测试。</p>
+<h4 id="等权重加权-3">等权重加权</h4>
+<p>M7_单因子等权重加权各组期望收益率:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">         M7_1     M7_2     M7_3     M7_4     M7_5     M7_6     M7_7    M7_8     M7_9    M7_10       HML</span><br><span class="line">stat                                                                                                   </span><br><span class="line">mean   <span class="number">0.033</span>    <span class="number">0.164</span>   <span class="number">0.205</span> *   <span class="number">0.177</span>   <span class="number">0.196</span> *    <span class="number">0.16</span>   <span class="number">0.22</span> **  <span class="number">0.138</span>    <span class="number">0.182</span>   <span class="number">0.217</span> *  <span class="number">0.184</span> **</span><br><span class="line">t     (<span class="number">0.284</span>)  (<span class="number">1.421</span>)  (<span class="number">1.814</span>)  (<span class="number">1.608</span>)  (<span class="number">1.737</span>)  (<span class="number">1.436</span>)   (<span class="number">1.97</span>)  (<span class="number">1.27</span>)  (<span class="number">1.605</span>)  (<span class="number">1.793</span>)   (<span class="number">2.124</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望收益率散点图如下：</p>
+<p><img src="mom7因子各组期望收益率-等权重加权.png" alt="mom7因子各组期望收益率-等权重加权">可见1周动量表现出正动量效应。</p>
+<p>各组收益时序图：</p>
+<figure>
+<img src="mom7因子各组收益率时序图-等权重加权.png" alt="mom7因子各组收益率时序图-等权重加权">
+<figcaption aria-hidden="true">mom7因子各组收益率时序图-等权重加权</figcaption>
+</figure>
+<p>由时序图可见：最高动量组在牛市（20-21）时表现很好，但是在熊市（21末-23初）和调整市（23-25）表现不佳；最低动量组基本全时段表现均垫底。等权重加权下该因子的分层不是很稳定。</p>
+<h4 id="市值加权-3">市值加权</h4>
+<p>M7_单因子市值加权各组期望收益率:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">          M7_1     M7_2     M7_3     M7_4     M7_5    M7_6      M7_7     M7_8      M7_9    M7_10        HML</span><br><span class="line">stat                                                                                                       </span><br><span class="line">mean   -<span class="number">0.046</span>    <span class="number">0.111</span>   <span class="number">0.179</span> *   <span class="number">0.155</span>   <span class="number">0.183</span> *  <span class="number">0.132</span>   <span class="number">0.215</span> **  <span class="number">0.199</span> *  <span class="number">0.269</span> **  <span class="number">0.29</span> **  <span class="number">0.336</span> ***</span><br><span class="line">t     (-<span class="number">0.366</span>)  (<span class="number">1.071</span>)  (<span class="number">1.723</span>)  (<span class="number">1.442</span>)  (<span class="number">1.892</span>)  (<span class="number">1.28</span>)   (<span class="number">2.151</span>)  (<span class="number">1.935</span>)   (<span class="number">2.298</span>)  (<span class="number">2.377</span>)    (<span class="number">2.944</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望收益率散点图如下：</p>
+<figure>
+<img src="mom7因子各组期望收益率-市值加权.png" alt="mom7因子各组期望收益率-市值加权">
+<figcaption aria-hidden="true">mom7因子各组期望收益率-市值加权</figcaption>
+</figure>
+<p>可见在市值加权下1周动量值与期望收益率的单调性非常好，表现出较显著的正动量效应。这一结论与等权重加权有一定的差异，说明市值对1周动量有影响。</p>
+<p>各组收益时序图：</p>
+<figure>
+<img src="mom7因子各组收益率时序图-市值加权.png" alt="mom7因子各组收益率时序图-市值加权">
+<figcaption aria-hidden="true">mom7因子各组收益率时序图-市值加权</figcaption>
+</figure>
+<p>可见1周动量最高的两组M7_9、M7_10仍然是在牛市时表现最好，在熊市时不佳；最低动量组M7_1在全时段几乎都垫底。</p>
+<h4 id="组合-3">组合</h4>
+<p>鉴于1周动量的市值加权比等权重加权表现更好，故采取组内市值加权法，选用如下投资组合：</p>
+<p><span class="math display">\[\begin{equation} \label{eq04}
+port04_{M7}=(M7\_9+M7\_10)/2-M7\_1
+\end{equation}\]</span></p>
+<p>不考虑交易成本时，表现如下：</p>
+<figure>
+<img src="mom7因子组合4收益时序图.png" alt="mom7因子组合4收益时序图">
+<figcaption aria-hidden="true">mom7因子组合4收益时序图</figcaption>
+</figure>
+<p>可见不考虑成本时，该组合具有显著的溢价，但是并不如不考虑成本时的1日动量稳定。长期复合年化收益率139%、最大回撤71%、夏普率1.48，可见最大回撤过大。</p>
+<p>考虑0.001成本及资金费率时，表现如下：</p>
+<figure>
+<img src="mom7因子组合4收益时序图-1倍杠杆0.001成本.png" alt="mom7因子组合4收益时序图-1倍杠杆0.001成本">
+<figcaption aria-hidden="true">mom7因子组合4收益时序图-1倍杠杆0.001成本</figcaption>
+</figure>
+<p>可见1周动量的换手率虽然相较于1日动量有所下降，但是仍然太大，以至于组合收益不能抵消交易成本，使最终的表现较差。</p>
+<h2 id="因子双排">因子双排</h2>
+<p>本处总共进行beta-size、mom1-size、mom1-beta三种双排，选为控制变量的因子应该具有值更稳定的特性，不应该变动频繁、剧烈，故三种双排分别选择size、size、beta作为控制变量。</p>
+<p>考虑到篇幅，本处不再进行7日动量与其他因子双排的展示。</p>
+<h3 id="beta-size双排">beta-size双排</h3>
+<p>上文关于beta因子在等权重加权和市值加权下表现不一样，可以通过控制size对beta进行二次分组，以抵消市值对因子组合的影响。我们分别作出等权重和市值两种加权方式下各组的表现，以验证双排是否可以起到这样的效果。</p>
+<h4 id="等权重加权-4">等权重加权</h4>
+<p>B-S各组等权重加权收益率期望表:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">              B1        B2       B3       B4         B5       HML</span><br><span class="line">S1/mean   <span class="number">0.185</span>     <span class="number">0.166</span>   <span class="number">0.271</span> *   <span class="number">0.109</span>   <span class="number">0.429</span> ***  <span class="number">0.244</span> **</span><br><span class="line">S1/t     (<span class="number">1.472</span>)    (<span class="number">1.23</span>)  (<span class="number">1.881</span>)  (<span class="number">0.755</span>)    (<span class="number">2.584</span>)   (<span class="number">2.282</span>)</span><br><span class="line">S2/mean   <span class="number">0.159</span>     <span class="number">0.189</span>    <span class="number">0.046</span>    <span class="number">0.104</span>       <span class="number">0.09</span>    -<span class="number">0.069</span> </span><br><span class="line">S2/t      (<span class="number">1.29</span>)   (<span class="number">1.398</span>)  (<span class="number">0.367</span>)  (<span class="number">0.772</span>)    (<span class="number">0.647</span>)  (-<span class="number">0.759</span>)</span><br><span class="line">S3/mean   <span class="number">0.148</span>     <span class="number">0.169</span>    <span class="number">0.117</span>    <span class="number">0.184</span>      <span class="number">0.197</span>     <span class="number">0.049</span> </span><br><span class="line">S3/t     (<span class="number">1.287</span>)   (<span class="number">1.473</span>)   (<span class="number">0.95</span>)  (<span class="number">1.492</span>)    (<span class="number">1.513</span>)   (<span class="number">0.595</span>)</span><br><span class="line">S4/mean   <span class="number">0.115</span>     <span class="number">0.165</span>    <span class="number">0.009</span>    <span class="number">0.124</span>     <span class="number">0.287</span> *    <span class="number">0.172</span> </span><br><span class="line">S4/t     (<span class="number">0.988</span>)    (<span class="number">1.41</span>)  (<span class="number">0.075</span>)  (<span class="number">1.069</span>)    (<span class="number">1.841</span>)   (<span class="number">1.498</span>)</span><br><span class="line">S5/mean   <span class="number">0.137</span>   <span class="number">0.201</span> **   <span class="number">0.189</span>    <span class="number">0.135</span>      <span class="number">0.094</span>    -<span class="number">0.044</span> </span><br><span class="line">S5/t     (<span class="number">1.574</span>)   (<span class="number">1.994</span>)  (<span class="number">1.624</span>)   (<span class="number">1.24</span>)    (<span class="number">0.804</span>)  (-<span class="number">0.537</span>)</span><br></pre></td></tr></table></figure>
+<p>可见在双排下，由于有了更精细的划分，此时出现了S1/B5这样具有显著正溢价的分组。</p>
+<p>各组期望收益率对比图：</p>
+<figure>
+<img src="beta-size因子各组期望收益率-等权重加权.png" alt="beta-size因子各组期望收益率-等权重加权">
+<figcaption aria-hidden="true">beta-size因子各组期望收益率-等权重加权</figcaption>
+</figure>
+<p>可见S4/B3组的期望收益率最低，其次为S2/B3。期望收益率最高的为S1/B5组，这一组相当于叠加了小市值溢价和高beta溢价。</p>
+<p>重点组时序图如下：</p>
+<figure>
+<img src="beta-size因子重点组收益率时序图-等权重加权.png" alt="beta-size因子重点组收益率时序图-等权重加权">
+<figcaption aria-hidden="true">beta-size因子重点组收益率时序图-等权重加权</figcaption>
+</figure>
+<p>可以看出：</p>
+<ol type="1">
+<li>S1/B5组相较于其他组在大多数时候具有正溢价；</li>
+<li>S4/B5组虽然在上一轮牛市时相对表现很优异，但是在接下来的熊市时相对表现变得很差；</li>
+<li>S/B3和S4/B3组在牛市时（20-22）大幅跑输其他几组，在熊市时（22-23）也远不及S1/B5组，在熊市转化为牛市（23年之后）时表现又相对较差。</li>
+</ol>
+<h4 id="市值加权-4">市值加权</h4>
+<p>B-S各组市值加权收益率期望表:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">              B1         B2       B3       B4        B5       HML</span><br><span class="line">S1/mean   <span class="number">0.166</span>      <span class="number">0.132</span>   <span class="number">0.243</span> *   <span class="number">0.116</span>   <span class="number">0.395</span> **  <span class="number">0.229</span> **</span><br><span class="line">S1/t     (<span class="number">1.333</span>)    (<span class="number">0.998</span>)  (<span class="number">1.682</span>)  (<span class="number">0.801</span>)     (<span class="number">2.4</span>)   (<span class="number">2.235</span>)</span><br><span class="line">S2/mean   <span class="number">0.149</span>      <span class="number">0.213</span>    <span class="number">0.033</span>    <span class="number">0.096</span>     <span class="number">0.098</span>    -<span class="number">0.051</span> </span><br><span class="line">S2/t     (<span class="number">1.238</span>)     (<span class="number">1.58</span>)  (<span class="number">0.265</span>)  (<span class="number">0.709</span>)   (<span class="number">0.704</span>)   (-<span class="number">0.55</span>)</span><br><span class="line">S3/mean   <span class="number">0.143</span>       <span class="number">0.18</span>    <span class="number">0.122</span>    <span class="number">0.173</span>     <span class="number">0.193</span>     <span class="number">0.051</span> </span><br><span class="line">S3/t     (<span class="number">1.238</span>)    (<span class="number">1.556</span>)  (<span class="number">0.984</span>)  (<span class="number">1.403</span>)    (<span class="number">1.47</span>)   (<span class="number">0.622</span>)</span><br><span class="line">S4/mean   <span class="number">0.119</span>      <span class="number">0.167</span>    <span class="number">0.007</span>     <span class="number">0.13</span>    <span class="number">0.245</span> *    <span class="number">0.125</span> </span><br><span class="line">S4/t     (<span class="number">1.028</span>)    (<span class="number">1.432</span>)  (<span class="number">0.058</span>)  (<span class="number">1.121</span>)   (<span class="number">1.666</span>)   (<span class="number">1.203</span>)</span><br><span class="line">S5/mean  <span class="number">0.167</span> *  <span class="number">0.272</span> ***  <span class="number">0.215</span> *  <span class="number">0.203</span> *    <span class="number">0.056</span>    -<span class="number">0.111</span> </span><br><span class="line">S5/t     (<span class="number">1.904</span>)    (<span class="number">2.607</span>)  (<span class="number">1.945</span>)  (<span class="number">1.901</span>)   (<span class="number">0.493</span>)  (-<span class="number">1.272</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望收益率对比图：</p>
+<figure>
+<img src="beta-size因子各组期望收益率-市值加权.png" alt="beta-size因子各组期望收益率-市值加权">
+<figcaption aria-hidden="true">beta-size因子各组期望收益率-市值加权</figcaption>
+</figure>
+<p>可见经过双排后，各组在市值加权与等权重加权下的期望收益率已经大致相同了。此时，仍然是S1/B5组具有最优秀的正溢价，S4/B3、S2/B3的期望收益最低。</p>
+<p>重点组如下：</p>
+<figure>
+<img src="beta-size因子重点组收益率时序图-市值加权.png" alt="beta-size因子重点组收益率时序图-市值加权">
+<figcaption aria-hidden="true">beta-size因子重点组收益率时序图-市值加权</figcaption>
+</figure>
+<p>由时序图可见市值加权与等权重加权略有差异，但是S1/B5组相对而言在各时段均处于相对优秀的位置，S4/B3、S2/B3组仍然相对表现较差。</p>
+<h4 id="组合-4">组合</h4>
+<p>如上讨论，选择等权重加权下期望收益率最大落差组合进行测试：</p>
+<p><span class="math display">\[\begin{equation} \label{eq05}
+port05_{BS}=S1/B5-(S4/B3+S2/B3)/2
+\end{equation}\]</span></p>
+<p>不考虑交易成本时，收益表现如下：</p>
+<figure>
+<img src="beta-size因子组合5收益时序图.png" alt="beta-size因子组合5收益时序图">
+<figcaption aria-hidden="true">beta-size因子组合5收益时序图</figcaption>
+</figure>
+<p>可见该组合的收益显著且较稳定，长期复合年化收益2.73、最大回撤0.42、夏普率2.0，表现较优异。</p>
+<p>考虑成本后，效果如下：</p>
+<figure>
+<img src="beta-size因子组合5收益时序图-1倍杠杆0.001成本.png" alt="beta-size因子组合5收益时序图-1倍杠杆0.001成本">
+<figcaption aria-hidden="true">beta-size因子组合5收益时序图-1倍杠杆0.001成本</figcaption>
+</figure>
+<p>可见在考虑交易成本后，长期来看该组合仍然能够获得正溢价，但是最大回撤有些大。</p>
+<p>分段展示：</p>
+<figure>
+<img src="beta-size因子组合5收益时序图-1倍杠杆0.001成本-分段.png" alt="beta-size因子组合5收益时序图-1倍杠杆0.001成本-分段">
+<figcaption aria-hidden="true">beta-size因子组合5收益时序图-1倍杠杆0.001成本-分段</figcaption>
+</figure>
+<p>可见组合在各时间段均有正收益。</p>
+<h3 id="mom1-size双排">mom1-size双排</h3>
+<p>1日动量单排时组合3由于换手率太高最终表现不佳，如果将它与市值因子双排进行更细的分组，是否可以得到换手率与收益率平衡的组合？</p>
+<p>仍然分成等权重和市值加权两种方式罗列各组的期望收益率情况。</p>
+<h4 id="等权重加权-5">等权重加权</h4>
+<p>M1_-S各组等权重加权收益率期望表:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">             M1_1     M1_2      M1_3       M1_4      M1_5        HML</span><br><span class="line">S1/mean   <span class="number">0.35</span> **   <span class="number">0.197</span>   <span class="number">0.346</span> **  <span class="number">0.373</span> ***    <span class="number">0.076</span>   -<span class="number">0.273</span> **</span><br><span class="line">S1/t      (<span class="number">2.461</span>)  (<span class="number">1.446</span>)   (<span class="number">2.551</span>)    (<span class="number">2.637</span>)   (<span class="number">0.541</span>)   (-<span class="number">2.454</span>)</span><br><span class="line">S2/mean    <span class="number">0.043</span>    <span class="number">0.196</span>     <span class="number">0.193</span>      <span class="number">0.197</span>    -<span class="number">0.098</span>     -<span class="number">0.141</span> </span><br><span class="line">S2/t      (<span class="number">0.329</span>)   (<span class="number">1.47</span>)   (<span class="number">1.487</span>)    (<span class="number">1.563</span>)  (-<span class="number">0.714</span>)   (-<span class="number">1.494</span>)</span><br><span class="line">S3/mean    <span class="number">0.067</span>     <span class="number">0.18</span>   <span class="number">0.273</span> **     <span class="number">0.119</span>      <span class="number">0.12</span>      <span class="number">0.054</span> </span><br><span class="line">S3/t      (<span class="number">0.559</span>)  (<span class="number">1.478</span>)   (<span class="number">2.333</span>)    (<span class="number">1.024</span>)   (<span class="number">0.895</span>)    (<span class="number">0.583</span>)</span><br><span class="line">S4/mean   -<span class="number">0.057</span>   <span class="number">0.241</span> *   <span class="number">0.218</span> *     <span class="number">0.115</span>     <span class="number">0.188</span>    <span class="number">0.246</span> **</span><br><span class="line">S4/t     (-<span class="number">0.485</span>)  (<span class="number">1.744</span>)   (<span class="number">1.777</span>)    (<span class="number">1.011</span>)   (<span class="number">1.334</span>)    (<span class="number">2.415</span>)</span><br><span class="line">S5/mean    <span class="number">0.105</span>    <span class="number">0.132</span>    <span class="number">0.172</span> *     <span class="number">0.091</span>    <span class="number">0.183</span> *     <span class="number">0.078</span> </span><br><span class="line">S5/t      (<span class="number">0.999</span>)  (<span class="number">1.302</span>)   (<span class="number">1.704</span>)    (<span class="number">0.919</span>)   (<span class="number">1.666</span>)    (<span class="number">1.101</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望收益率对比图：</p>
+<figure>
+<img src="mom1-size因子各组期望收益率-等权重加权.png" alt="mom1-size因子各组期望收益率-等权重加权">
+<figcaption aria-hidden="true">mom1-size因子各组期望收益率-等权重加权</figcaption>
+</figure>
+<p>重点收益组时序图：</p>
+<figure>
+<img src="mom1-size因子重点组收益率时序图-等权重加权.png" alt="mom1-size因子重点组收益率时序图-等权重加权">
+<figcaption aria-hidden="true">mom1-size因子重点组收益率时序图-等权重加权</figcaption>
+</figure>
+<p>可见重点组的分层显著、稳定，明显分化出优劣两个区间。S1/M1_1、S1/M1_3、S1/M1_4组在上图中的各时间段均表现相对优异，S4/M1_1、S2/M1_5则在各时间段均表现相对较差。</p>
+<h4 id="市值加权-5">市值加权</h4>
+<p>M1_-S各组市值加权收益率期望表:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">             M1_1     M1_2      M1_3       M1_4      M1_5        HML</span><br><span class="line">S1/mean  <span class="number">0.301</span> **   <span class="number">0.181</span>    <span class="number">0.34</span> **  <span class="number">0.376</span> ***    <span class="number">0.044</span>   -<span class="number">0.256</span> **</span><br><span class="line">S1/t      (<span class="number">2.138</span>)  (<span class="number">1.314</span>)   (<span class="number">2.522</span>)    (<span class="number">2.643</span>)   (<span class="number">0.313</span>)   (-<span class="number">2.167</span>)</span><br><span class="line">S2/mean    <span class="number">0.017</span>    <span class="number">0.195</span>     <span class="number">0.195</span>      <span class="number">0.207</span>    -<span class="number">0.085</span>     -<span class="number">0.102</span> </span><br><span class="line">S2/t      (<span class="number">0.127</span>)  (<span class="number">1.454</span>)   (<span class="number">1.501</span>)    (<span class="number">1.625</span>)  (-<span class="number">0.621</span>)   (-<span class="number">1.056</span>)</span><br><span class="line">S3/mean    <span class="number">0.078</span>    <span class="number">0.182</span>   <span class="number">0.275</span> **     <span class="number">0.107</span>     <span class="number">0.121</span>      <span class="number">0.043</span> </span><br><span class="line">S3/t      (<span class="number">0.647</span>)  (<span class="number">1.497</span>)    (<span class="number">2.33</span>)    (<span class="number">0.923</span>)   (<span class="number">0.886</span>)    (<span class="number">0.453</span>)</span><br><span class="line">S4/mean   -<span class="number">0.062</span>   <span class="number">0.227</span> *   <span class="number">0.214</span> *     <span class="number">0.129</span>     <span class="number">0.177</span>    <span class="number">0.239</span> **</span><br><span class="line">S4/t     (-<span class="number">0.519</span>)  (<span class="number">1.776</span>)   (<span class="number">1.737</span>)    (<span class="number">1.136</span>)   (<span class="number">1.295</span>)    (<span class="number">2.443</span>)</span><br><span class="line">S5/mean    <span class="number">0.123</span>    <span class="number">0.118</span>     <span class="number">0.147</span>     <span class="number">0.189</span> *  <span class="number">0.254</span> **     <span class="number">0.131</span> </span><br><span class="line">S5/t      (<span class="number">1.177</span>)  (<span class="number">1.241</span>)   (<span class="number">1.537</span>)    (<span class="number">1.898</span>)   (<span class="number">2.173</span>)    (<span class="number">1.595</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望收益率对比图：</p>
+<figure>
+<img src="mom1-size因子各组期望收益率-市值加权.png" alt="mom1-size因子各组期望收益率-市值加权">
+<figcaption aria-hidden="true">mom1-size因子各组期望收益率-市值加权</figcaption>
+</figure>
+<p>可见在市值加权与等权重加权的效果差不多。</p>
+<p>重点组的收益时序图如下：</p>
+<figure>
+<img src="mom1-size因子重点组收益率时序图-市值加权.png" alt="mom1-size因子重点组收益率时序图-市值加权">
+<figcaption aria-hidden="true">mom1-size因子重点组收益率时序图-市值加权</figcaption>
+</figure>
+<p>可见此时，S1/M1_1组的表现不及等权重加权时，虽然也属于相对表现较优组，但是不那么优异了。其余结论与等权重加权差不多。</p>
+<h4 id="组合-5">组合</h4>
+<p>我们可以选择等权重加权的如下组合，研究其盈利能力：</p>
+<p><span class="math display">\[\begin{equation} \label{eq06}
+port06_{MS}=(S1/M1\_1+S1/M1\_3+S1/M1\_4)/3-(S4/M1\_1+S2/M1\_5)2
+\end{equation}\]</span></p>
+<p>不考虑交易成本时，该组合的表现如下：</p>
+<figure>
+<img src="mom1-size因子组合6收益时序图.png" alt="mom1-size因子组合6收益时序图">
+<figcaption aria-hidden="true">mom1-size因子组合6收益时序图</figcaption>
+</figure>
+<p>上述结果非常好，长期夏普率达到了3.22、复合年化收益率3.37、最大回撤0.43。这显示出在不考虑交易成本时，动量+市值因子可以组合出非常好的投资效果。</p>
+<p>考虑了交易成本后，效果如下：</p>
+<figure>
+<img src="mom1-size因子组合6收益时序图-1倍杠杆0.001成本.png" alt="mom1-size因子组合6收益时序图-1倍杠杆0.001成本">
+<figcaption aria-hidden="true">mom1-size因子组合6收益时序图-1倍杠杆0.001成本</figcaption>
+</figure>
+<p>可见，该组合的换手率太高、达到了日平均2.45倍资金的调仓率，在考虑交易成本时会产生巨大的收益损耗，造成理论上可以有很好表现的投资组合、在实际交易中会表现的非常糟糕。换手率越高，对交易成本越敏感，交易成本的些许增加都会导致最终结果大相径庭。</p>
+<p>这显示1日动量因子虽然具有理论上的显著、稳定溢价，但是由于其值极度不稳定，会因过高的换手率导致最终几乎不能直接获得这种收益。</p>
+<h3 id="mom1-beta双排">mom1-beta双排</h3>
+<p>如上流程，分成等权重和市值两种加权进行双排结果罗列。</p>
+<h4 id="等权重加权-6">等权重加权</h4>
+<p>M1_-B各组等权重加权收益率期望表:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">            M1_1      M1_2      M1_3      M1_4      M1_5       HML</span><br><span class="line">B1/mean   <span class="number">0.071</span>     <span class="number">0.169</span>     <span class="number">0.164</span>   <span class="number">0.241</span> **    <span class="number">0.177</span>     <span class="number">0.106</span> </span><br><span class="line">B1/t     (<span class="number">0.642</span>)   (<span class="number">1.641</span>)    (<span class="number">1.56</span>)   (<span class="number">2.234</span>)   (<span class="number">1.409</span>)   (<span class="number">1.133</span>)</span><br><span class="line">B2/mean   <span class="number">0.124</span>    <span class="number">0.214</span> *     <span class="number">0.15</span>    <span class="number">0.27</span> **   -<span class="number">0.012</span>   -<span class="number">0.136</span> *</span><br><span class="line">B2/t      (<span class="number">1.05</span>)   (<span class="number">1.874</span>)   (<span class="number">1.354</span>)   (<span class="number">2.468</span>)  (-<span class="number">0.102</span>)  (-<span class="number">1.873</span>)</span><br><span class="line">B3/mean   <span class="number">0.136</span>     <span class="number">0.179</span>    <span class="number">0.213</span> *   <span class="number">0.207</span> *    <span class="number">0.135</span>    -<span class="number">0.001</span> </span><br><span class="line">B3/t     (<span class="number">1.078</span>)   (<span class="number">1.467</span>)   (<span class="number">1.798</span>)   (<span class="number">1.664</span>)   (<span class="number">1.043</span>)  (-<span class="number">0.007</span>)</span><br><span class="line">B4/mean   <span class="number">0.171</span>    <span class="number">0.205</span> *  <span class="number">0.335</span> **    <span class="number">0.144</span>     <span class="number">0.169</span>    -<span class="number">0.002</span> </span><br><span class="line">B4/t     (<span class="number">1.372</span>)   (<span class="number">1.685</span>)   (<span class="number">2.545</span>)   (<span class="number">1.144</span>)   (<span class="number">1.247</span>)  (-<span class="number">0.021</span>)</span><br><span class="line">B5/mean    <span class="number">0.14</span>   <span class="number">0.327</span> **   <span class="number">0.232</span> *   <span class="number">0.214</span> *    <span class="number">0.087</span>    -<span class="number">0.053</span> </span><br><span class="line">B5/t     (<span class="number">1.009</span>)    (<span class="number">2.08</span>)   (<span class="number">1.797</span>)   (<span class="number">1.682</span>)   (<span class="number">0.614</span>)  (-<span class="number">0.499</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望收益率对比图：</p>
+<figure>
+<img src="mom1-beta因子各组期望收益率-等权重加权.png" alt="mom1-beta因子各组期望收益率-等权重加权">
+<figcaption aria-hidden="true">mom1-beta因子各组期望收益率-等权重加权</figcaption>
+</figure>
+<p>可见等权重加权下，相较于BTC波动较低的B2组的动量崩溃最严重，相较于BTC波动最高的B5组里的最高动量组没有更高的溢价，期望收益率最高组出现在次高波动中等动量组B4/M1_3，接着为最高波动次低动量组B5/M1_2。</p>
+<p>重点组收益时序图如下：</p>
+<figure>
+<img src="mom1-beta因子重点组收益率时序图-等权重加权.png" alt="mom1-beta因子重点组收益率时序图-等权重加权">
+<figcaption aria-hidden="true">mom1-beta因子重点组收益率时序图-等权重加权</figcaption>
+</figure>
+<p>可见在各时间段内，重点组合里均分化出明显相对优秀和拙劣的两个区域，这种分化在时间序列上较稳定。</p>
+<h4 id="市值加权-6">市值加权</h4>
+<p>M1_-B各组市值加权收益率期望表:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">            M1_1     M1_2       M1_3       M1_4     M1_5      HML</span><br><span class="line">B1/mean   <span class="number">0.095</span>    <span class="number">0.163</span>     <span class="number">0.192</span> *  <span class="number">0.303</span> ***   <span class="number">0.135</span>     <span class="number">0.04</span> </span><br><span class="line">B1/t     (<span class="number">0.889</span>)  (<span class="number">1.591</span>)    (<span class="number">1.874</span>)    (<span class="number">2.622</span>)  (<span class="number">1.073</span>)  (<span class="number">0.355</span>)</span><br><span class="line">B2/mean   <span class="number">0.148</span>    <span class="number">0.161</span>      <span class="number">0.078</span>    <span class="number">0.29</span> ***   <span class="number">0.129</span>   -<span class="number">0.019</span> </span><br><span class="line">B2/t     (<span class="number">1.331</span>)  (<span class="number">1.412</span>)    (<span class="number">0.728</span>)    (<span class="number">2.722</span>)  (<span class="number">1.004</span>)  (-<span class="number">0.18</span>)</span><br><span class="line">B3/mean   <span class="number">0.103</span>    <span class="number">0.162</span>      <span class="number">0.173</span>       <span class="number">0.13</span>    <span class="number">0.188</span>    <span class="number">0.084</span> </span><br><span class="line">B3/t     (<span class="number">0.786</span>)  (<span class="number">1.376</span>)    (<span class="number">1.526</span>)     (<span class="number">1.07</span>)  (<span class="number">1.358</span>)  (<span class="number">0.752</span>)</span><br><span class="line">B4/mean   <span class="number">0.116</span>    <span class="number">0.175</span>   <span class="number">0.358</span> ***     <span class="number">0.108</span>   <span class="number">0.279</span> *   <span class="number">0.163</span> </span><br><span class="line">B4/t     (<span class="number">0.962</span>)  (<span class="number">1.435</span>)    (<span class="number">2.754</span>)     (<span class="number">0.83</span>)  (<span class="number">1.709</span>)   (<span class="number">1.23</span>)</span><br><span class="line">B5/mean  -<span class="number">0.019</span>   <span class="number">0.271</span> *     <span class="number">0.191</span>      <span class="number">0.141</span>    <span class="number">0.037</span>    <span class="number">0.056</span> </span><br><span class="line">B5/t     (-<span class="number">0.12</span>)   (<span class="number">1.86</span>)    (<span class="number">1.457</span>)    (<span class="number">1.115</span>)  (<span class="number">0.242</span>)  (<span class="number">0.397</span>)</span><br></pre></td></tr></table></figure>
+<p>各组期望收益率对比图：</p>
+<figure>
+<img src="mom1-beta因子各组期望收益率-市值加权.png" alt="mom1-beta因子各组期望收益率-市值加权">
+<figcaption aria-hidden="true">mom1-beta因子各组期望收益率-市值加权</figcaption>
+</figure>
+<p>可见市值加权与等权重加权的各组期望收益率差异较大，说明市值对这两个因子有影响。此时期望收益率最低为B5/M1_1组，最高期望收益率仍然为B4/M1_3组。</p>
+<p>重点组收益时序图如下：</p>
+<figure>
+<img src="mom1-beta因子重点组收益率时序图-市值加权.png" alt="mom1-beta因子重点组收益率时序图-市值加权">
+<figcaption aria-hidden="true">mom1-beta因子重点组收益率时序图-市值加权</figcaption>
+</figure>
+<p>可见在时间序列上，重点组内也分化出了相对优秀和拙劣的两个区域。</p>
+<h4 id="组合-6">组合</h4>
+<p>我们采用组内市值加权的方式构建投资组合，采用最大落差组合，形式如下：</p>
+<p><span class="math display">\[\begin{equation} \label{eq07}
+port07_{MB}=B4/M1\_3-B5/M1\_1
+\end{equation}\]</span></p>
+<p>不考虑交易成本时，组合的表现如下：</p>
+<figure>
+<img src="mom1-beta因子组合7收益时序图.png" alt="mom1-beta因子组合7收益时序图">
+<figcaption aria-hidden="true">mom1-beta因子组合7收益时序图</figcaption>
+</figure>
+<p>考虑成本后：</p>
+<figure>
+<img src="mom1-beta因子组合7收益时序图-1倍杠杆0.001成本.png" alt="mom1-beta因子组合7收益时序图-1倍杠杆0.001成本">
+<figcaption aria-hidden="true">mom1-beta因子组合7收益时序图-1倍杠杆0.001成本</figcaption>
+</figure>
+<p>可见在不考虑交易成本时，该组合能有正溢价，但是一旦考虑成本，就会发现该组合的换手率过高，盈利完全覆盖不了成本。利用beta-mom1进行双排的换手率极高，由图可见，组合7的日均调仓资金达到3.42倍的比例。</p>
+<h2 id="总结">总结</h2>
+<p>本文较详细的分析了3个重要因子在加密市场的表现情况，经过冗长繁杂的分析，可以得出如下结论：</p>
+<ol type="1">
+<li>通过单因子分析，发现在3个因子中，考虑了交易成本后，只有市值因子可以获得较显著、稳定的收益，小市值区域相较于其他市值区域表现出较高的溢价，市值因子本身在截面上较稳定、利用它构建的组合换手率低、对交易成本不敏感；</li>
+<li>beta因子在等权重加权下、在一定程度上符合CAPM模型规律，但是在市值加权下结论就完全不一样，该因子相较于市值而言不是很稳定，每日换手率较高、对交易成本敏感；</li>
+<li>动量因子在不考虑交易成本时表现非常优秀，但是由于其值的不稳定性决定用其构建的组合换手率非常高、收益很难抵消交易成本，最终表现较平庸；</li>
+<li>在其他市场中的一些结论，如小市值溢价、短期动量崩溃效应、CAPM模型关于收益率差异的描述与实际情况不合等，在加密市场仍然成立，反映出主流因子具有普适性；</li>
+<li>在控制一个因子的双排分析中，发现beta-size因子可以获得较显著的溢价，mom1-size虽然在没有交易成本时的表现很惊艳、但是考虑了交易成本后表现非常糟糕，同样的还有mom1-beta双排组合，说明交易成本的分析对选择真正可交易的因子具有至关重要的作用；</li>
+<li>通过二次排序，可以更精细的区分出表现更优、更差的组合；</li>
+<li>等等。</li>
+</ol>
+<p>全文完！谢谢阅读！</p>
+]]></content>
+      <categories>
+        <category>投资</category>
+      </categories>
+      <tags>
+        <tag>加密货币</tag>
+        <tag>因子</tag>
+      </tags>
+  </entry>
 </search>
