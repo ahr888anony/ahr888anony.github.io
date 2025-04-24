@@ -6126,7 +6126,7 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
 <h2 id="单因子">单因子</h2>
 <h3 id="beta因子">beta因子</h3>
 <p>将每日的beta值按照从大到小的顺序排序，分组成10个组进行组合，即为因子单排组合。</p>
-<p>下面分成等权重加权和市值加权两种情况分析。</p>
+<p>下面将分成等权重和市值加权两种组内加权方式进行分析。顺便一提，对于后文讨论的双排、也会分成这两种加权方式进行分析。</p>
 <h4 id="等权重加权">等权重加权</h4>
 <p>B单因子等权重加权各组期望收益率:</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">           B1        B2       B3       B4       B5       B6       B7       B8       B9     B10      HML</span><br><span class="line">stat                                                                                                   </span><br><span class="line">mean   <span class="number">0.127</span>   <span class="number">0.201</span> **   <span class="number">0.116</span>    <span class="number">0.153</span>    <span class="number">0.144</span>    <span class="number">0.175</span>    <span class="number">0.174</span>   <span class="number">0.216</span> *   <span class="number">0.191</span>   <span class="number">0.206</span>    <span class="number">0.078</span> </span><br><span class="line">t     (<span class="number">1.259</span>)    (<span class="number">1.97</span>)  (<span class="number">1.149</span>)  (<span class="number">1.371</span>)  (<span class="number">1.291</span>)  (<span class="number">1.522</span>)  (<span class="number">1.515</span>)  (<span class="number">1.777</span>)  (<span class="number">1.613</span>)  (<span class="number">1.59</span>)  (<span class="number">1.003</span>)</span><br></pre></td></tr></table></figure>
