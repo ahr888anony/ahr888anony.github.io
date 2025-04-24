@@ -6327,7 +6327,9 @@ port03_{M1}=&amp;(M1\_4+M1\_5)/2 \\
 <h4 id="组合-3">组合</h4>
 <p>鉴于1周动量的市值加权比等权重加权表现更好，故采取组内市值加权法，选用如下投资组合：</p>
 <p><span class="math display">\[\begin{equation} \label{eq04}
-port04_{M7}=(M7\_9+M7\_10)/2-M7\_1
+\begin{aligned}
+port04_{M7}=&amp;(M7\_9+M7\_10)/2 \\ &amp;-M7\_1
+\end{aligned}
 \end{equation}\]</span></p>
 <p>不考虑交易成本时，表现如下：</p>
 <figure>
@@ -6385,7 +6387,9 @@ port04_{M7}=(M7\_9+M7\_10)/2-M7\_1
 <h4 id="组合-4">组合</h4>
 <p>如上讨论，选择等权重加权下期望收益率最大落差组合进行测试：</p>
 <p><span class="math display">\[\begin{equation} \label{eq05}
-port05_{BS}=S1/B5-(S4/B3+S2/B3)/2
+\begin{aligned}
+port05_{BS}=&amp;S1/B5 \\ &amp;-(S4/B3+S2/B3)/2
+\end{aligned}
 \end{equation}\]</span></p>
 <p>不考虑交易成本时，收益表现如下：</p>
 <figure>
@@ -6441,7 +6445,8 @@ port05_{BS}=S1/B5-(S4/B3+S2/B3)/2
 <p>我们可以选择等权重加权的如下组合，研究其盈利能力：</p>
 <p><span class="math display">\[\begin{equation} \label{eq06}
 \begin{aligned}
-port06_{MS}=&amp;(S1/M1\_1+S1/M1\_3+S1/M1\_4)/3 \\
+port06_{MS}=&amp;(S1/M1\_1+S1/M1\_3 \\
+&amp;+S1/M1\_4)/3 \\
 &amp;-(S4/M1\_1+S2/M1\_5)/2
 \end{aligned}
 \end{equation}\]</span></p>
