@@ -6118,10 +6118,11 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
 </figure>
 <p>可见：</p>
 <ol type="1">
+<li>总体上这几个因子的IC相关性均较低；</li>
 <li>beta因子与另几个因子呈现负IC相关性；</li>
-<li>mom_1与mom_7表现出较高的正相关；</li>
+<li>mom_1与mom_7表现出相对较高的正相关；</li>
 <li>动量因子（mom_1、mom_7）与beta、size因子的相关性很低；</li>
-<li>beta因子与size因子呈现出较高的负相关性。</li>
+<li>beta因子与size因子呈现出相对较高的负相关性。</li>
 </ol>
 <h2 id="单因子">单因子</h2>
 <h3 id="beta因子">beta因子</h3>
@@ -6130,7 +6131,9 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
 <h4 id="等权重加权">等权重加权</h4>
 <p>B单因子等权重加权各组期望收益率:</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">           B1        B2       B3       B4       B5       B6       B7       B8       B9     B10      HML</span><br><span class="line">stat                                                                                                   </span><br><span class="line">mean   <span class="number">0.127</span>   <span class="number">0.201</span> **   <span class="number">0.116</span>    <span class="number">0.153</span>    <span class="number">0.144</span>    <span class="number">0.175</span>    <span class="number">0.174</span>   <span class="number">0.216</span> *   <span class="number">0.191</span>   <span class="number">0.206</span>    <span class="number">0.078</span> </span><br><span class="line">t     (<span class="number">1.259</span>)    (<span class="number">1.97</span>)  (<span class="number">1.149</span>)  (<span class="number">1.371</span>)  (<span class="number">1.291</span>)  (<span class="number">1.522</span>)  (<span class="number">1.515</span>)  (<span class="number">1.777</span>)  (<span class="number">1.613</span>)  (<span class="number">1.59</span>)  (<span class="number">1.003</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
 <p>表中的t值为Newey-West调整后的值（下同），<span class="math inline">\(HML=B10-B1\)</span>。</p>
+</blockquote>
 <p>作出散点图：</p>
 <figure>
 <img src="beta因子各组期望收益率-等权重加权.png" alt="等权重加权beta因子各组期望收益率">
