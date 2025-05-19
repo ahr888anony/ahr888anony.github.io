@@ -2984,7 +2984,9 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
 <h2 id="前言">前言</h2>
 <p>在之前那篇文章（<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">参见此处</a>）中，我们得到并验证了比特币均衡价格与时间、挖矿难度和单位时间产量之间的关系：</p>
 <p><span class="math display">\[\begin{equation} \label{eq01}
-log(P)=a+b*t+log(d_t)+log(\frac{\Delta t}{\Delta S})
+\begin{aligned}
+log(P)=&amp;a+b*t+log(d_t) \\ &amp;+log(\frac{\Delta t}{\Delta S})
+\end{aligned}
 \end{equation}\]</span></p>
 <p>不过，该文存在一些不足：</p>
 <ol type="1">
@@ -3047,8 +3049,8 @@ g(d_t)=\alpha * (d_t)^\beta
 <p>将上述各式代入公式<span class="math inline">\(\eqref{eq02}\)</span>，同时对等式两边取对数，并将常数项合并后按顺序重命名，即得到如下形式：</p>
 <p><span class="math display">\[\begin{equation} \label{eq11}
 \begin{aligned}
-log(P)&amp;= c_0+c_1*t+c_2*log(M2_t) \\
-&amp;+c_3*log(d_t)+c_4*log(\frac{\Delta t}{\Delta S})
+log(P)=&amp; c_0+c_1*t \\ &amp;+c_2*log(M2_t) \\ &amp; +c_3*log(d_t) \\
+&amp;+c_4*log(\frac{\Delta t}{\Delta S})
 \end{aligned}
 \end{equation}\]</span></p>
 <p>也即得到了含有系数的对数关系，解决了前言提到的问题1。该式将通胀引起的时间价值和技术进步引起的时间价值分离成两个独立项，可以分别考察技术进步与通胀对均衡价格的影响，进而可以对问题2进行解释。</p>
