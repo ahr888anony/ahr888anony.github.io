@@ -2998,7 +2998,7 @@ S})\)</span>参数为1，这与回归结果不一样，回归结果参数不为1
 <p>本文针对这几个问题作进一步说明。</p>
 <h2 id="模型修正">模型修正</h2>
 <h3 id="推导">推导</h3>
-<p>首先需要修正的是公式（1），即均衡价格不一定严格等于边际成本，而是边际成本的如下更普遍的函数：
+<p>首先需要修正的是原文的公式（1），即均衡价格不一定严格等于边际成本，而是边际成本的如下更普遍的函数：
 <span class="math display">\[\begin{equation} \label{eq02}
 P=a_1*(\frac{\Delta C}{\Delta S})^{a_2}
 \end{equation}\]</span></p>
@@ -3011,7 +3011,7 @@ t\)</span>为1天或1月时则不能这么简单处理，原文（2）式更严�
 \Delta C=\int_t^{t+\Delta t}n_t*h_t*dt
 \end{equation}\]</span></p>
 <p>其中<span class="math inline">\(n_t\)</span>为t时刻1次哈希运算的成本，在间隔不太大的<span class="math inline">\(t\sim t+\Delta
-t\)</span>时间段内可以近似为一个不变量，故可将<span class="math inline">\(n_t\)</span>提到积分符号之外。</p>
+t\)</span>时间段内可以近似为一个不变量（1日、1月间隔内的哈希运算成本相差不大），故可将<span class="math inline">\(n_t\)</span>提到积分符号之外。</p>
 <p>获得单位电能对应的成本<span class="math inline">\(E_t\)</span>可以写成全球<span class="math inline">\(M2_t\)</span>的如下函数：</p>
 <p><span class="math display">\[\begin{equation} \label{eq04}
 E_t=a_3*(M2_t)^{a_4}
@@ -3031,7 +3031,7 @@ n_t &amp;=\frac{a_3*(M2_t)^{a_4}}{a_5*2^{a_6*t}} \\
 &amp;=a_3/a_5*2^{-a_6*t}*(M2_t)^{a_4}
 \end{aligned}
 \end{equation}\]</span></p>
-<p>比特币全网算力在理想情况下等于挖矿难度<span class="math inline">\(d_t\)</span>与单位难度对应算力<span class="math inline">\(\overline{u}_0\)</span>的乘积（也即原文（6）式），但是在1日或1月的频率上，全网算力与挖矿难度之间的关系不是简单的正比关系，而应该是与<span class="math inline">\(d_t\)</span>的某个函数成正比：</p>
+<p>比特币全网算力在理想情况下、等于挖矿难度<span class="math inline">\(d_t\)</span>与单位难度对应算力<span class="math inline">\(\overline{u}_0\)</span>的乘积（也即原文（6）式），但是在1日或1月的频率上，全网算力与挖矿难度之间的关系不是简单的正比关系，而应该是与<span class="math inline">\(d_t\)</span>的某个函数成正比：</p>
 <p><span class="math display">\[\begin{equation} \label{eq08}
 h_t=\overline{u}_0*f(d_t)
 \end{equation}\]</span></p>
@@ -3053,7 +3053,7 @@ log(P_t)=&amp; c_0+c_1*t \\ &amp;+c_2*log(M2_t) \\ &amp; +c_3*log(d_t)
 \\ &amp;+c_4*log(\frac{\Delta t}{\Delta S})
 \end{aligned}
 \end{equation}\]</span></p>
-<p>也即得到了含有系数的对数关系，解决了前言提到的问题1。该式将通胀引起的时间价值和技术进步引起的时间价值分离成两个独立项，可以分别考察技术进步与通胀对均衡价格的影响，进而可以对问题2进行解释。</p>
+<p>也即得到了含有系数的对数关系，解决了前言提到的问题1。同时，通胀和技术进步对均衡价格的影响被分离成两个独立项，也就可以对问题2进行解释了。</p>
 <p>上式中等号右边依次为：常数项、由于技术进步（如摩尔定律）导致的时间相关项、全球货币超发引起的通货膨胀相关项、比特币挖矿难度相关项、单位时间比特币产量相关项。</p>
 <h3 id="模型说明">模型说明</h3>
 <p>下面将阐述<span class="math inline">\(\eqref{eq11}\)</span>式右侧中各项的意义：</p>
@@ -3075,8 +3075,8 @@ log(P_t)=&amp; c_0+c_1*t \\ &amp;+c_2*log(M2_t) \\ &amp; +c_3*log(d_t)
 <p>由<span class="math inline">\(\eqref{eq11}\)</span>式各变量，可以解释比特币价格在一定历史时期中所呈现出的周期性：</p>
 <ol type="1">
 <li>由于产量减半，最后一项出现阶跃上升（在减半早期，这一阶跃增量约增加<span class="math inline">\(c_4*log2\)</span>，可参见前文关于公式（9）的<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#价格模型推导">论述</a>）。在减半前后的一段时间里，其他项不发生较大变化，比特币均衡价格（与实际价格有区别）因这一增量而出现指数上涨，将均衡价格抬升到一个新的区域（不同减半周期会出现不同的价格区域，可参见<a href="https://btcrainmaker.com/2023/10/17/比特币S2F模型还适用吗/#s2f简化模型建模">比特币S2F模型还适用吗</a>一文中的“<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>线性回归图”），上一周期形成的价格、算力均衡会被打破；</li>
-<li>矿工们有减半后均衡价格将会上涨的预期，即便产量减半，依然有动力去增加算力、抬高自己在全网算力所占的比例，以获得尽可能多的BTC，这一动机促使BTC挖矿难度上升，也会促使比特币均衡价格出现随时间推移的指数上升，具体而言，在其他条件不变时、因算力上升导致的<span class="math inline">\(\Delta t\)</span>内对数价格（<span class="math inline">\(\Delta log(P_t)\)</span>）的上升幅度为<span class="math inline">\(c_3*\Delta log(d_t)\)</span>；</li>
-<li>比特币价格的上涨，会促使关于它的投资需求上升，这一点与一般商品有区别，因为作为投资品的价格上涨代表投资回报的增加，而不是如一般商品那样代表消费支出的增加，故投资品价格上涨不仅不会减少需求、反而会增加需求（历史表现会影响大众关于投资品的未来预期），这又会导致矿工利润扩大、更多算力涌入、难度再度上升，进一步推高价格，进入减半后价格上涨的正循环逻辑，形成牛市；</li>
+<li>矿工们对减半后均衡价格将会上涨具有预期，即便产量减半，依然有动力去增加算力、抬高自己在全网算力所占的比例，以获得尽可能多的BTC，这一动机促使BTC挖矿难度上升，也会促使比特币均衡价格出现随时间推移的指数上升，具体而言，在其他条件不变时、因算力上升导致的<span class="math inline">\(\Delta t\)</span>内对数价格的上升幅度（<span class="math inline">\(\Delta log(P_t)\)</span>）为<span class="math inline">\(c_3*\Delta log(d_t)\)</span>；</li>
+<li>比特币价格的上涨，会促使关于它的投资需求上升，这一点与一般商品有区别。因为作为投资品的价格上涨代表投资回报的增加，而不是如一般商品那样代表消费支出的增加，故投资品价格上涨不仅不会减少需求、反而会增加需求（历史表现会影响大众关于投资品的未来预期），这又会导致矿工利润扩大、更多算力涌入、难度再度上升，进一步推高价格，进入减半后价格上涨的正循环逻辑，形成牛市；</li>
 <li>由于2、3导致价格持续上升，以至于远远高于均衡价格模型所预言的值，产生过大的正残差项，出现泡沫；</li>
 <li>投资品的价格过高，一方面普通投资者不再能够有足够的资金维持其上涨，另一方面已经获利的投资者出于风险厌恶心理、有更多的抛售企图，最终价格上涨逻辑的临界点到来，泡沫开始破裂，价格出现下跌；</li>
 <li>价格下跌会促使获利者的进一步抛售，潜在投资者出于风险厌恶持观望态度，导致价格进一步的下跌，开始进入熊市；</li>
@@ -3123,7 +3123,7 @@ t}{\Delta S})\)</span>，记为logtS）时序图如下：</p>
 <figcaption aria-hidden="true">BTC对数单位产量时间时序图</figcaption>
 </figure>
 <p>需要额外说明的是，上图中的值中采用了与前文（参见<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#数据实证">数据实证</a>一节）一样的MAD异常值处理，先在日频上处理了日产量（包含区块奖励与手续费）的异常值、再将处理后的产量进行月度加总、进而得到<span class="math inline">\(logtS\)</span>值。</p>
-<p>由各变量的时序图可见，对数价格走势与这几项相似。直观上模型具有一定的正确性，下面对这些数据做回归、从数据实证上验证模型是否有效。</p>
+<p>由各变量的时序图可见，对数价格走势与这几项相似。直观上模型具有一定的正确性，下面对这些数据作回归、从数据实证上验证模型是否有效。</p>
 <h2 id="数据实证">数据实证</h2>
 <p>直接采用线性回归模型对<span class="math inline">\(\eqref{eq11}\)</span>式各变量进行回归，结果如下：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">                            OLS Regression Results                            </span><br><span class="line">==============================================================================</span><br><span class="line">Dep. Variable:                   logP   R-squared:                       <span class="number">0.972</span></span><br><span class="line">Model:                            OLS   Adj. R-squared:                  <span class="number">0.971</span></span><br><span class="line">Method:                 Least Squares   F-statistic:                     <span class="number">1487.</span></span><br><span class="line">Date:                Mon, <span class="number">19</span> May <span class="number">2025</span>   Prob (F-statistic):          <span class="number">3.26e-132</span></span><br><span class="line">Time:                        <span class="number">11</span>:<span class="number">56</span>:<span class="number">27</span>   Log-Likelihood:                -<span class="number">156.12</span></span><br><span class="line">No. Observations:                 <span class="number">177</span>   AIC:                             <span class="number">322.2</span></span><br><span class="line">Df Residuals:                     <span class="number">172</span>   BIC:                             <span class="number">338.1</span></span><br><span class="line">Df Model:                           <span class="number">4</span>                                         </span><br><span class="line">Covariance <span class="type">Type</span>:            nonrobust                                         </span><br><span class="line">==============================================================================</span><br><span class="line">                 coef    std err          t      P&gt;|t|      [<span class="number">0.025</span>      <span class="number">0.975</span>]</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Intercept   -<span class="number">325.8850</span>     <span class="number">37.176</span>     -<span class="number">8.766</span>      <span class="number">0.000</span>    -<span class="number">399.265</span>    -<span class="number">252.505</span></span><br><span class="line">days          -<span class="number">0.0014</span>      <span class="number">0.000</span>     -<span class="number">6.619</span>      <span class="number">0.000</span>      -<span class="number">0.002</span>      -<span class="number">0.001</span></span><br><span class="line">logM2         <span class="number">10.4011</span>      <span class="number">1.148</span>      <span class="number">9.062</span>      <span class="number">0.000</span>       <span class="number">8.136</span>      <span class="number">12.667</span></span><br><span class="line">logD           <span class="number">0.4040</span>      <span class="number">0.017</span>     <span class="number">24.082</span>      <span class="number">0.000</span>       <span class="number">0.371</span>       <span class="number">0.437</span></span><br><span class="line">logtS          <span class="number">0.5258</span>      <span class="number">0.246</span>      <span class="number">2.141</span>      <span class="number">0.034</span>       <span class="number">0.041</span>       <span class="number">1.010</span></span><br><span class="line">==============================================================================</span><br><span class="line">Omnibus:                       <span class="number">26.338</span>   Durbin-Watson:                   <span class="number">0.275</span></span><br><span class="line">Prob(Omnibus):                  <span class="number">0.000</span>   Jarque-Bera (JB):               <span class="number">34.452</span></span><br><span class="line">Skew:                           <span class="number">0.913</span>   Prob(JB):                     <span class="number">3.30e-08</span></span><br><span class="line">Kurtosis:                       <span class="number">4.156</span>   Cond. No.                     <span class="number">3.00e+06</span></span><br><span class="line">==============================================================================</span><br><span class="line">Notes:</span><br><span class="line">[<span class="number">1</span>] Standard Errors assume that the covariance matrix of the errors <span class="keyword">is</span> correctly specified.</span><br><span class="line">[<span class="number">2</span>] The condition number <span class="keyword">is</span> large,  <span class="number">3e+06</span>. This might indicate that there are</span><br><span class="line">strong multicollinearity <span class="keyword">or</span> other numerical problems.</span><br></pre></td></tr></table></figure>
