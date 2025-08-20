@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://btcrainmaker.com/2025/07/28/%E6%AF%94%E7%89%B9%E5%B8%81%E6%B2%A1%E6%9C%89%E5%9F%BA%E6%9C%AC%E9%9D%A2%E5%90%97/%E6%8C%87%E6%95%B0%E5%B9%B3%E6%BB%91%E5%90%8E%E7%9A%84%E7%9C%9F%E5%AE%9E%E6%94%B6%E7%9B%8A%E7%8E%87VS%E6%A8%A1%E5%9E%8B%E6%94%B6%E7%9B%8A%E7%8E%87.png">
 <meta property="og:image" content="https://btcrainmaker.com/2025/07/28/%E6%AF%94%E7%89%B9%E5%B8%81%E6%B2%A1%E6%9C%89%E5%9F%BA%E6%9C%AC%E9%9D%A2%E5%90%97/BTC%E4%BB%B7%E6%A0%BC%E5%8F%8A%E5%9F%BA%E6%9C%AC%E9%9D%A2%E6%B3%A1%E6%B2%AB%E6%97%A5%E6%9C%9F%E6%A0%87%E8%AE%B0%E5%9B%BE.png">
 <meta property="article:published_time" content="2025-07-28T04:50:33.000Z">
-<meta property="article:modified_time" content="2025-08-20T05:08:08.399Z">
+<meta property="article:modified_time" content="2025-08-20T07:16:48.236Z">
 <meta property="article:author" content="雨师">
 <meta property="article:tag" content="bitcoin">
 <meta name="twitter:card" content="summary">
@@ -255,7 +255,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-08-20 13:08:08" itemprop="dateModified" datetime="2025-08-20T13:08:08+08:00">2025-08-20</time>
+      <time title="修改时间：2025-08-20 15:16:48" itemprop="dateModified" datetime="2025-08-20T15:16:48+08:00">2025-08-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -328,8 +328,10 @@ H(t)=\log(1+(\frac{t}{\alpha})^{\beta})
 \end{equation}\]</span></p>
 <p>结合<span class="math inline">\(\eqref{eq01}\)</span>可得：</p>
 <p><span class="math display">\[\begin{equation} \label{eq05}
-\log(P_B(t))=\log(P(0))+\tilde{\mu} t+
+\begin{aligned}
+\log(P_B(t))=&amp;\log(P(0))+\tilde{\mu} t+ \\ &amp;
 (\nu-\frac{\nu^2}{2})\cdot\log(1+\frac{t}{\alpha})^{\beta}
+\end{aligned}
 \end{equation}\]</span></p>
 <p>为了保持符号的一致性，上述<span class="math inline">\(\log(\cdot)\)</span>代表自然对数，即等价于通常的<span class="math inline">\(\ln(\cdot)\)</span>，下文如有特别说明、否则均同此例。</p>
 <p>作者们认为，对应<span class="math inline">\(\eqref{eq01}\)</span>的基本面价格应该遵循如下规律：</p>
@@ -380,9 +382,11 @@ barrier）的无收益资产（earning-free assets）。</p>
 <p>所谓的吸收壁垒，指比特币会由于诸如技术迭代、人们兴趣变化等原因，在某一个节点（边界条件），出现不可逆的归零，之后再也不能够恢复原貌，这个节点（边界条件）即为吸收壁垒。</p>
 <p>他假定这个未来的时间节点为<span class="math inline">\(\tau\)</span>，在那之后的价格将永远为0：<span class="math inline">\(P_{t&gt;\tau}=0\)</span>。</p>
 <p>由于<span class="math inline">\(\tau\)</span>出现的具体时间并不确定，他假定每个周期达到吸收壁垒的概率（也即每个周期比特币的失败概率）为一个先验的固定值<span class="math inline">\(\pi\)</span>。这样，再次利用未来价格贴现，就可以得到该论文的核心公式：</p>
-<p><span class="math display">\[\begin{equation}
-P_t = \lim_{n \to \infty} \left( \frac{1 - \pi}{1 + r_d} \right)^n
-\mathbb{E} \left( P_{t+n \mid (t+n) &lt; \tau} \right) \label{eq10}
+<p><span class="math display">\[\begin{equation}  \label{eq10}
+\begin{aligned}
+P_t = &amp;\lim_{n \to \infty} \left( \frac{1 - \pi}{1 + r_d} \right)^n
+\cdot \\ &amp;\mathbb{E} \left( P_{t+n \mid (t+n) &lt; \tau} \right)
+\end{aligned}
 \end{equation}\]</span></p>
 <p>由于<span class="math inline">\(\pi\)</span>是一个正值，不论其大小如何，随着<span class="math inline">\(n\)</span>不断增大，上式中的第一部分会趋于0。除非未来期望价格持续以超过指数<span class="math inline">\(e^{n(r+\pi)}\)</span>的方式增长，否则上式为0。但这样幅度的持续增长，会导致价格出现无穷大的问题、与现实世界不吻合。</p>
 <p>据此，Taleb得出比特币当前价值为0的结论。</p>
@@ -481,9 +485,11 @@ q_t=\frac{q_0}{q_0+(1-\lambda)^t(1-q_0)} \label{eq11}
 </ol>
 <p>假定用户<span class="math inline">\(i\)</span>参与通用商品的效用流（utility
 flow）函数为（参见论文公式（2））：</p>
-<p><span class="math display">\[\begin{equation}
-dv_{i,t}=(x_{i,t})^{1-\alpha}(N_tA_te^{u_i})^{\alpha}dt-\phi dt -
-x_{i,t}rdt \label{eq14}
+<p><span class="math display">\[\begin{equation} \label{eq14}
+\begin{aligned}
+dv_{i,t}= &amp; (x_{i,t})^{1-\alpha}(N_tA_te^{u_i})^{\alpha}dt- \\ &amp;
+\phi dt - x_{i,t}rdt
+\end{aligned}
 \end{equation}\]</span></p>
 <p>上式中的变量含义如下：</p>
 <ul>
@@ -504,9 +510,11 @@ dv_{i,t}^{token}=dv_{i,t} + k_{i,t}\mathbb{E}_t[dP_t]  \label{eq15}
 \end{equation}\]</span></p>
 <p>其中，<span class="math inline">\(k_{i,t}=x_{i,t}/P_t\)</span>为持有代币的数量，<span class="math inline">\(P_t\)</span>为代币在<span class="math inline">\(t\)</span>时刻的价格。</p>
 <p>对于任意时刻<span class="math inline">\(t\)</span>，市场均衡出现在效用流最大化时，结合市场清算条件（论文公式（18）），可以得出均衡价格遵循如下量化关系（参见论文（32）式）：</p>
-<p><span class="math display">\[\begin{equation}
-P_t=\frac{N(A_t)S(A_t)A_t}{M}\left( \frac{1-\alpha}{r-\mu^P(A_t)}
-\right)^{1/\alpha}  \label{eq16}
+<p><span class="math display">\[\begin{equation} \label{eq16}
+\begin{aligned}
+P_t= &amp; \frac{N(A_t)S(A_t)A_t}{M} \cdot \\ &amp;\left(
+\frac{1-\alpha}{r-\mu^P(A_t)} \right)^{1/\alpha}
+\end{aligned}
 \end{equation}\]</span></p>
 <p>其中：</p>
 <ul>
@@ -544,15 +552,21 @@ investors）、黑客（hackers）、矿工（miners）。</p>
 <p>4种参与者在各自的预算限制条件（budget
 constraint）下的消费函数（consumption）如下：</p>
 <p><span class="math display">\[\begin{equation} \label{eq17}
-\left\{
+\begin{array}{l}
 \begin{aligned}
-&amp; c^y_t = e_t - s_t - q_t p_t - \hat{q}_t \hat{p}_t - \phi_t q_t p_t
-\\
-&amp; \hat{c}^o_{t+1} = c^o_{t+1}+(1-h_{t+1})\theta_{t+1}q_tp_{t+1} \\
-&amp; c^h_{t+1} = h_{t+1} q_t p_{t+1} \\
-&amp; c^m_{t+1} = (X_{t+1} - X_t) p_{t+1} + \phi_{t+1} q_{t+1} p_{t+1}
+c^y_t = &amp;e_t - s_t - q_t p_t - \\ &amp; \hat{q}_t \hat{p}_t - \phi_t
+q_t p_t
+\end{aligned} \\
+\begin{aligned}
+\hat{c}^o_{t+1} =&amp;  c^o_{t+1}+(1-h_{t+1}) \cdot \\ &amp;
+\theta_{t+1}q_tp_{t+1}
+\end{aligned} \\
+c^h_{t+1} = h_{t+1} q_t p_{t+1} \\
+\begin{aligned}
+c^m_{t+1} =&amp; (X_{t+1} - X_t) p_{t+1} + \\ &amp; \phi_{t+1} q_{t+1}
+p_{t+1}
 \end{aligned}
-\right.
+\end{array}
 \end{equation}\]</span></p>
 <p>其中：</p>
 <ul>
@@ -568,29 +582,32 @@ constraint）下的消费函数（consumption）如下：</p>
 </em>{t+1} $，为不考虑加密货币独特收益的老一代消费函数。</li>
 </ul>
 <p>效用函数假设为<span class="math inline">\(u(c)\)</span>，其中的<span class="math inline">\(c\)</span>即为上述的消费函数，效用函数的具体形式未知，作者们先对一般性均衡（也即没有过多对参数和效用函数进行假设）进行了讨论。</p>
-<p>均衡的条件是：从需求侧角度，最大化新一代投资者的效用。新一代投资者的效用包含了老一代投资者效用的折现：</p>
+<p>均衡的条件是：从需求侧角度，最大化新一代投资者的效用。新一代投资者的效用包含了其成为老一代投资者后的效用折现：</p>
 <p><span class="math display">\[\begin{equation} \label{eq18}
-max_{q_t,s_t,\hat{q}_t} (u_t)=max_{q_t,s_t,\hat{q}_t}\left(
-u(c_t^y)+\beta E_t(\hat{c}^o_{t+1}) \right)
+\max_{q_t,s_t,\hat{q}_t}\left( u(c_t^y)+ \beta E_t(\hat{c}^o_{t+1})
+\right)
 \end{equation}\]</span></p>
 <p>上式的<span class="math inline">\(\beta\)</span>为折现率。</p>
 <p>分别对各个变量求偏导，结合市场清算条件，可以得到<span class="math inline">\(t\)</span>期均衡价格与次期均衡价格之间具有如下关系：</p>
 <p><span class="math display">\[\begin{equation} \label{eq19}
-p_t=\frac{1}{1+r_t}E_t\left(
-\frac{u^\prime(\hat{c}^o_{t+1})(1-h_{t+1})(1+\theta_{t+1})}{E_t\left[
-u^\prime(\hat{c}^o_{t+1}) \right] (1+\phi_t)}p_{t+1}  \right)
+\begin{aligned}
+p_t=\beta_t E_t \left( \frac{u^\prime(\hat{c}^o_{t+1})\cdot
+f_t}{E_t\left[ u^\prime(\hat{c}^o_{t+1}) \right]}\cdot p_{t+1}  \right)
+\end{aligned}
 \end{equation}\]</span></p>
 <p>其中：</p>
 <ul>
+<li><span class="math inline">\(\beta_t=\frac{1}{1+r_t}\)</span>，为折现率，可能为时间变量；</li>
+<li><span class="math inline">\(f_t=\frac{(1-h_{t+1})(1+\theta_{t+1})}{1+\phi_t}\)</span>，为与黑客、交易收益、交易成本相关的函数；</li>
 <li><span class="math inline">\(u^\prime(\hat{c}^o_{t+1})\)</span>代表对<span class="math inline">\(x\)</span>的1阶导数；</li>
 <li><span class="math inline">\(E_t(x_{t+1})\)</span>代表在当期<span class="math inline">\(t\)</span>，根据次期随机变量<span class="math inline">\(x_{t+1}\)</span>的分布、求其期望值。</li>
 </ul>
 <p>可见，上式建立了未来价格和当期价格之间的递推关系。</p>
 <p>作者们假设，每一期都有1个崩盘（价格归零）概率<span class="math inline">\(\pi_t\)</span>，该小概率事件发生时、次期价格归零，故可以将价格与当期崩盘概率（这一概率持续到次期）结合起来：</p>
 <p><span class="math display">\[\begin{equation} \label{eq20}
-E_t[x_{t+1}]=(1-\pi_t)E_t[x_{t+1}|\text{no crash}]
+E_t[x_{t+1}]=\bar{\pi}_tE_t[x_{t+1}|\text{no crash}]
 \end{equation}\]</span></p>
-<p>上式中的<span class="math inline">\(x_{t+1}\)</span>对应<span class="math inline">\(\eqref{eq19}\)</span>右侧括号中部分。</p>
+<p>上式中的<span class="math inline">\(x_{t+1}\)</span>对应<span class="math inline">\(\eqref{eq19}\)</span>右侧括号中部分，<span class="math inline">\(\bar{\pi}_t=1-\pi_t\)</span>为当期不崩盘的概率。</p>
 <p>于是，作者们建立了比特币当前价格与未来价格、崩盘概率、黑客盗窃比例、比特币带来的独特收益、交易成本以及具体的效用函数之间的关系。崩盘概率由外生的重大负面事件驱动，即为文章所说的“太阳黑子事件”。</p>
 <h4 id="特例讨论">特例讨论</h4>
 <p>作者们进一步讨论了几个特殊的情况：</p>
@@ -603,10 +620,12 @@ E_t[x_{t+1}]=(1-\pi_t)E_t[x_{t+1}|\text{no crash}]
 <li>讨论了风险中性投资者、其具有凹型的效用函数，仍然得到了上述均衡价格存在外生波动影响的结论。</li>
 </ol>
 <h4 id="数据实证">数据实证</h4>
-<p>在市场中性（<span class="math inline">\(\gamma=0\)</span>）投资者模型下，均衡价格模型可以变换为：</p>
-<p><span class="math display">\[\begin{equation} \label{eq21}
-E_t\left( \frac{(1-\pi_t)(1-\bar{h})(1+\alpha_1 B_{t+1})}{1+\beta_1\cdot
-CF_t + \beta_2 \cdot CA_t}(1+\rho_{t+1}) \right)=1
+<p>在市场中性（<span class="math inline">\(\gamma=0\)</span>）投资者模型下，使用作者们定义的代理变量，对均衡价格模型进行一阶泰勒展开，得到模型期望收益率：</p>
+<p><span class="math display">\[\begin{equation} \label{eq22}
+\begin{aligned}
+E_t[\rho_{t+1}|\text{no crash}] &amp; \approx \pi_t+\bar{h}-\alpha_1
+B_{t+1} \\ &amp; + \beta_1 CF_t +\beta_2 CA_t
+\end{aligned}
 \end{equation}\]</span></p>
 <p>其中：</p>
 <ul>
@@ -620,13 +639,7 @@ CF_t + \beta_2 \cdot CA_t}(1+\rho_{t+1}) \right)=1
 <li><span class="math inline">\(CF_t\)</span>为比特币的链上交易手续费成本，通过链上数据可以直接获取；</li>
 <li><span class="math inline">\(CA_t\)</span>为市场进入成本，<span class="math inline">\(CA_t=\frac{1}{1+MA_t}\)</span>。其中<span class="math inline">\(MA_t\)</span>为MarketAccesst指数，反映的比特币兑换其他货币的难易程度，用正面事件（如新货币成为可兑换比特币，或新交易所开通）和负面事件（如大型平台关闭、国家禁令或监管限制）通过事件计数加权（正面事件增加指数，负面事件减少）得到。<span class="math inline">\(CA_t\)</span>在<span class="math inline">\(MA_t\)</span>无穷大时为0，反映了进入市场的成本。</li>
 </ul>
-<p>值得一提的是，作者们为了避免多参数非线性优化的“维数灾难”（curse of
-dimensionality）问题，对<span class="math inline">\(\eqref{eq21}\)</span>进行一阶泰勒展开，可得加密货币的期望收益率如下：</p>
-<p><span class="math display">\[\begin{equation} \label{eq22}
-E_t[\rho_{t+1}|\text{no crash}]\approx \pi_t+\bar{h}-\alpha_1 B_{t+1}  +
-\beta_1 CF_t +\beta_2 CA_t
-\end{equation}\]</span></p>
-<p>通过拟合实际收益率与模型隐含收益率（参见<span class="math inline">\(\eqref{eq21}\)</span>）的最小均方根误差（RMSE）（参见式（61）），可以定出参数值（<span class="math inline">\(\lambda_0\)</span>、<span class="math inline">\(\mu\)</span>、<span class="math inline">\(\gamma\)</span>、<span class="math inline">\(\alpha_1\)</span>、<span class="math inline">\(\beta_1\)</span>、<span class="math inline">\(\beta2\)</span>）。收益率的偏差项为：</p>
+<p>通过拟合实际收益率与模型期望收益率的最小均方根误差（RMSE）（参见式（61）），可以定出参数值（<span class="math inline">\(\lambda_0\)</span>、<span class="math inline">\(\mu\)</span>、<span class="math inline">\(\gamma\)</span>、<span class="math inline">\(\alpha_1\)</span>、<span class="math inline">\(\beta_1\)</span>、<span class="math inline">\(\beta2\)</span>）。收益率的偏差项为：</p>
 <p><span class="math display">\[\begin{equation} \label{eq23}
 \begin{aligned}
 \epsilon_{t+1} &amp; \approx \rho_{t+1}-E_t[\rho_{t+1}|\text{no crash}]
@@ -725,9 +738,11 @@ E_t(B_{t+1}=(1+r_f)B_t
 <p>存在泡沫时，价格将出现爆炸性增长。作者们利用GSADF（Generalized
 SADF）测试，使用扩展滚动窗口回归检测如下回归关系、双向（前后）计算滚动ADF统计量：</p>
 <p><span class="math display">\[\begin{equation} \label{eq26}
-\Delta y_t=\hat{\alpha}_{r1,r2}+\hat{\beta}_{r1,r2}\cdot
-y_{t-1}+\sum_{i=1}^{k}\hat{\psi}_{r1,r2}^i\Delta y_{i-1} +
+\begin{aligned}
+\Delta y_t=&amp; \hat{\alpha}_{r1,r2}+\hat{\beta}_{r1,r2}\cdot y_{t-1}+
+\\ &amp; \sum_{i=1}^{k}\hat{\psi}_{r1,r2}^i\Delta y_{i-1} +
 \hat{\epsilon}_t
+\end{aligned}
 \end{equation}\]</span></p>
 <p>其中：</p>
 <ul>
