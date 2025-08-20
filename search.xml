@@ -71,34 +71,6 @@ hexo每次部署后均需要重新配置自定义域名</h2>
       </tags>
   </entry>
   <entry>
-    <title>pycharm重装打不开的问题</title>
-    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
-m1电脑，重装最新版pycharm专业版后不能打开。</p>
-<span id="more"></span>
-<h2 id="背景介绍">背景介绍</h2>
-<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
-<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
-m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
-<p>网上找了很久，才最终解决该问题。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
-<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
-<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
-<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>PyCharm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>加密市场的市场因子</title>
     <url>/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/</url>
     <content><![CDATA[<p>本文首先分析全加密市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。</p>
@@ -1163,6 +1135,34 @@ rtn_{mkt}^t=\sum_{i}^{N^{t-1}}
         <tag>加密货币</tag>
         <tag>因子投资</tag>
         <tag>bitcoin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pycharm重装打不开的问题</title>
+    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
+m1电脑，重装最新版pycharm专业版后不能打开。</p>
+<span id="more"></span>
+<h2 id="背景介绍">背景介绍</h2>
+<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
+<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
+m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
+<p>网上找了很久，才最终解决该问题。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
+<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
+<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
+<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>PyCharm</tag>
       </tags>
   </entry>
   <entry>
@@ -2259,31 +2259,6 @@ net_T^e=\prod_{t=1}^T(1+r_t^e)
       </tags>
   </entry>
   <entry>
-    <title>《致命的自负》读书札记</title>
-    <url>/2024/02/27/%E3%80%8A%E8%87%B4%E5%91%BD%E7%9A%84%E8%87%AA%E8%B4%9F%E3%80%8B%E8%AF%BB%E4%B9%A6%E6%9C%AD%E8%AE%B0/</url>
-    <content><![CDATA[<p>本文是对最近阅读《致命的自负》的札记，用来记录概述的核心思想，以供没有阅读该书的读者了解其梗概，且供未来回忆该书内容时参考。</p>
-<span id="more"></span>
-<h2 id="前言">前言</h2>
-<p>出于对比特币的信仰，一直对哈耶克很崇拜。</p>
-<p>可实事求是的说，我对哈耶克的书读的并不多。他是一个伟大的自由经济学家，人们普遍把他视为奥地利经济学派的代表。他的思想一直活跃在反思社会主义思潮的最前沿，对计划经济的谬误进行了鞭辟入里的分析。可以说，他是一位开启未来的伟大思想家。</p>
-<p>在推崇凯恩斯政府干预的地方，他其实是不受待见的。对于像我这样并非经济学出身、也没有想做一个职业经济学家的普通读者而言，阅读他最负盛名的代表作似乎可了解他的思想。</p>
-<p>他最有名的著作是《通往奴役之路》、《自由宪章》、《致命的自负》三本书。当然其他还有很多，比如间接催生出比特币的著作《货币的非国家化》等。</p>
-<p>《致命的自负》（1988年）一书是哈耶克生前发表的最后一部重要著作，我对它感兴趣是因为阅读了张维迎的文章<a href="https://www.bimba.pku.edu.cn/mba/mbaxw/272456.htm">《张维迎：知不知，小平也》</a>，虽然该文只对这本书进行了言简意赅的内容提炼，但其中透露出的说服力之强着实让没涉猎过哈耶克著作的我很震惊。从那以后，便决心工作闲暇时将这本书好好读一读。恰好最近策略上线并如预期运行，终于可以静下来阅读了。</p>
-<h2 id="内容梗概">内容梗概</h2>
-<p>首先，当然是需要理解题目，到底是谁有致命的自负？本书所分析的自负主体，是带有纯粹理性主义、构建主义倾向的知识分子，也即人类中有杰出理性能力的精英。他们对理性过分依赖并自负的认为理性万能、进而希望通过理性进行社会构建，是一个必然导致致命后果的谬误。</p>
-<p>那么哈耶克在这本书中是怎么论述这一结论的呢？</p>
-<p>[TODO]</p>
-]]></content>
-      <categories>
-        <category>札记</category>
-      </categories>
-      <tags>
-        <tag>哈耶克</tag>
-        <tag>经济</tag>
-        <tag>名著</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>比特币去中心化交易所Bisq在Mac上运行方法</title>
     <url>/2023/11/27/%E6%AF%94%E7%89%B9%E5%B8%81%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E4%BA%A4%E6%98%93%E6%89%80Bisq%E5%9C%A8Mac%E4%B8%8A%E8%BF%90%E8%A1%8C%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p><a href="https://bisq.network">Bisq</a>作为最优秀的比特币去中心化交易平台，在中文圈的使用率很低，但是很值得推荐。</p>
@@ -2339,6 +2314,31 @@ routing</a>）进行匿名交互，对于身处网络洼地的人们还是不太
       <tags>
         <tag>bitcoin</tag>
         <tag>Bisq</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《致命的自负》读书札记</title>
+    <url>/2024/02/27/%E3%80%8A%E8%87%B4%E5%91%BD%E7%9A%84%E8%87%AA%E8%B4%9F%E3%80%8B%E8%AF%BB%E4%B9%A6%E6%9C%AD%E8%AE%B0/</url>
+    <content><![CDATA[<p>本文是对最近阅读《致命的自负》的札记，用来记录概述的核心思想，以供没有阅读该书的读者了解其梗概，且供未来回忆该书内容时参考。</p>
+<span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>出于对比特币的信仰，一直对哈耶克很崇拜。</p>
+<p>可实事求是的说，我对哈耶克的书读的并不多。他是一个伟大的自由经济学家，人们普遍把他视为奥地利经济学派的代表。他的思想一直活跃在反思社会主义思潮的最前沿，对计划经济的谬误进行了鞭辟入里的分析。可以说，他是一位开启未来的伟大思想家。</p>
+<p>在推崇凯恩斯政府干预的地方，他其实是不受待见的。对于像我这样并非经济学出身、也没有想做一个职业经济学家的普通读者而言，阅读他最负盛名的代表作似乎可了解他的思想。</p>
+<p>他最有名的著作是《通往奴役之路》、《自由宪章》、《致命的自负》三本书。当然其他还有很多，比如间接催生出比特币的著作《货币的非国家化》等。</p>
+<p>《致命的自负》（1988年）一书是哈耶克生前发表的最后一部重要著作，我对它感兴趣是因为阅读了张维迎的文章<a href="https://www.bimba.pku.edu.cn/mba/mbaxw/272456.htm">《张维迎：知不知，小平也》</a>，虽然该文只对这本书进行了言简意赅的内容提炼，但其中透露出的说服力之强着实让没涉猎过哈耶克著作的我很震惊。从那以后，便决心工作闲暇时将这本书好好读一读。恰好最近策略上线并如预期运行，终于可以静下来阅读了。</p>
+<h2 id="内容梗概">内容梗概</h2>
+<p>首先，当然是需要理解题目，到底是谁有致命的自负？本书所分析的自负主体，是带有纯粹理性主义、构建主义倾向的知识分子，也即人类中有杰出理性能力的精英。他们对理性过分依赖并自负的认为理性万能、进而希望通过理性进行社会构建，是一个必然导致致命后果的谬误。</p>
+<p>那么哈耶克在这本书中是怎么论述这一结论的呢？</p>
+<p>[TODO]</p>
+]]></content>
+      <categories>
+        <category>札记</category>
+      </categories>
+      <tags>
+        <tag>哈耶克</tag>
+        <tag>经济</tag>
+        <tag>名著</tag>
       </tags>
   </entry>
   <entry>
@@ -2800,6 +2800,42 @@ log(P)=&amp;2.65+2.2e(-4)*t \\ &amp;+0.36*log(d_t) \\
       </tags>
   </entry>
   <entry>
+    <title>比特币均衡价格模型的残差分析</title>
+    <url>/2024/12/27/%E6%AF%94%E7%89%B9%E5%B8%81%E5%9D%87%E8%A1%A1%E4%BB%B7%E6%A0%BC%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%AE%8B%E5%B7%AE%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<p>在上一篇文章（<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">参见此处</a>）中，我得出并着重分析了比特币均衡价格模型。不过限于篇幅，该篇文章中没有进行残差分析，本文对此进行弥补。</p>
+<span id="more"></span>
+<h2 id="残差分析">残差分析</h2>
+<p>上篇文章所得出的模型值、原始值及残差情况如下：</p>
+<figure>
+<img src="BTC对数价格与模型拟合及残差.png" alt="BTC对数价格与模型拟合及残差">
+<figcaption aria-hidden="true">BTC对数价格与模型拟合及残差</figcaption>
+</figure>
+<p>如上图可见残差没有明显的趋势，在0值附近上下波动。该残差波动有越来越小的趋势，显示价格与模型越来越贴近。</p>
+<p>作出残差频率分布直方图，如下：</p>
+<figure>
+<img src="模型残差频率分布直方图.png" alt="模型残差频率分布直方图">
+<figcaption aria-hidden="true">模型残差频率分布直方图</figcaption>
+</figure>
+<p>可见残差虽然不完美符合正态分布，但具有中间大、两头小的特征，可近似认为服从正态分布。这说明残差中包含的信息已经较少了。</p>
+<p>进一步作出残差分位数与正态分布分位数的Q-Q图，如下：</p>
+<figure>
+<img src="模型残差值与标准正态分布的QQ图.png" alt="模型残差值与标准正态分布的QQ图">
+<figcaption aria-hidden="true">模型残差值与标准正态分布的QQ图</figcaption>
+</figure>
+<p>可见分位数对比图近似处于一条直线上，这也说明模型残差近似服从正态分布。</p>
+<h2 id="结论与展望">结论与展望</h2>
+<p>经过残差分析，我们可以得出模型是有效的这一结论。</p>
+<p>但仍值得指出的是，残差时序图中呈现出高低周期，大致以减半周期（4年）为周期。这意味着可能存在着一个、模型尚没有完全解释的周期性问题。鉴于减半次数尚少，不能断定残差中是否存在显著的周期性，这值得未来进一步观察研究。</p>
+]]></content>
+      <categories>
+        <category>投资</category>
+      </categories>
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>模型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>利用比特币均衡价格模型进行未来价格预测</title>
     <url>/2024/12/31/%E5%88%A9%E7%94%A8%E6%AF%94%E7%89%B9%E5%B8%81%E5%9D%87%E8%A1%A1%E4%BB%B7%E6%A0%BC%E6%A8%A1%E5%9E%8B%E8%BF%9B%E8%A1%8C%E6%9C%AA%E6%9D%A5%E4%BB%B7%E6%A0%BC%E9%A2%84%E6%B5%8B/</url>
     <content><![CDATA[<p>本文利用最近提出的比特币均衡价格模型（<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系">参见此处</a>），结合对未来难度、产量、残差等变量的建模，对比特币未来均衡价格进行预测，并通过生成随机数残差差分对未来价格进行模拟。</p>
@@ -2930,42 +2966,6 @@ S_t)\)</span>）建模时，将该项的随机波动成分忽略、直接采用�
 <p>本文首先对BTC均衡价格模型进行了自变量建模，进而利用自变量模型、对未来一个周期的均衡价格进行了预测，最后叠加残差等随机项、进行了符合模型预期的BTC未来价格随机模拟。</p>
 <h2 id="声明">声明</h2>
 <p>本文所有观点或结论只作为研究成果展示，不作为投资建议，望读者自行斟酌！</p>
-]]></content>
-      <categories>
-        <category>投资</category>
-      </categories>
-      <tags>
-        <tag>bitcoin</tag>
-        <tag>模型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>比特币均衡价格模型的残差分析</title>
-    <url>/2024/12/27/%E6%AF%94%E7%89%B9%E5%B8%81%E5%9D%87%E8%A1%A1%E4%BB%B7%E6%A0%BC%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%AE%8B%E5%B7%AE%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[<p>在上一篇文章（<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">参见此处</a>）中，我得出并着重分析了比特币均衡价格模型。不过限于篇幅，该篇文章中没有进行残差分析，本文对此进行弥补。</p>
-<span id="more"></span>
-<h2 id="残差分析">残差分析</h2>
-<p>上篇文章所得出的模型值、原始值及残差情况如下：</p>
-<figure>
-<img src="BTC对数价格与模型拟合及残差.png" alt="BTC对数价格与模型拟合及残差">
-<figcaption aria-hidden="true">BTC对数价格与模型拟合及残差</figcaption>
-</figure>
-<p>如上图可见残差没有明显的趋势，在0值附近上下波动。该残差波动有越来越小的趋势，显示价格与模型越来越贴近。</p>
-<p>作出残差频率分布直方图，如下：</p>
-<figure>
-<img src="模型残差频率分布直方图.png" alt="模型残差频率分布直方图">
-<figcaption aria-hidden="true">模型残差频率分布直方图</figcaption>
-</figure>
-<p>可见残差虽然不完美符合正态分布，但具有中间大、两头小的特征，可近似认为服从正态分布。这说明残差中包含的信息已经较少了。</p>
-<p>进一步作出残差分位数与正态分布分位数的Q-Q图，如下：</p>
-<figure>
-<img src="模型残差值与标准正态分布的QQ图.png" alt="模型残差值与标准正态分布的QQ图">
-<figcaption aria-hidden="true">模型残差值与标准正态分布的QQ图</figcaption>
-</figure>
-<p>可见分位数对比图近似处于一条直线上，这也说明模型残差近似服从正态分布。</p>
-<h2 id="结论与展望">结论与展望</h2>
-<p>经过残差分析，我们可以得出模型是有效的这一结论。</p>
-<p>但仍值得指出的是，残差时序图中呈现出高低周期，大致以减半周期（4年）为周期。这意味着可能存在着一个、模型尚没有完全解释的周期性问题。鉴于减半次数尚少，不能断定残差中是否存在显著的周期性，这值得未来进一步观察研究。</p>
 ]]></content>
       <categories>
         <category>投资</category>
@@ -3510,10 +3510,10 @@ port07_{MB}=B4/M1\_3-B5/M1\_1
 <span id="more"></span>
 <h2 id="模型1月价格图">模型1月价格图</h2>
 <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
-<div id="echarts287" style="width: 100%;height: 400px;margin: 0 auto"></div>
+<div id="echarts7389" style="width: 100%;height: 400px;margin: 0 auto"></div>
 <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('echarts287'));
+        var myChart = echarts.init(document.getElementById('echarts7389'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -7185,7 +7185,7 @@ et al., 2016; Cong et al.,
 所具有的不足点相同。纵然得出了基于效用函数的定价公式，也因没有现实依据而不可用。值得一提的是，我所提出的EPM模型<span class="citation" data-cites="Ren-bitcoin-epm-2025">(Ren,
 2025b)</span>，并没有采用效用函数对均衡价格进行推理，避免了不可真实观测的问题；</p></li>
 <li><p>作者们假定标准货币的总量不变，这与事实违背。全球总广义货币供给量正在不间断的快速（高于无风险利率）增长，可以参见<span class="citation" data-cites="Ren-bitcoin-epm-2025">(Ren,
-2025b)</span>的M2数据走势图；</p></li>
+2025b)</span>的M2数据走势图。这正是比特币诞生之初便希望解决的问题，反映着比特币的宏观基本面；</p></li>
 <li><p>作者们的模型，并不像他们所宣称的：与股票定价机制存在很大的差异。对于没有分红的股票，他们采用的基于未来价格预期和太阳黑子的定价逻辑，同样也适用。在第二部分的结尾，作者们引用
 <span class="citation" data-cites="Shiller-stock-prices-dividends-1981">Shiller (1981)</span>
 来说明股票定价与加密货币定价的差异，说道：</p></li>
