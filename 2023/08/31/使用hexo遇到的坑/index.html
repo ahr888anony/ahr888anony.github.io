@@ -171,7 +171,7 @@ hexo每次部署后均需要重新配置自定义域名</span></a></li><li class
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -308,7 +308,7 @@ typora与hexo的图片引用地址不一致问题</h2>
 <p>才可显示。</p>
 <p>而hexo按照教程（ <a target="_blank" rel="noopener" href="https://hexo.io/docs/asset-folders#Embedding-an-image-using-markdown">资源文件夹</a>）设置后，不需要指定<code>&#123;文稿名称对应的资源文件夹&#125;</code>。</p>
 <p>在知乎上找到了<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/542101567">解决方案</a>。需要更改</p>
-<p><code>node_modules</code> --&gt; <code>hexo-asset-image</code> --&gt;
+<p><code>node_modules</code> –&gt; <code>hexo-asset-image</code> –&gt;
 <code>index.js</code></p>
 <p>第58行的代码：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">$(<span class="variable language_">this</span>).<span class="title function_">attr</span>(<span class="string">&#x27;src&#x27;</span>, config.<span class="property">root</span> + link + src);</span><br></pre></td></tr></table></figure>
@@ -512,7 +512,7 @@ hexo每次部署后均需要重新配置自定义域名</h2>
 
   
 
-  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"cdn":"//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js","tags":"ams","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
 <script src="/js/third-party/math/mathjax.js"></script>
 
 
