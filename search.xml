@@ -71,6 +71,34 @@ hexo每次部署后均需要重新配置自定义域名</h2>
       </tags>
   </entry>
   <entry>
+    <title>pycharm重装打不开的问题</title>
+    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
+m1电脑，重装最新版pycharm专业版后不能打开。</p>
+<span id="more"></span>
+<h2 id="背景介绍">背景介绍</h2>
+<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
+<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
+m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
+<p>网上找了很久，才最终解决该问题。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
+<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
+<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
+<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>PyCharm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>加密市场的市场因子</title>
     <url>/2023/09/14/%E5%8A%A0%E5%AF%86%E5%B8%82%E5%9C%BA%E7%9A%84%E5%B8%82%E5%9C%BA%E5%9B%A0%E5%AD%90/</url>
     <content><![CDATA[<p>本文首先分析全加密市场收益率的一般特征，进而按照一定的筛选规则对数据进行过滤，然后分等权重与市值加权两种情况、组建各市值排名下的市场组合，将各组合的收益率联合比特币一起进行相关性分析，最后得出市场因子的可能代理形式。</p>
@@ -1138,31 +1166,25 @@ rtn_{mkt}^t=\sum_{i}^{N^{t-1}}
       </tags>
   </entry>
   <entry>
-    <title>pycharm重装打不开的问题</title>
-    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
-m1电脑，重装最新版pycharm专业版后不能打开。</p>
+    <title>可以在比特币上计算一切的BitVM</title>
+    <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
+    <content><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">Robin
+Linus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p>
 <span id="more"></span>
-<h2 id="背景介绍">背景介绍</h2>
-<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
-<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
-m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
-<p>网上找了很久，才最终解决该问题。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
-<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
-<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
-<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
+<h2 id="前言">前言</h2>
+<p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p>
+<h2 id="白皮书内容理解">白皮书内容理解</h2>
+<p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p>
+<p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考Bob
+Bodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p>
+<p>该白皮书（ TODO，待完成）</p>
 ]]></content>
       <categories>
         <category>技术</category>
       </categories>
       <tags>
-        <tag>PyCharm</tag>
+        <tag>bitcoin</tag>
+        <tag>BitVM</tag>
       </tags>
   </entry>
   <entry>
@@ -1701,28 +1723,6 @@ P_{2024-04-16}\in[51006.21, 76458.321]
         <tag>bitcoin</tag>
         <tag>减半</tag>
         <tag>模型</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>可以在比特币上计算一切的BitVM</title>
-    <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
-    <content><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">Robin
-Linus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p>
-<span id="more"></span>
-<h2 id="前言">前言</h2>
-<p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p>
-<h2 id="白皮书内容理解">白皮书内容理解</h2>
-<p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p>
-<p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考Bob
-Bodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p>
-<p>该白皮书（ TODO，待完成）</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>bitcoin</tag>
-        <tag>BitVM</tag>
       </tags>
   </entry>
   <entry>
@@ -3504,16 +3504,209 @@ port07_{MB}=B4/M1\_3-B5/M1\_1
       </tags>
   </entry>
   <entry>
+    <title>比特币均衡价格模型与全球m2</title>
+    <url>/2025/05/15/%E6%AF%94%E7%89%B9%E5%B8%81%E5%9D%87%E8%A1%A1%E4%BB%B7%E6%A0%BC%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%A8%E7%90%83m2/</url>
+    <content><![CDATA[<p>之前的《<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">比特币价格与挖矿难度、时间、减半的关系</a>》一文存在3点不足之处，本文对其作了进一步的讨论。</p>
+<p>本文对比特币均衡价格定价公式进行了修正，得到含系数的价格模型；揭示出比特币价格变动的4个重要外因与内因，有力的反驳了类似“比特币没有基本面”这样的观点；利用本文模型可解释比特币价格周期规律；对通胀与技术进步导致的比特币时间价值作了区分；对全球的M2数据进行了分析和回归，并将其吸纳进新的模型；在月度数据频率上对模型进行了实证，得出了模型有效且显著的结论……</p>
+<span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>在之前那篇文章（<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">参见此处</a>）中，我们得到并验证了比特币均衡价格与时间、挖矿难度和单位时间产量之间的关系：</p>
+<p><span class="math display">\[\begin{equation} \label{eq01}
+\begin{aligned}
+log(P_t)=&amp;a+b*t+log(d_t) \\ &amp;+log(\frac{\Delta t}{\Delta S})
+\end{aligned}
+\end{equation}\]</span></p>
+<p>不过，该文存在一些不足：</p>
+<ol type="1">
+<li>模型推导的<span class="math inline">\(log(d_t)\)</span>、<span class="math inline">\(log(\frac{\Delta t}{\Delta
+S})\)</span>参数为1，这与回归结果不一样，回归结果参数不为1；</li>
+<li>对摩尔定律项（参见该文公式<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">（8）</a>）取对数，会出现负的时间参数，意味着在其他变量不变时、技术进步会引起均衡价格下跌，但该文将技术进步项和通胀项合并成一个时间变量，其参数为正、仅体现了正的时间价值，没有体现技术进步产生的负时间价值；</li>
+<li>模型推导假定通胀率固定，这一点是否成立需要验证。</li>
+</ol>
+<p>本文针对这几个问题作进一步说明。</p>
+<h2 id="模型修正">模型修正</h2>
+<h3 id="推导">推导</h3>
+<p>首先需要修正的是原文的公式（1），即均衡价格不一定严格等于边际成本，而是边际成本的如下更普遍的函数：
+<span class="math display">\[\begin{equation} \label{eq02}
+P=a_1*(\frac{\Delta C}{\Delta S})^{a_2}
+\end{equation}\]</span></p>
+<p>其中<span class="math inline">\(a_1\)</span>、<span class="math inline">\(a_2\)</span>为参数。</p>
+<p>原文的公式（2）将<span class="math inline">\(t\sim t+ \Delta
+t\)</span>之间的全网算力<span class="math inline">\(h_t\)</span>视为固定值，这在<span class="math inline">\(\Delta
+t\)</span>趋近于0的极限情况下才成立，但是在<span class="math inline">\(\Delta
+t\)</span>为1天或1月时则不能这么简单处理，原文（2）式更严格的表达应该是：</p>
+<p><span class="math display">\[\begin{equation} \label{eq03}
+\Delta C=\int_t^{t+\Delta t}n_t*h_t*dt
+\end{equation}\]</span></p>
+<p>其中<span class="math inline">\(n_t\)</span>为t时刻1次哈希运算的成本，在间隔不太大的<span class="math inline">\(t\sim t+\Delta
+t\)</span>时间段内可以近似为一个不变量（1日、1月间隔内的哈希运算成本相差不大），故可将<span class="math inline">\(n_t\)</span>提到积分符号之外。</p>
+<p>获得单位电能对应的成本<span class="math inline">\(E_t\)</span>可以写成全球<span class="math inline">\(M2_t\)</span>的如下函数：</p>
+<p><span class="math display">\[\begin{equation} \label{eq04}
+E_t=a_3*(M2_t)^{a_4}
+\end{equation}\]</span></p>
+<p>重述前文的公式<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">(3)</a>如下：</p>
+<p><span class="math display">\[\begin{equation} \label{eq05}
+E_t=u_t*n_t
+\end{equation}\]</span></p>
+<p>单位电能产生的哈希运算次数<span class="math inline">\(u_t\)</span>仍然遵循摩尔定律：</p>
+<p><span class="math display">\[\begin{equation} \label{eq06}
+u_t=a_5*2^{a_6*t}
+\end{equation}\]</span></p>
+<p>从而可以得出<span class="math inline">\(n_t\)</span>遵循的规律如下：</p>
+<p><span class="math display">\[\begin{equation} \label{eq07}
+\begin{aligned}
+n_t &amp;=\frac{a_3*(M2_t)^{a_4}}{a_5*2^{a_6*t}} \\
+&amp;=a_3/a_5*2^{-a_6*t}*(M2_t)^{a_4}
+\end{aligned}
+\end{equation}\]</span></p>
+<p>比特币全网算力在理想情况下、等于挖矿难度<span class="math inline">\(d_t\)</span>与单位难度对应算力<span class="math inline">\(\overline{u}_0\)</span>的乘积（也即原文（6）式），但是在1日或1月的频率上，全网算力与挖矿难度之间的关系不是简单的正比关系，而应该是与<span class="math inline">\(d_t\)</span>的某个函数成正比：</p>
+<p><span class="math display">\[\begin{equation} \label{eq08}
+h_t=\overline{u}_0*f(d_t)
+\end{equation}\]</span></p>
+<p>我们可以将<span class="math inline">\(\eqref{eq03}\)</span>式中的积分作如下函数变换：</p>
+<p><span class="math display">\[\begin{equation} \label{eq09}
+\begin{aligned}
+\int_t^{t+\Delta t}h_t*dt&amp;=\overline{u}_0*\int_t^{\Delta t}f(d_t)*dt
+\\ &amp;=\overline{u}_0*g(d_t)*\Delta t
+\end{aligned}
+\end{equation}\]</span></p>
+<p>将上式中的<span class="math inline">\(g(d_t)\)</span>用以下函数形式表示：</p>
+<p><span class="math display">\[\begin{equation} \label{eq10}
+g(d_t)=\alpha * (d_t)^\beta
+\end{equation}\]</span></p>
+<p>将上述各式代入公式<span class="math inline">\(\eqref{eq02}\)</span>，同时对等式两边取对数，并将常数项合并后按顺序重命名，即得到如下形式：</p>
+<p><span class="math display">\[\begin{equation} \label{eq11}
+\begin{aligned}
+log(P_t)=&amp; c_0+c_1*t \\ &amp;+c_2*log(M2_t) \\ &amp; +c_3*log(d_t)
+\\ &amp;+c_4*log(\frac{\Delta t}{\Delta S})
+\end{aligned}
+\end{equation}\]</span></p>
+<p>也即得到了含有系数的对数关系，解决了前言提到的问题1。同时，通胀和技术进步对均衡价格的影响被分离成两个独立项，也就可以对问题2进行解释了。</p>
+<p>上式中等号右边依次为：常数项、由于技术进步（如摩尔定律）导致的时间相关项、全球货币超发引起的通货膨胀相关项、比特币挖矿难度相关项、单位时间比特币产量相关项。</p>
+<h3 id="模型说明">模型说明</h3>
+<p>下面将阐述<span class="math inline">\(\eqref{eq11}\)</span>式右侧中各项的意义：</p>
+<ol type="1">
+<li>由于技术进步导致的时间相关系数（<span class="math inline">\(c_1\)</span>）应该是负值，意味着技术进步会带来产品的成本价格下跌，这不仅仅适用于比特币、还适用很多其他产品，这一项不是比特币生产者能够直接干预的，是比特币价格变化的技术外因。</li>
+<li>M2相关项与全球货币超发相关，因为BTC是一种全球性资产，任何国家的货币超发都会对它产生影响，这一项的系数（<span class="math inline">\(c_2\)</span>）应该为正数，意味着因为通货膨胀，会导致用法币计价的BTC价格上涨，这一项也不是比特币生产者能够直接干预的，是比特币价格变化的宏观外因。</li>
+<li>比特币挖矿难度相关项，反应了比特币的生产端（或曰供给侧）对它价值的预估及根据当前价格对生产行为的调整，这一项是比特币生产者能够主动干预的，以适应市场价格和需求。同时，这一项也是市场需求端强弱的体现，反应了比特币的购买者对它价值的预估及对当前价格购买行为的调整。归根到底，此项是比特币设计机制的体现，是比特币网络为了适应外在市场情况而作出的调整。它可被视为比特币的基本面，既反应了比特币价格变化的市场外因、又反应了其调节机制的内因。</li>
+<li>难度值（<span class="math inline">\(d_t\)</span>）会对价格产生影响：若难度上涨预示着成本的上涨，反应了矿工对当前及未来价格的乐观预期，在市场需求不变时，更高的成本会导致供给变少，引起价格上涨；若该项下跌预示着成本下跌，反应了矿工对当前及未来价格的悲观预期，在市场需求不变时，更低的成本会导致供给变多，引起价格下跌。这一情形是矿工们主动影响市场价格。</li>
+<li>因为需求端导致的价格变化，也会对挖矿难度产生影响：若需求旺盛，促使价格上涨，矿工们的收益扩大，利润驱使更多的参与者加入，导致算力增加、引起难度上涨；若需求萎缩，促使价格下跌，矿工们的收益减少，发生亏损的参与者会停止或减少挖矿行为，导致算力减少、引起难度下跌。这一情形是矿工们被动的通过调节算力来适应需求端主导的市场价格。</li>
+<li>单位时间产量相关项，这一项是比特币设计时预设的经济激励机制，不是矿工和市场需求者能够影响的，代表了比特币自身设计对价格的影响，是比特币价格变化的经济激励内因。</li>
+<li>比特币的均衡价格是上述各种因素的总和结果。</li>
+</ol>
+<p>通过以上阐述，可以看出：</p>
+<ol type="1">
+<li><font color="red"><strong>比特币的价格形成具有坚实的基本面基础、其价格变动有深刻原因。</strong></font></li>
+<li><font color="red"><strong>人们通常臆测的一些过分简化的观点，如“比特币没有基本面”、“比特币只具有投机价值”或“比特币的价格上涨仅仅是因为投机泡沫”等等，是毫无道理的。</strong></font></li>
+</ol>
+<h3 id="对btc价格周期规律的解释">对BTC价格周期规律的解释</h3>
+<p>由<span class="math inline">\(\eqref{eq11}\)</span>式各变量，可以解释比特币价格在一定历史时期中所呈现出的周期性：</p>
+<ol type="1">
+<li>由于产量减半，最后一项出现阶跃上升（在减半早期，这一阶跃增量约增加<span class="math inline">\(c_4*log2\)</span>，可参见上一篇文章关于公式（9）的<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#价格模型推导">论述</a>）。在减半前后的一段时间里，其他项不发生较大变化，比特币均衡价格（与实际价格有区别）因这一增量而出现指数上涨，将均衡价格抬升到一个新的区域（不同减半周期会出现不同的价格区域，可参见<a href="https://btcrainmaker.com/2023/10/17/比特币S2F模型还适用吗/#s2f简化模型建模">比特币S2F模型还适用吗</a>一文中的“<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>线性回归图”），上一周期形成的价格、算力均衡会被打破；</li>
+<li>矿工们对减半后均衡价格将会上涨具有预期，即便产量减半，依然有动力去增加算力、抬高自己在全网算力所占的比例，以获得尽可能多的BTC，这一动机促使BTC挖矿难度上升，也会促使比特币均衡价格出现随时间推移的指数上升，具体而言，在其他条件不变时、因算力上升导致的<span class="math inline">\(\Delta t\)</span>内对数价格的上升幅度（<span class="math inline">\(\Delta log(P_t)\)</span>）为<span class="math inline">\(c_3*\Delta log(d_t)\)</span>；</li>
+<li>比特币价格的上涨，会促使关于它的投资需求上升，这一点与一般商品有区别。因为作为投资品的价格上涨代表投资回报的增加，而不是如一般商品那样代表消费支出的增加，故投资品价格一定程度的上涨不仅不会减少需求、反而会增加需求（投资品的历史表现会影响大众关于它的未来预期），这又会导致矿工利润扩大、更多算力涌入、难度再度上升，进一步推高价格，进入减半后价格上涨的正循环逻辑，形成牛市；</li>
+<li>由于2、3导致价格持续上升，以至于远远高于均衡价格模型所预言的值，产生过大的正残差项，出现泡沫；</li>
+<li>投资品的价格过高，一方面普通投资者不再能够有足够的资金维持其上涨，另一方面已经获利的投资者出于风险厌恶心理、有更多的抛售企图，最终价格上涨逻辑的临界点到来，泡沫开始破裂，价格出现下跌；</li>
+<li>价格下跌会促使获利者的进一步抛售，潜在投资者出于风险厌恶持观望态度，导致价格进一步的下跌，开始进入熊市；</li>
+<li>价格持续下跌，引起挖矿难度的下降，促使均衡价格下降，进入价格下跌的负循环逻辑，直至价格大幅低于均衡价格模型所预言的值，产生较大的负残差项，出现超卖，进入市场情绪低落的熊市；</li>
+<li>进入熊市后，由于宏观通胀因素始终存在，指数增长的M2资金部分流入比特币市场，对下跌趋势有抑制作用，让熊市的价格得到部分依托；</li>
+<li>另一方面，由于比特币本身的优异性及广泛的市场认可度、赋予其大宗商品的属性，在进入熊市后，比特币作为投资品的需求会减弱，此时其一般商品的属性凸显出来，即价格下跌，潜在卖出量会减少、潜在需求会增加，这一因素会让其价格下跌趋势减缓，最终趋于平衡；</li>
+<li>直到新的减半到来，再次打破平衡，进入新的一轮价格周期。</li>
+</ol>
+<h2 id="数据说明">数据说明</h2>
+<p>由于相较于之前文章新增了M2变量，故先对此变量进行数据说明。
+本文的M2数据，是从各大央行的数据库、<a href="https://fred.stlouisfed.org">FRED</a>数据库、<a href="https://data.worldbank.org">worldbank</a>数据库及<a href="https://tradingeconomics.com">tradingeconomics</a>数据库获取的世界各大经济体的广义货币（board
+money，M2）的月频历史数据。</p>
+<p>限于规模，本文只取GDP排名前29的经济体的M2值，将本币计价的各M2值折算成美元计价。如此得到的top29各经济体M2时序对比图如下：</p>
+<figure>
+<img src="全球top29经济体M2时序图.png" alt="全球top29经济体M2时序图">
+<figcaption aria-hidden="true">全球top29经济体M2时序图</figcaption>
+</figure>
+<p>将历史数据任意一个经济体的M2数据存在空值的时间段删除，分别加总top4经济体和top29经济体的M2值，得到如下加总数据时序图：</p>
+<figure>
+<img src="全球top29经济体总M2及top4经济体总M2时序图.png" alt="全球top29经济体总M2及top4经济体总M2时序图">
+<figcaption aria-hidden="true">全球top29经济体总M2及top4经济体总M2时序图</figcaption>
+</figure>
+<p>可见top4与top29的相似度非常高，照此推理我们采用top29的M2作为全球M2总量的代理变量是合理的，后文的M2值即为top29经济体的M2总和值。</p>
+<p>作出<span class="math inline">\(log(M2)\)</span>的时序图，并对比特币上线天数进行线性回归，得到如下线性回归散点图：</p>
+<figure>
+<img src="logM2与比特币上线天数的线性回归图.png" alt="logM2与比特币上线天数的线性回归图">
+<figcaption aria-hidden="true">logM2与比特币上线天数的线性回归图</figcaption>
+</figure>
+<p>可见线性回归效果很好，这揭示出直接将通胀因素纳入时间相关项是合理的，且通胀系数可被视为常数，从而解决了问题3。</p>
+<p>作出月频比特币对数价格（<span class="math inline">\(log(P_t)\)</span>，记为<span class="math inline">\(logP\)</span>）时序图，如下：</p>
+<figure>
+<img src="BTC对数价格时序图.png" alt="BTC对数价格时序图">
+<figcaption aria-hidden="true">BTC对数价格时序图</figcaption>
+</figure>
+<p>月频对数难度项（<span class="math inline">\(log(d_t)\)</span>，记为<span class="math inline">\(logD\)</span>）时序图如下：</p>
+<figure>
+<img src="BTC对数挖矿难度时序图.png" alt="BTC对数挖矿难度时序图">
+<figcaption aria-hidden="true">BTC对数挖矿难度时序图</figcaption>
+</figure>
+<p>对数单位产量时间项（<span class="math inline">\(log(\frac{\Delta
+t}{\Delta S})\)</span>，记为logtS）时序图如下：</p>
+<figure>
+<img src="BTC对数单位产量时间时序图.png" alt="BTC对数单位产量时间时序图">
+<figcaption aria-hidden="true">BTC对数单位产量时间时序图</figcaption>
+</figure>
+<p>需要额外说明的是，上图中的值中采用了与前文（参见<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#数据实证">数据实证</a>一节）一样的MAD异常值处理，先在日频上处理了日产量（包含区块奖励与手续费）的异常值、再将处理后的产量进行月度加总、进而得到<span class="math inline">\(logtS\)</span>值。</p>
+<p>由各变量的时序图可见，对数价格走势与这几项相似。直观上模型具有一定的正确性，下面对这些数据作回归、从数据实证上验证模型是否有效。</p>
+<h2 id="数据实证">数据实证</h2>
+<p>直接采用线性回归模型对<span class="math inline">\(\eqref{eq11}\)</span>式各变量进行回归，结果如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">                            OLS Regression Results                            </span><br><span class="line">==============================================================================</span><br><span class="line">Dep. Variable:                   logP   R-squared:                       <span class="number">0.972</span></span><br><span class="line">Model:                            OLS   Adj. R-squared:                  <span class="number">0.971</span></span><br><span class="line">Method:                 Least Squares   F-statistic:                     <span class="number">1487.</span></span><br><span class="line">Date:                Mon, <span class="number">19</span> May <span class="number">2025</span>   Prob (F-statistic):          <span class="number">3.26e-132</span></span><br><span class="line">Time:                        <span class="number">11</span>:<span class="number">56</span>:<span class="number">27</span>   Log-Likelihood:                -<span class="number">156.12</span></span><br><span class="line">No. Observations:                 <span class="number">177</span>   AIC:                             <span class="number">322.2</span></span><br><span class="line">Df Residuals:                     <span class="number">172</span>   BIC:                             <span class="number">338.1</span></span><br><span class="line">Df Model:                           <span class="number">4</span>                                         </span><br><span class="line">Covariance <span class="type">Type</span>:            nonrobust                                         </span><br><span class="line">==============================================================================</span><br><span class="line">                 coef    std err          t      P&gt;|t|      [<span class="number">0.025</span>      <span class="number">0.975</span>]</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Intercept   -<span class="number">325.8850</span>     <span class="number">37.176</span>     -<span class="number">8.766</span>      <span class="number">0.000</span>    -<span class="number">399.265</span>    -<span class="number">252.505</span></span><br><span class="line">days          -<span class="number">0.0014</span>      <span class="number">0.000</span>     -<span class="number">6.619</span>      <span class="number">0.000</span>      -<span class="number">0.002</span>      -<span class="number">0.001</span></span><br><span class="line">logM2         <span class="number">10.4011</span>      <span class="number">1.148</span>      <span class="number">9.062</span>      <span class="number">0.000</span>       <span class="number">8.136</span>      <span class="number">12.667</span></span><br><span class="line">logD           <span class="number">0.4040</span>      <span class="number">0.017</span>     <span class="number">24.082</span>      <span class="number">0.000</span>       <span class="number">0.371</span>       <span class="number">0.437</span></span><br><span class="line">logtS          <span class="number">0.5258</span>      <span class="number">0.246</span>      <span class="number">2.141</span>      <span class="number">0.034</span>       <span class="number">0.041</span>       <span class="number">1.010</span></span><br><span class="line">==============================================================================</span><br><span class="line">Omnibus:                       <span class="number">26.338</span>   Durbin-Watson:                   <span class="number">0.275</span></span><br><span class="line">Prob(Omnibus):                  <span class="number">0.000</span>   Jarque-Bera (JB):               <span class="number">34.452</span></span><br><span class="line">Skew:                           <span class="number">0.913</span>   Prob(JB):                     <span class="number">3.30e-08</span></span><br><span class="line">Kurtosis:                       <span class="number">4.156</span>   Cond. No.                     <span class="number">3.00e+06</span></span><br><span class="line">==============================================================================</span><br><span class="line">Notes:</span><br><span class="line">[<span class="number">1</span>] Standard Errors assume that the covariance matrix of the errors <span class="keyword">is</span> correctly specified.</span><br><span class="line">[<span class="number">2</span>] The condition number <span class="keyword">is</span> large,  <span class="number">3e+06</span>. This might indicate that there are</span><br><span class="line">strong multicollinearity <span class="keyword">or</span> other numerical problems.</span><br></pre></td></tr></table></figure>
+<p>可见：</p>
+<ol type="1">
+<li>各项的回归系数都很显著，<span class="math inline">\(R^2\)</span>值高达0.972（旧模型的<span class="math inline">\(R^2\)</span>为0.956，参见<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#数据实证">前文的回归结果</a>），F统计量值达1487、所有自变量系数为0的概率几乎为0（3.26e-132），说明模型的解释力非常强、模型作为整体的有效性非常显著；</li>
+<li>时间项（<span class="math inline">\(days\)</span>）的系数为负，体现出技术进步对价格有负影响，技术进步降低了成本、有推动价格下跌的趋势，这一点与前文所期望的相符，印证了模型的正确性；</li>
+<li>将通胀从时间项剥离后，发现其系数为正，说明通胀会推高比特币均衡价格；</li>
+<li>难度项的t值最大，说明该项最显著，是影响比特币均衡价格的最重要因素；</li>
+<li>产量相关项的t值较小，但在5%的显著水平下是显著的，这一项的t值虽然与前文统计结果相比差异较大，但仍在意料之中，毕竟此处采用的是月频数据；</li>
+<li>仍然出现了“条件数很大、可能存在强多重共线性”的提示，这依旧是因为没有对变量进行归一化处理造成的，下文将验证之。</li>
+</ol>
+<p>先对<span class="math inline">\(logP\)</span>、<span class="math inline">\(days\)</span>、<span class="math inline">\(logM2\)</span>、<span class="math inline">\(logD\)</span>、<span class="math inline">\(logtS\)</span>进行“min-max归一化”，再进行线性回归，结果如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">                            OLS Regression Results                            </span><br><span class="line">==============================================================================</span><br><span class="line">Dep. Variable:                   logP   R-squared:                       <span class="number">0.972</span></span><br><span class="line">Model:                            OLS   Adj. R-squared:                  <span class="number">0.971</span></span><br><span class="line">Method:                 Least Squares   F-statistic:                     <span class="number">1487.</span></span><br><span class="line">Date:                Mon, <span class="number">19</span> May <span class="number">2025</span>   Prob (F-statistic):          <span class="number">3.26e-132</span></span><br><span class="line">Time:                        <span class="number">13</span>:<span class="number">44</span>:<span class="number">41</span>   Log-Likelihood:                 <span class="number">314.98</span></span><br><span class="line">No. Observations:                 <span class="number">177</span>   AIC:                            -<span class="number">620.0</span></span><br><span class="line">Df Residuals:                     <span class="number">172</span>   BIC:                            -<span class="number">604.1</span></span><br><span class="line">Df Model:                           <span class="number">4</span>                                         </span><br><span class="line">Covariance <span class="type">Type</span>:            nonrobust                                         </span><br><span class="line">==============================================================================</span><br><span class="line">                 coef    std err          t      P&gt;|t|      [<span class="number">0.025</span>      <span class="number">0.975</span>]</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Intercept      <span class="number">0.0176</span>      <span class="number">0.013</span>      <span class="number">1.345</span>      <span class="number">0.180</span>      -<span class="number">0.008</span>       <span class="number">0.043</span></span><br><span class="line">days          -<span class="number">0.5227</span>      <span class="number">0.079</span>     -<span class="number">6.619</span>      <span class="number">0.000</span>      -<span class="number">0.679</span>      -<span class="number">0.367</span></span><br><span class="line">logM2          <span class="number">0.5914</span>      <span class="number">0.065</span>      <span class="number">9.062</span>      <span class="number">0.000</span>       <span class="number">0.463</span>       <span class="number">0.720</span></span><br><span class="line">logD           <span class="number">0.7581</span>      <span class="number">0.031</span>     <span class="number">24.082</span>      <span class="number">0.000</span>       <span class="number">0.696</span>       <span class="number">0.820</span></span><br><span class="line">logtS          <span class="number">0.1196</span>      <span class="number">0.056</span>      <span class="number">2.141</span>      <span class="number">0.034</span>       <span class="number">0.009</span>       <span class="number">0.230</span></span><br><span class="line">==============================================================================</span><br><span class="line">Omnibus:                       <span class="number">26.338</span>   Durbin-Watson:                   <span class="number">0.275</span></span><br><span class="line">Prob(Omnibus):                  <span class="number">0.000</span>   Jarque-Bera (JB):               <span class="number">34.452</span></span><br><span class="line">Skew:                           <span class="number">0.913</span>   Prob(JB):                     <span class="number">3.30e-08</span></span><br><span class="line">Kurtosis:                       <span class="number">4.156</span>   Cond. No.                         <span class="number">49.6</span></span><br><span class="line">==============================================================================</span><br><span class="line">Notes:</span><br><span class="line">[<span class="number">1</span>] Standard Errors assume that the covariance matrix of the errors <span class="keyword">is</span> correctly specified.</span><br></pre></td></tr></table></figure>
+<p>可见此时“条件数很大、可能存在强多重共线性”提示已经消失，说明该问题确实是因为没有归一化引起的。需要注意的是，在归一化后，截距项并不显著的与0相异，在5%甚至10%的显著水平下不能拒绝其为0的假设。说明通过归一化几乎消除了常数项。</p>
+<p>作出没有归一化的模型值、真实值及残差对比图，如下：</p>
+<figure>
+<img src="新均衡价格模型的拟合值真实值及残差对比图.png" alt="新均衡价格模型的拟合值真实值及残差对比图">
+<figcaption aria-hidden="true">新均衡价格模型的拟合值真实值及残差对比图</figcaption>
+</figure>
+<p>可见模型的残差项很平稳，说明模型捕捉到了自变量与因变量的长期均衡关系。</p>
+<p>归一化后的模型对比图如下：</p>
+<figure>
+<img src="归一化后的新均衡价格模型拟合值真实值及残差对比图.png" alt="归一化后的新均衡价格模型拟合值真实值及残差对比图">
+<figcaption aria-hidden="true">归一化后的新均衡价格模型拟合值真实值及残差对比图</figcaption>
+</figure>
+<p>通过归一化后的新旧模型参数对比可见，两个模型的各自变量参数值相近。</p>
+<p>由于本文中模型采用的是月频数据，且M2数据具有较大的滞后性，若希望对未来价格进行推测，可继续沿用旧价格模型（日频），结合对预测变量的建模（参见<a href="https://btcrainmaker.com/2024/12/31/利用比特币均衡价格模型进行未来价格预测/">利用比特币均衡价格模型进行未来价格预测</a>）来实现。也就是说，原来的预测方法依然是合理且符合预期的。</p>
+<h2 id="结论">结论</h2>
+<p>本文对约半年所前提出的、<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#价格模型推导">比特币均衡价格模型</a>的3点不足之处、进行了进一步探讨，通过修正推导的中间变量得到了带有系数的新模型，该模型正确区分了通胀与技术进步引起的时间效应，利用该模型可以解释比特币价格的周期性规律。</p>
+<p>本文从理论及实证角度，有力的反驳了人们一贯对比特币基本面所持的负面观点，证实了比特币的价值与其他大类资产一样、有基本面作为依托，其价格由宏观外因、技术外因、市场外因、机制内因、经济激励内因等因素，叠加市场噪音共同驱动形成。</p>
+<p>本文对全球top29经济体的M2进行了分析，借此解释了在<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#价格模型推导">《比特币价格与挖矿难度、时间、减半的关系》</a>一文中将通胀率视为常数的原因。</p>
+<p>通过对新模型的回归分析，可见该模型非常显著有效，能很好的解释比特币价格的变化。</p>
+<p><strong>本文完！</strong></p>
+]]></content>
+      <categories>
+        <category>投资</category>
+      </categories>
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>模型</tag>
+        <tag>m2</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>BTC均衡价格模型及预测值echarts图</title>
     <url>/2025/01/10/BTC%E5%9D%87%E8%A1%A1%E4%BB%B7%E6%A0%BC%E6%A8%A1%E5%9E%8B%E5%8F%8A%E9%A2%84%E6%B5%8B%E5%80%BCecharts%E5%9B%BE/</url>
     <content><![CDATA[<p>本文展示1月频率的BTC已实现价格、均衡价格及预测价格的Echarts图。</p>
 <span id="more"></span>
 <h2 id="模型1月价格图">模型1月价格图</h2>
 <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
-<div id="echarts7389" style="width: 100%;height: 400px;margin: 0 auto"></div>
+<div id="echarts162" style="width: 100%;height: 400px;margin: 0 auto"></div>
 <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('echarts7389'));
+        var myChart = echarts.init(document.getElementById('echarts162'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -6575,199 +6768,6 @@ port07_{MB}=B4/M1\_3-B5/M1\_1
       </tags>
   </entry>
   <entry>
-    <title>比特币均衡价格模型与全球m2</title>
-    <url>/2025/05/15/%E6%AF%94%E7%89%B9%E5%B8%81%E5%9D%87%E8%A1%A1%E4%BB%B7%E6%A0%BC%E6%A8%A1%E5%9E%8B%E4%B8%8E%E5%85%A8%E7%90%83m2/</url>
-    <content><![CDATA[<p>之前的《<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">比特币价格与挖矿难度、时间、减半的关系</a>》一文存在3点不足之处，本文对其作了进一步的讨论。</p>
-<p>本文对比特币均衡价格定价公式进行了修正，得到含系数的价格模型；揭示出比特币价格变动的4个重要外因与内因，有力的反驳了类似“比特币没有基本面”这样的观点；利用本文模型可解释比特币价格周期规律；对通胀与技术进步导致的比特币时间价值作了区分；对全球的M2数据进行了分析和回归，并将其吸纳进新的模型；在月度数据频率上对模型进行了实证，得出了模型有效且显著的结论……</p>
-<span id="more"></span>
-<h2 id="前言">前言</h2>
-<p>在之前那篇文章（<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">参见此处</a>）中，我们得到并验证了比特币均衡价格与时间、挖矿难度和单位时间产量之间的关系：</p>
-<p><span class="math display">\[\begin{equation} \label{eq01}
-\begin{aligned}
-log(P_t)=&amp;a+b*t+log(d_t) \\ &amp;+log(\frac{\Delta t}{\Delta S})
-\end{aligned}
-\end{equation}\]</span></p>
-<p>不过，该文存在一些不足：</p>
-<ol type="1">
-<li>模型推导的<span class="math inline">\(log(d_t)\)</span>、<span class="math inline">\(log(\frac{\Delta t}{\Delta
-S})\)</span>参数为1，这与回归结果不一样，回归结果参数不为1；</li>
-<li>对摩尔定律项（参见该文公式<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">（8）</a>）取对数，会出现负的时间参数，意味着在其他变量不变时、技术进步会引起均衡价格下跌，但该文将技术进步项和通胀项合并成一个时间变量，其参数为正、仅体现了正的时间价值，没有体现技术进步产生的负时间价值；</li>
-<li>模型推导假定通胀率固定，这一点是否成立需要验证。</li>
-</ol>
-<p>本文针对这几个问题作进一步说明。</p>
-<h2 id="模型修正">模型修正</h2>
-<h3 id="推导">推导</h3>
-<p>首先需要修正的是原文的公式（1），即均衡价格不一定严格等于边际成本，而是边际成本的如下更普遍的函数：
-<span class="math display">\[\begin{equation} \label{eq02}
-P=a_1*(\frac{\Delta C}{\Delta S})^{a_2}
-\end{equation}\]</span></p>
-<p>其中<span class="math inline">\(a_1\)</span>、<span class="math inline">\(a_2\)</span>为参数。</p>
-<p>原文的公式（2）将<span class="math inline">\(t\sim t+ \Delta
-t\)</span>之间的全网算力<span class="math inline">\(h_t\)</span>视为固定值，这在<span class="math inline">\(\Delta
-t\)</span>趋近于0的极限情况下才成立，但是在<span class="math inline">\(\Delta
-t\)</span>为1天或1月时则不能这么简单处理，原文（2）式更严格的表达应该是：</p>
-<p><span class="math display">\[\begin{equation} \label{eq03}
-\Delta C=\int_t^{t+\Delta t}n_t*h_t*dt
-\end{equation}\]</span></p>
-<p>其中<span class="math inline">\(n_t\)</span>为t时刻1次哈希运算的成本，在间隔不太大的<span class="math inline">\(t\sim t+\Delta
-t\)</span>时间段内可以近似为一个不变量（1日、1月间隔内的哈希运算成本相差不大），故可将<span class="math inline">\(n_t\)</span>提到积分符号之外。</p>
-<p>获得单位电能对应的成本<span class="math inline">\(E_t\)</span>可以写成全球<span class="math inline">\(M2_t\)</span>的如下函数：</p>
-<p><span class="math display">\[\begin{equation} \label{eq04}
-E_t=a_3*(M2_t)^{a_4}
-\end{equation}\]</span></p>
-<p>重述前文的公式<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/">(3)</a>如下：</p>
-<p><span class="math display">\[\begin{equation} \label{eq05}
-E_t=u_t*n_t
-\end{equation}\]</span></p>
-<p>单位电能产生的哈希运算次数<span class="math inline">\(u_t\)</span>仍然遵循摩尔定律：</p>
-<p><span class="math display">\[\begin{equation} \label{eq06}
-u_t=a_5*2^{a_6*t}
-\end{equation}\]</span></p>
-<p>从而可以得出<span class="math inline">\(n_t\)</span>遵循的规律如下：</p>
-<p><span class="math display">\[\begin{equation} \label{eq07}
-\begin{aligned}
-n_t &amp;=\frac{a_3*(M2_t)^{a_4}}{a_5*2^{a_6*t}} \\
-&amp;=a_3/a_5*2^{-a_6*t}*(M2_t)^{a_4}
-\end{aligned}
-\end{equation}\]</span></p>
-<p>比特币全网算力在理想情况下、等于挖矿难度<span class="math inline">\(d_t\)</span>与单位难度对应算力<span class="math inline">\(\overline{u}_0\)</span>的乘积（也即原文（6）式），但是在1日或1月的频率上，全网算力与挖矿难度之间的关系不是简单的正比关系，而应该是与<span class="math inline">\(d_t\)</span>的某个函数成正比：</p>
-<p><span class="math display">\[\begin{equation} \label{eq08}
-h_t=\overline{u}_0*f(d_t)
-\end{equation}\]</span></p>
-<p>我们可以将<span class="math inline">\(\eqref{eq03}\)</span>式中的积分作如下函数变换：</p>
-<p><span class="math display">\[\begin{equation} \label{eq09}
-\begin{aligned}
-\int_t^{t+\Delta t}h_t*dt&amp;=\overline{u}_0*\int_t^{\Delta t}f(d_t)*dt
-\\ &amp;=\overline{u}_0*g(d_t)*\Delta t
-\end{aligned}
-\end{equation}\]</span></p>
-<p>将上式中的<span class="math inline">\(g(d_t)\)</span>用以下函数形式表示：</p>
-<p><span class="math display">\[\begin{equation} \label{eq10}
-g(d_t)=\alpha * (d_t)^\beta
-\end{equation}\]</span></p>
-<p>将上述各式代入公式<span class="math inline">\(\eqref{eq02}\)</span>，同时对等式两边取对数，并将常数项合并后按顺序重命名，即得到如下形式：</p>
-<p><span class="math display">\[\begin{equation} \label{eq11}
-\begin{aligned}
-log(P_t)=&amp; c_0+c_1*t \\ &amp;+c_2*log(M2_t) \\ &amp; +c_3*log(d_t)
-\\ &amp;+c_4*log(\frac{\Delta t}{\Delta S})
-\end{aligned}
-\end{equation}\]</span></p>
-<p>也即得到了含有系数的对数关系，解决了前言提到的问题1。同时，通胀和技术进步对均衡价格的影响被分离成两个独立项，也就可以对问题2进行解释了。</p>
-<p>上式中等号右边依次为：常数项、由于技术进步（如摩尔定律）导致的时间相关项、全球货币超发引起的通货膨胀相关项、比特币挖矿难度相关项、单位时间比特币产量相关项。</p>
-<h3 id="模型说明">模型说明</h3>
-<p>下面将阐述<span class="math inline">\(\eqref{eq11}\)</span>式右侧中各项的意义：</p>
-<ol type="1">
-<li>由于技术进步导致的时间相关系数（<span class="math inline">\(c_1\)</span>）应该是负值，意味着技术进步会带来产品的成本价格下跌，这不仅仅适用于比特币、还适用很多其他产品，这一项不是比特币生产者能够直接干预的，是比特币价格变化的技术外因。</li>
-<li>M2相关项与全球货币超发相关，因为BTC是一种全球性资产，任何国家的货币超发都会对它产生影响，这一项的系数（<span class="math inline">\(c_2\)</span>）应该为正数，意味着因为通货膨胀，会导致用法币计价的BTC价格上涨，这一项也不是比特币生产者能够直接干预的，是比特币价格变化的宏观外因。</li>
-<li>比特币挖矿难度相关项，反应了比特币的生产端（或曰供给侧）对它价值的预估及根据当前价格对生产行为的调整，这一项是比特币生产者能够主动干预的，以适应市场价格和需求。同时，这一项也是市场需求端强弱的体现，反应了比特币的购买者对它价值的预估及对当前价格购买行为的调整。归根到底，此项是比特币设计机制的体现，是比特币网络为了适应外在市场情况而作出的调整。它可被视为比特币的基本面，既反应了比特币价格变化的市场外因、又反应了其调节机制的内因。</li>
-<li>难度值（<span class="math inline">\(d_t\)</span>）会对价格产生影响：若难度上涨预示着成本的上涨，反应了矿工对当前及未来价格的乐观预期，在市场需求不变时，更高的成本会导致供给变少，引起价格上涨；若该项下跌预示着成本下跌，反应了矿工对当前及未来价格的悲观预期，在市场需求不变时，更低的成本会导致供给变多，引起价格下跌。这一情形是矿工们主动影响市场价格。</li>
-<li>因为需求端导致的价格变化，也会对挖矿难度产生影响：若需求旺盛，促使价格上涨，矿工们的收益扩大，利润驱使更多的参与者加入，导致算力增加、引起难度上涨；若需求萎缩，促使价格下跌，矿工们的收益减少，发生亏损的参与者会停止或减少挖矿行为，导致算力减少、引起难度下跌。这一情形是矿工们被动的通过调节算力来适应需求端主导的市场价格。</li>
-<li>单位时间产量相关项，这一项是比特币设计时预设的经济激励机制，不是矿工和市场需求者能够影响的，代表了比特币自身设计对价格的影响，是比特币价格变化的经济激励内因。</li>
-<li>比特币的均衡价格是上述各种因素的总和结果。</li>
-</ol>
-<p>通过以上阐述，可以看出：</p>
-<ol type="1">
-<li><font color="red"><strong>比特币的价格形成具有坚实的基本面基础、其价格变动有深刻原因。</strong></font></li>
-<li><font color="red"><strong>人们通常臆测的一些过分简化的观点，如“比特币没有基本面”、“比特币只具有投机价值”或“比特币的价格上涨仅仅是因为投机泡沫”等等，是毫无道理的。</strong></font></li>
-</ol>
-<h3 id="对btc价格周期规律的解释">对BTC价格周期规律的解释</h3>
-<p>由<span class="math inline">\(\eqref{eq11}\)</span>式各变量，可以解释比特币价格在一定历史时期中所呈现出的周期性：</p>
-<ol type="1">
-<li>由于产量减半，最后一项出现阶跃上升（在减半早期，这一阶跃增量约增加<span class="math inline">\(c_4*log2\)</span>，可参见上一篇文章关于公式（9）的<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#价格模型推导">论述</a>）。在减半前后的一段时间里，其他项不发生较大变化，比特币均衡价格（与实际价格有区别）因这一增量而出现指数上涨，将均衡价格抬升到一个新的区域（不同减半周期会出现不同的价格区域，可参见<a href="https://btcrainmaker.com/2023/10/17/比特币S2F模型还适用吗/#s2f简化模型建模">比特币S2F模型还适用吗</a>一文中的“<span class="math inline">\(logM\)</span>与<span class="math inline">\(logS2F\)</span>线性回归图”），上一周期形成的价格、算力均衡会被打破；</li>
-<li>矿工们对减半后均衡价格将会上涨具有预期，即便产量减半，依然有动力去增加算力、抬高自己在全网算力所占的比例，以获得尽可能多的BTC，这一动机促使BTC挖矿难度上升，也会促使比特币均衡价格出现随时间推移的指数上升，具体而言，在其他条件不变时、因算力上升导致的<span class="math inline">\(\Delta t\)</span>内对数价格的上升幅度（<span class="math inline">\(\Delta log(P_t)\)</span>）为<span class="math inline">\(c_3*\Delta log(d_t)\)</span>；</li>
-<li>比特币价格的上涨，会促使关于它的投资需求上升，这一点与一般商品有区别。因为作为投资品的价格上涨代表投资回报的增加，而不是如一般商品那样代表消费支出的增加，故投资品价格一定程度的上涨不仅不会减少需求、反而会增加需求（投资品的历史表现会影响大众关于它的未来预期），这又会导致矿工利润扩大、更多算力涌入、难度再度上升，进一步推高价格，进入减半后价格上涨的正循环逻辑，形成牛市；</li>
-<li>由于2、3导致价格持续上升，以至于远远高于均衡价格模型所预言的值，产生过大的正残差项，出现泡沫；</li>
-<li>投资品的价格过高，一方面普通投资者不再能够有足够的资金维持其上涨，另一方面已经获利的投资者出于风险厌恶心理、有更多的抛售企图，最终价格上涨逻辑的临界点到来，泡沫开始破裂，价格出现下跌；</li>
-<li>价格下跌会促使获利者的进一步抛售，潜在投资者出于风险厌恶持观望态度，导致价格进一步的下跌，开始进入熊市；</li>
-<li>价格持续下跌，引起挖矿难度的下降，促使均衡价格下降，进入价格下跌的负循环逻辑，直至价格大幅低于均衡价格模型所预言的值，产生较大的负残差项，出现超卖，进入市场情绪低落的熊市；</li>
-<li>进入熊市后，由于宏观通胀因素始终存在，指数增长的M2资金部分流入比特币市场，对下跌趋势有抑制作用，让熊市的价格得到部分依托；</li>
-<li>另一方面，由于比特币本身的优异性及广泛的市场认可度、赋予其大宗商品的属性，在进入熊市后，比特币作为投资品的需求会减弱，此时其一般商品的属性凸显出来，即价格下跌，潜在卖出量会减少、潜在需求会增加，这一因素会让其价格下跌趋势减缓，最终趋于平衡；</li>
-<li>直到新的减半到来，再次打破平衡，进入新的一轮价格周期。</li>
-</ol>
-<h2 id="数据说明">数据说明</h2>
-<p>由于相较于之前文章新增了M2变量，故先对此变量进行数据说明。
-本文的M2数据，是从各大央行的数据库、<a href="https://fred.stlouisfed.org">FRED</a>数据库、<a href="https://data.worldbank.org">worldbank</a>数据库及<a href="https://tradingeconomics.com">tradingeconomics</a>数据库获取的世界各大经济体的广义货币（board
-money，M2）的月频历史数据。</p>
-<p>限于规模，本文只取GDP排名前29的经济体的M2值，将本币计价的各M2值折算成美元计价。如此得到的top29各经济体M2时序对比图如下：</p>
-<figure>
-<img src="全球top29经济体M2时序图.png" alt="全球top29经济体M2时序图">
-<figcaption aria-hidden="true">全球top29经济体M2时序图</figcaption>
-</figure>
-<p>将历史数据任意一个经济体的M2数据存在空值的时间段删除，分别加总top4经济体和top29经济体的M2值，得到如下加总数据时序图：</p>
-<figure>
-<img src="全球top29经济体总M2及top4经济体总M2时序图.png" alt="全球top29经济体总M2及top4经济体总M2时序图">
-<figcaption aria-hidden="true">全球top29经济体总M2及top4经济体总M2时序图</figcaption>
-</figure>
-<p>可见top4与top29的相似度非常高，照此推理我们采用top29的M2作为全球M2总量的代理变量是合理的，后文的M2值即为top29经济体的M2总和值。</p>
-<p>作出<span class="math inline">\(log(M2)\)</span>的时序图，并对比特币上线天数进行线性回归，得到如下线性回归散点图：</p>
-<figure>
-<img src="logM2与比特币上线天数的线性回归图.png" alt="logM2与比特币上线天数的线性回归图">
-<figcaption aria-hidden="true">logM2与比特币上线天数的线性回归图</figcaption>
-</figure>
-<p>可见线性回归效果很好，这揭示出直接将通胀因素纳入时间相关项是合理的，且通胀系数可被视为常数，从而解决了问题3。</p>
-<p>作出月频比特币对数价格（<span class="math inline">\(log(P_t)\)</span>，记为<span class="math inline">\(logP\)</span>）时序图，如下：</p>
-<figure>
-<img src="BTC对数价格时序图.png" alt="BTC对数价格时序图">
-<figcaption aria-hidden="true">BTC对数价格时序图</figcaption>
-</figure>
-<p>月频对数难度项（<span class="math inline">\(log(d_t)\)</span>，记为<span class="math inline">\(logD\)</span>）时序图如下：</p>
-<figure>
-<img src="BTC对数挖矿难度时序图.png" alt="BTC对数挖矿难度时序图">
-<figcaption aria-hidden="true">BTC对数挖矿难度时序图</figcaption>
-</figure>
-<p>对数单位产量时间项（<span class="math inline">\(log(\frac{\Delta
-t}{\Delta S})\)</span>，记为logtS）时序图如下：</p>
-<figure>
-<img src="BTC对数单位产量时间时序图.png" alt="BTC对数单位产量时间时序图">
-<figcaption aria-hidden="true">BTC对数单位产量时间时序图</figcaption>
-</figure>
-<p>需要额外说明的是，上图中的值中采用了与前文（参见<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#数据实证">数据实证</a>一节）一样的MAD异常值处理，先在日频上处理了日产量（包含区块奖励与手续费）的异常值、再将处理后的产量进行月度加总、进而得到<span class="math inline">\(logtS\)</span>值。</p>
-<p>由各变量的时序图可见，对数价格走势与这几项相似。直观上模型具有一定的正确性，下面对这些数据作回归、从数据实证上验证模型是否有效。</p>
-<h2 id="数据实证">数据实证</h2>
-<p>直接采用线性回归模型对<span class="math inline">\(\eqref{eq11}\)</span>式各变量进行回归，结果如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">                            OLS Regression Results                            </span><br><span class="line">==============================================================================</span><br><span class="line">Dep. Variable:                   logP   R-squared:                       <span class="number">0.972</span></span><br><span class="line">Model:                            OLS   Adj. R-squared:                  <span class="number">0.971</span></span><br><span class="line">Method:                 Least Squares   F-statistic:                     <span class="number">1487.</span></span><br><span class="line">Date:                Mon, <span class="number">19</span> May <span class="number">2025</span>   Prob (F-statistic):          <span class="number">3.26e-132</span></span><br><span class="line">Time:                        <span class="number">11</span>:<span class="number">56</span>:<span class="number">27</span>   Log-Likelihood:                -<span class="number">156.12</span></span><br><span class="line">No. Observations:                 <span class="number">177</span>   AIC:                             <span class="number">322.2</span></span><br><span class="line">Df Residuals:                     <span class="number">172</span>   BIC:                             <span class="number">338.1</span></span><br><span class="line">Df Model:                           <span class="number">4</span>                                         </span><br><span class="line">Covariance <span class="type">Type</span>:            nonrobust                                         </span><br><span class="line">==============================================================================</span><br><span class="line">                 coef    std err          t      P&gt;|t|      [<span class="number">0.025</span>      <span class="number">0.975</span>]</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Intercept   -<span class="number">325.8850</span>     <span class="number">37.176</span>     -<span class="number">8.766</span>      <span class="number">0.000</span>    -<span class="number">399.265</span>    -<span class="number">252.505</span></span><br><span class="line">days          -<span class="number">0.0014</span>      <span class="number">0.000</span>     -<span class="number">6.619</span>      <span class="number">0.000</span>      -<span class="number">0.002</span>      -<span class="number">0.001</span></span><br><span class="line">logM2         <span class="number">10.4011</span>      <span class="number">1.148</span>      <span class="number">9.062</span>      <span class="number">0.000</span>       <span class="number">8.136</span>      <span class="number">12.667</span></span><br><span class="line">logD           <span class="number">0.4040</span>      <span class="number">0.017</span>     <span class="number">24.082</span>      <span class="number">0.000</span>       <span class="number">0.371</span>       <span class="number">0.437</span></span><br><span class="line">logtS          <span class="number">0.5258</span>      <span class="number">0.246</span>      <span class="number">2.141</span>      <span class="number">0.034</span>       <span class="number">0.041</span>       <span class="number">1.010</span></span><br><span class="line">==============================================================================</span><br><span class="line">Omnibus:                       <span class="number">26.338</span>   Durbin-Watson:                   <span class="number">0.275</span></span><br><span class="line">Prob(Omnibus):                  <span class="number">0.000</span>   Jarque-Bera (JB):               <span class="number">34.452</span></span><br><span class="line">Skew:                           <span class="number">0.913</span>   Prob(JB):                     <span class="number">3.30e-08</span></span><br><span class="line">Kurtosis:                       <span class="number">4.156</span>   Cond. No.                     <span class="number">3.00e+06</span></span><br><span class="line">==============================================================================</span><br><span class="line">Notes:</span><br><span class="line">[<span class="number">1</span>] Standard Errors assume that the covariance matrix of the errors <span class="keyword">is</span> correctly specified.</span><br><span class="line">[<span class="number">2</span>] The condition number <span class="keyword">is</span> large,  <span class="number">3e+06</span>. This might indicate that there are</span><br><span class="line">strong multicollinearity <span class="keyword">or</span> other numerical problems.</span><br></pre></td></tr></table></figure>
-<p>可见：</p>
-<ol type="1">
-<li>各项的回归系数都很显著，<span class="math inline">\(R^2\)</span>值高达0.972（旧模型的<span class="math inline">\(R^2\)</span>为0.956，参见<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#数据实证">前文的回归结果</a>），F统计量值达1487、所有自变量系数为0的概率几乎为0（3.26e-132），说明模型的解释力非常强、模型作为整体的有效性非常显著；</li>
-<li>时间项（<span class="math inline">\(days\)</span>）的系数为负，体现出技术进步对价格有负影响，技术进步降低了成本、有推动价格下跌的趋势，这一点与前文所期望的相符，印证了模型的正确性；</li>
-<li>将通胀从时间项剥离后，发现其系数为正，说明通胀会推高比特币均衡价格；</li>
-<li>难度项的t值最大，说明该项最显著，是影响比特币均衡价格的最重要因素；</li>
-<li>产量相关项的t值较小，但在5%的显著水平下是显著的，这一项的t值虽然与前文统计结果相比差异较大，但仍在意料之中，毕竟此处采用的是月频数据；</li>
-<li>仍然出现了“条件数很大、可能存在强多重共线性”的提示，这依旧是因为没有对变量进行归一化处理造成的，下文将验证之。</li>
-</ol>
-<p>先对<span class="math inline">\(logP\)</span>、<span class="math inline">\(days\)</span>、<span class="math inline">\(logM2\)</span>、<span class="math inline">\(logD\)</span>、<span class="math inline">\(logtS\)</span>进行“min-max归一化”，再进行线性回归，结果如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">                            OLS Regression Results                            </span><br><span class="line">==============================================================================</span><br><span class="line">Dep. Variable:                   logP   R-squared:                       <span class="number">0.972</span></span><br><span class="line">Model:                            OLS   Adj. R-squared:                  <span class="number">0.971</span></span><br><span class="line">Method:                 Least Squares   F-statistic:                     <span class="number">1487.</span></span><br><span class="line">Date:                Mon, <span class="number">19</span> May <span class="number">2025</span>   Prob (F-statistic):          <span class="number">3.26e-132</span></span><br><span class="line">Time:                        <span class="number">13</span>:<span class="number">44</span>:<span class="number">41</span>   Log-Likelihood:                 <span class="number">314.98</span></span><br><span class="line">No. Observations:                 <span class="number">177</span>   AIC:                            -<span class="number">620.0</span></span><br><span class="line">Df Residuals:                     <span class="number">172</span>   BIC:                            -<span class="number">604.1</span></span><br><span class="line">Df Model:                           <span class="number">4</span>                                         </span><br><span class="line">Covariance <span class="type">Type</span>:            nonrobust                                         </span><br><span class="line">==============================================================================</span><br><span class="line">                 coef    std err          t      P&gt;|t|      [<span class="number">0.025</span>      <span class="number">0.975</span>]</span><br><span class="line">------------------------------------------------------------------------------</span><br><span class="line">Intercept      <span class="number">0.0176</span>      <span class="number">0.013</span>      <span class="number">1.345</span>      <span class="number">0.180</span>      -<span class="number">0.008</span>       <span class="number">0.043</span></span><br><span class="line">days          -<span class="number">0.5227</span>      <span class="number">0.079</span>     -<span class="number">6.619</span>      <span class="number">0.000</span>      -<span class="number">0.679</span>      -<span class="number">0.367</span></span><br><span class="line">logM2          <span class="number">0.5914</span>      <span class="number">0.065</span>      <span class="number">9.062</span>      <span class="number">0.000</span>       <span class="number">0.463</span>       <span class="number">0.720</span></span><br><span class="line">logD           <span class="number">0.7581</span>      <span class="number">0.031</span>     <span class="number">24.082</span>      <span class="number">0.000</span>       <span class="number">0.696</span>       <span class="number">0.820</span></span><br><span class="line">logtS          <span class="number">0.1196</span>      <span class="number">0.056</span>      <span class="number">2.141</span>      <span class="number">0.034</span>       <span class="number">0.009</span>       <span class="number">0.230</span></span><br><span class="line">==============================================================================</span><br><span class="line">Omnibus:                       <span class="number">26.338</span>   Durbin-Watson:                   <span class="number">0.275</span></span><br><span class="line">Prob(Omnibus):                  <span class="number">0.000</span>   Jarque-Bera (JB):               <span class="number">34.452</span></span><br><span class="line">Skew:                           <span class="number">0.913</span>   Prob(JB):                     <span class="number">3.30e-08</span></span><br><span class="line">Kurtosis:                       <span class="number">4.156</span>   Cond. No.                         <span class="number">49.6</span></span><br><span class="line">==============================================================================</span><br><span class="line">Notes:</span><br><span class="line">[<span class="number">1</span>] Standard Errors assume that the covariance matrix of the errors <span class="keyword">is</span> correctly specified.</span><br></pre></td></tr></table></figure>
-<p>可见此时“条件数很大、可能存在强多重共线性”提示已经消失，说明该问题确实是因为没有归一化引起的。需要注意的是，在归一化后，截距项并不显著的与0相异，在5%甚至10%的显著水平下不能拒绝其为0的假设。说明通过归一化几乎消除了常数项。</p>
-<p>作出没有归一化的模型值、真实值及残差对比图，如下：</p>
-<figure>
-<img src="新均衡价格模型的拟合值真实值及残差对比图.png" alt="新均衡价格模型的拟合值真实值及残差对比图">
-<figcaption aria-hidden="true">新均衡价格模型的拟合值真实值及残差对比图</figcaption>
-</figure>
-<p>可见模型的残差项很平稳，说明模型捕捉到了自变量与因变量的长期均衡关系。</p>
-<p>归一化后的模型对比图如下：</p>
-<figure>
-<img src="归一化后的新均衡价格模型拟合值真实值及残差对比图.png" alt="归一化后的新均衡价格模型拟合值真实值及残差对比图">
-<figcaption aria-hidden="true">归一化后的新均衡价格模型拟合值真实值及残差对比图</figcaption>
-</figure>
-<p>通过归一化后的新旧模型参数对比可见，两个模型的各自变量参数值相近。</p>
-<p>由于本文中模型采用的是月频数据，且M2数据具有较大的滞后性，若希望对未来价格进行推测，可继续沿用旧价格模型（日频），结合对预测变量的建模（参见<a href="https://btcrainmaker.com/2024/12/31/利用比特币均衡价格模型进行未来价格预测/">利用比特币均衡价格模型进行未来价格预测</a>）来实现。也就是说，原来的预测方法依然是合理且符合预期的。</p>
-<h2 id="结论">结论</h2>
-<p>本文对约半年所前提出的、<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#价格模型推导">比特币均衡价格模型</a>的3点不足之处、进行了进一步探讨，通过修正推导的中间变量得到了带有系数的新模型，该模型正确区分了通胀与技术进步引起的时间效应，利用该模型可以解释比特币价格的周期性规律。</p>
-<p>本文从理论及实证角度，有力的反驳了人们一贯对比特币基本面所持的负面观点，证实了比特币的价值与其他大类资产一样、有基本面作为依托，其价格由宏观外因、技术外因、市场外因、机制内因、经济激励内因等因素，叠加市场噪音共同驱动形成。</p>
-<p>本文对全球top29经济体的M2进行了分析，借此解释了在<a href="https://btcrainmaker.com/2024/12/19/比特币价格与挖矿难度、时间、减半的关系/#价格模型推导">《比特币价格与挖矿难度、时间、减半的关系》</a>一文中将通胀率视为常数的原因。</p>
-<p>通过对新模型的回归分析，可见该模型非常显著有效，能很好的解释比特币价格的变化。</p>
-<p><strong>本文完！</strong></p>
-]]></content>
-      <categories>
-        <category>投资</category>
-      </categories>
-      <tags>
-        <tag>bitcoin</tag>
-        <tag>模型</tag>
-        <tag>m2</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>比特币没有基本面吗</title>
     <url>/2025/07/28/%E6%AF%94%E7%89%B9%E5%B8%81%E6%B2%A1%E6%9C%89%E5%9F%BA%E6%9C%AC%E9%9D%A2%E5%90%97/</url>
     <content><![CDATA[<p>最近写了一篇关于比特币定价的论文<span class="citation" data-cites="Ren-bitcoin-epm-2025">(Ren,
@@ -7185,7 +7185,7 @@ et al., 2016; Cong et al.,
 所具有的不足点相同。纵然得出了基于效用函数的定价公式，也因没有现实依据而不可用。值得一提的是，我所提出的EPM模型<span class="citation" data-cites="Ren-bitcoin-epm-2025">(Ren,
 2025b)</span>，并没有采用效用函数对均衡价格进行推理，避免了不可真实观测的问题；</p></li>
 <li><p>作者们假定标准货币的总量不变，这与事实违背。全球总广义货币供给量正在不间断的快速（高于无风险利率）增长，可以参见<span class="citation" data-cites="Ren-bitcoin-epm-2025">(Ren,
-2025b)</span>的M2数据走势图。这正是比特币诞生之初便希望解决的问题，反映着比特币的宏观基本面；</p></li>
+2025b)</span>的M2数据走势图。这正是比特币诞生之初时希望解决的问题，不断超发的货币、反映着比特币的宏观基本面；</p></li>
 <li><p>作者们的模型，并不像他们所宣称的：与股票定价机制存在很大的差异。对于没有分红的股票，他们采用的基于未来价格预期和太阳黑子的定价逻辑，同样也适用。在第二部分的结尾，作者们引用
 <span class="citation" data-cites="Shiller-stock-prices-dividends-1981">Shiller (1981)</span>
 来说明股票定价与加密货币定价的差异，说道：</p></li>
