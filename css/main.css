@@ -2683,7 +2683,7 @@ header.header {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #f7ff54;
+  background: #ffa80b;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2726,4 +2726,14 @@ header.header {
   .sidebar-dimmer {
     display: none;
   }
+}
+.MathJax_Display {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  max-width: 100% !important;
+  width: auto !important;
+  margin: 1em 0 !important;
+}
+.MathJax_Display > span {
+  white-space: nowrap !important;
 }
