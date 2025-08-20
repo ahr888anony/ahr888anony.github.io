@@ -2683,7 +2683,7 @@ header.header {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #91a354;
+  background: #82e973;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2727,13 +2727,16 @@ header.header {
     display: none;
   }
 }
-.MathJax_Display {
+.post-body .MathJax_Display {
   overflow-x: auto !important;
   overflow-y: hidden !important;
   max-width: 100% !important;
+  min-width: 0 !important;
   width: auto !important;
   margin: 1em 0 !important;
+  -webkit-overflow-scrolling: touch;
 }
-.MathJax_Display > span {
+.post-body .MathJax_Display .MathJax {
   white-space: nowrap !important;
+  display: inline-block !important;
 }
