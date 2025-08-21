@@ -252,6 +252,13 @@
   </url>
   
   <url>
+    <loc>https://btcrainmaker.com/tags/PyCharm/</loc>
+    <lastmod>2025-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://btcrainmaker.com/tags/%E5%8A%A0%E5%AF%86%E8%B4%A7%E5%B8%81/</loc>
     <lastmod>2025-08-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -273,7 +280,7 @@
   </url>
   
   <url>
-    <loc>https://btcrainmaker.com/tags/PyCharm/</loc>
+    <loc>https://btcrainmaker.com/tags/BitVM/</loc>
     <lastmod>2025-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -294,21 +301,7 @@
   </url>
   
   <url>
-    <loc>https://btcrainmaker.com/tags/BitVM/</loc>
-    <lastmod>2025-08-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://btcrainmaker.com/tags/acme-sh/</loc>
-    <lastmod>2025-08-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://btcrainmaker.com/tags/%E5%9F%BA%E9%87%91/</loc>
     <lastmod>2025-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -322,21 +315,14 @@
   </url>
   
   <url>
+    <loc>https://btcrainmaker.com/tags/%E5%9F%BA%E9%87%91/</loc>
+    <lastmod>2025-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://btcrainmaker.com/tags/pyecharts/</loc>
-    <lastmod>2025-08-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://btcrainmaker.com/tags/socks/</loc>
-    <lastmod>2025-08-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://btcrainmaker.com/tags/Debian/</loc>
     <lastmod>2025-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -365,6 +351,20 @@
   
   <url>
     <loc>https://btcrainmaker.com/tags/%E5%90%8D%E8%91%97/</loc>
+    <lastmod>2025-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://btcrainmaker.com/tags/socks/</loc>
+    <lastmod>2025-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://btcrainmaker.com/tags/Debian/</loc>
     <lastmod>2025-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
