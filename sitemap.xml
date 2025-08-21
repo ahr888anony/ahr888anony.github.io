@@ -322,13 +322,6 @@
   </url>
   
   <url>
-    <loc>https://btcrainmaker.com/tags/pyecharts/</loc>
-    <lastmod>2025-08-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://btcrainmaker.com/tags/socks/</loc>
     <lastmod>2025-08-21</lastmod>
     <changefreq>weekly</changefreq>
@@ -337,6 +330,13 @@
   
   <url>
     <loc>https://btcrainmaker.com/tags/Debian/</loc>
+    <lastmod>2025-08-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://btcrainmaker.com/tags/pyecharts/</loc>
     <lastmod>2025-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -392,14 +392,14 @@
   </url>
   
   <url>
-    <loc>https://btcrainmaker.com/tags/m2/</loc>
+    <loc>https://btcrainmaker.com/tags/%E5%9B%A0%E5%AD%90/</loc>
     <lastmod>2025-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://btcrainmaker.com/tags/%E5%9B%A0%E5%AD%90/</loc>
+    <loc>https://btcrainmaker.com/tags/m2/</loc>
     <lastmod>2025-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
