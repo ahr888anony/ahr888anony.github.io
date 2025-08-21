@@ -1138,6 +1138,56 @@ rtn_{mkt}^t=\sum_{i}^{N^{t-1}}
       </tags>
   </entry>
   <entry>
+    <title>pycharm重装打不开的问题</title>
+    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
+m1电脑，重装最新版pycharm专业版后不能打开。</p>
+<span id="more"></span>
+<h2 id="背景介绍">背景介绍</h2>
+<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
+<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
+m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
+<p>网上找了很久，才最终解决该问题。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
+<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
+<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
+<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
+<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>PyCharm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>可以在比特币上计算一切的BitVM</title>
+    <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
+    <content><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">Robin
+Linus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p>
+<span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p>
+<h2 id="白皮书内容理解">白皮书内容理解</h2>
+<p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p>
+<p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考Bob
+Bodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p>
+<p>该白皮书（ TODO，待完成）</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>BitVM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>由比特币已实现价格进行的一些推理</title>
     <url>/2023/09/25/%E7%94%B1%E6%AF%94%E7%89%B9%E5%B8%81%E5%B7%B2%E5%AE%9E%E7%8E%B0%E4%BB%B7%E6%A0%BC%E8%BF%9B%E8%A1%8C%E7%9A%84%E4%B8%80%E4%BA%9B%E6%8E%A8%E7%90%86/</url>
     <content><![CDATA[<p>本文首先介绍了一些比特币早期价格的历史；接着分析了比特币对数价格（<span class="math inline">\(logP\)</span>）与对数供给量（<span class="math inline">\(logS\)</span>）可能的一些回归关系；然后总结了历史上的3次减半规律；进而对总结的规律进行极值建模；最后运用汇总的规律及构建的模型，对下一次减半周期几个极值（最低价、减半价、最高价）和对应的时间范围进行了一些推测。</p>
@@ -1676,56 +1726,6 @@ P_{2024-04-16}\in[51006.21, 76458.321]
       </tags>
   </entry>
   <entry>
-    <title>pycharm重装打不开的问题</title>
-    <url>/2023/09/19/pycharm%E9%87%8D%E8%A3%85%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>安装过<code>BetterIntelliJ</code>破解插件，使用的mac
-m1电脑，重装最新版pycharm专业版后不能打开。</p>
-<span id="more"></span>
-<h2 id="背景介绍">背景介绍</h2>
-<p>之前贪便宜，安装过pycharm破解版，由于其一直报错、且经常不明原因的崩溃，故想升级系统、购买正版的证书。</p>
-<p>在网上一查，发现之前安装的破解程序居然有病毒！！考虑到本人Mac中保存着很多重要文件，有点后怕。由于直接安装了、没有先对<code>BetterIntelliJ</code>插件进行卸载，导致重装后，mac
-m1始终不能正常打开pycharm，弹出一个带有脏字的错误的弹窗。</p>
-<p>网上找了很久，才最终解决该问题。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>首先在<code>访达 -&gt; 应用程序</code>中找到新安装的<code>PyCharm</code>，右击选择<code>显示包内容</code>进入<code>Contents -&gt; MacOS</code>找到可运行的<code>pycharm</code>程序，双击打开，弹出终端程序自动运行，会显示出具体的错误。</p>
-<p>通过终端显示的日志，可见是由于<code>BetterIntelliJ</code>导致的，<code>PyCharm</code>在运行前会运行一个叫<code>pycharm.vmoptions</code>的配置文件，按照目录找到该文件，打开可见里面就是指定了运行上述插件。我的是在<code>~/Library/Application Support/JetBrains/PyCharm2023.2</code>里面，删除之：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Library/Application\ Support/JetBrains/PyCharm2023.2</span><br><span class="line"><span class="built_in">rm</span> -rf pycharm.vmoptions</span><br><span class="line"><span class="built_in">rm</span> -rf plugins/BetterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>然后在用户根目录下找到<code>BetterIntelliJ</code>插件，该插件为隐藏文件，如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line"><span class="built_in">ls</span> -a</span><br><span class="line"><span class="built_in">rm</span> -rf .betterIntelliJ</span><br></pre></td></tr></table></figure>
-<p>上面的最后一行文件名我有些记不清了，大概是这样的名字。按照上述方法肯定可以找到。</p>
-<p>然后重启<code>PyCharm</code>即可跳到正常激活页面。</p>
-<p>激活后发现新版本功能多了好多，花了钱的就是好。</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>PyCharm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>可以在比特币上计算一切的BitVM</title>
-    <url>/2023/10/10/%E5%8F%AF%E4%BB%A5%E5%9C%A8%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%8A%E8%AE%A1%E7%AE%97%E4%B8%80%E5%88%87%E7%9A%84BitVM/</url>
-    <content><![CDATA[<p>2023-10-09日<a href="https://twitter.com/robin_linus/">Robin
-Linus</a>发布了关于BitVM的<a href="https://bitvm.org/bitvm.pdf">白皮书</a>，该白皮书称通过BitVM可以在比特币上计算一切。本文对这篇重要的文章做一些介绍和跟踪。限于能力，本文尚未完结。</p>
-<span id="more"></span>
-<h2 id="前言">前言</h2>
-<p>限于能力，只能对我能理解的部分进行一些记录。主要着力在对该项目各方参与者的观点、解释进行汇总，方便读者理解该技术。</p>
-<h2 id="白皮书内容理解">白皮书内容理解</h2>
-<p>要真如该白皮书宣称那样，毫无疑问这将是比特币历史上的又一件大事件。</p>
-<p>该文章没有介绍怎么实现在比特币上计算一切的技术细节，对该文的一些解释可参考Bob
-Bodily的<a href="https://twitter.com/bobbodily/status/1711581484254192013?s=61&amp;t=BBePAmHuKE6Hb7kfWNa1KA">介绍</a>。该文章介绍了比特币的操作码可构成与非门（NAND），通过大量的与非门，可以组建图灵完备的计算机（参见<a href="https://github.com/woai3c/nand2tetris">从零开始构建现代计算机</a>），从而构建能计算一切的比特币虚拟机。</p>
-<p>该白皮书（ TODO，待完成）</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>bitcoin</tag>
-        <tag>BitVM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>比特币S2F模型还适用吗</title>
     <url>/2023/10/17/%E6%AF%94%E7%89%B9%E5%B8%81S2F%E6%A8%A1%E5%9E%8B%E8%BF%98%E9%80%82%E7%94%A8%E5%90%97/</url>
     <content><![CDATA[<p>在上轮比特币减半（2020-05-11减半）周期中，<a href="https://twitter.com/100trillionusd/">PlanB</a>的<a href="https://medium.com/@100trillionUSD/modeling-bitcoins-value-with-scarcity-91fa0fc03e25">S2F模型</a>扮演了非常重要的角色，<a href="https://charts.bitbo.io/stock-to-flow/">该模型预测</a>的比特币价格在牛市启动、牛市上涨冲高阶段有着非凡的表现。虽然其对最终上涨价格预测失败了，但瑕不掩瑜，它依然揭示了部分潜在的规律。本文对该模型进行批判性的继承，并解释了为什么S2F模型基本等价于<a href="https://btcrainmaker.com/2023/09/25/由比特币已实现价格进行的一些推理/#对数供给量多项式模型">对数供给量多项式模型</a>的1阶情况；最后尝试在PlanB的基础上进一步讨论稀缺性与市值的关系。</p>
@@ -2116,41 +2116,6 @@ n_i&#39;=\frac{S_i*n_i-t_i}{S_i}
       </tags>
   </entry>
   <entry>
-    <title>怎么给pyecharts生成的表格增加滚动条</title>
-    <url>/2023/11/23/%E6%80%8E%E4%B9%88%E7%BB%99pyecharts%E7%94%9F%E6%88%90%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%A2%9E%E5%8A%A0%E6%BB%9A%E5%8A%A8%E6%9D%A1/</url>
-    <content><![CDATA[<p>我在用<a href="https://pyecharts.org/#/"><code>pyecharts</code></a>制作网页表格时，面临如下问题：</p>
-<ul>
-<li><p>当表格的列数比较多时，会溢出页面右边框，十分不雅观。</p></li>
-<li><p>不想抛弃<code>pyecharts</code>带来的便捷。</p></li>
-</ul>
-<p>于是经过查询，找到了解决办法，见下文。</p>
-<span id="more"></span>
-<h2 id="问题描述">问题描述</h2>
-<p>当我们使用<code>pyecharts</code>的<code>table</code>类来创建表格，嵌入到网页中时，发现表格数据会右溢出，滚动条出现在最下面，严重影响了页面的美观和整洁。</p>
-<p>我们希望滚动条出现在表格处、而不是页面底部，即希望表格可以滑动显示。</p>
-<h2 id="解决办法">解决办法</h2>
-<p>在<a href="https://github.com/pyecharts/pyecharts"><code>pyecharts</code></a>的<code>github</code>上查找该问题，发现有人曾经提出过<a href="https://github.com/pyecharts/pyecharts/issues/1935">见此处</a>，该问题的回答没有详细说怎么解决，只是提到了需要修改<code>macro</code>模版。</p>
-<p>鉴于没有找到更好解决办法，于是动手修改了模块的宏文件。我安装的版本为<code>pyecharts==2.0.2</code>、<code>python==3.8.5</code>。具体修改如下：</p>
-<p>找到安装包所在路径：</p>
-<blockquote>
-<p><code>venv -&gt; lib -&gt; lib -&gt; python3.8 -&gt; site-packages -&gt; pyecharts -&gt; render -&gt; templates -&gt; macro</code></p>
-</blockquote>
-<p>打开<code>macro</code>文件，寻到<code>table</code>相关的<code>style</code>，在176行的<code>.fl-table</code>里增加两行：</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">display</span>: block;</span><br><span class="line"><span class="attribute">overflow</span>: scroll;</span><br></pre></td></tr></table></figure>
-<p>即变为</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.fl-table</span> &#123;</span><br><span class="line">                <span class="attribute">margin</span>: <span class="number">20px</span>;</span><br><span class="line">                <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">                <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">                <span class="attribute">border</span>: none;</span><br><span class="line">                <span class="attribute">border-collapse</span>: collapse;</span><br><span class="line">                <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">                <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">                <span class="attribute">word-break</span>: keep-all;</span><br><span class="line">                <span class="attribute">display</span>: block;</span><br><span class="line">                <span class="attribute">overflow</span>: scroll;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
-<p>然后重启项目，再次生成html文件，新生成的表格页面就限定为页面的大小，可以通过滚动条来拖动观看后续表格了。</p>
-<p>如有服务器，在服务器上也进行相同操作。</p>
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>python</tag>
-        <tag>pyecharts</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>用python压缩pdf文件</title>
     <url>/2023/11/08/%E7%94%A8python%E5%8E%8B%E7%BC%A9pdf%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<p>由于某些不可避免的原因，需要在某些网站上传一些<code>.pdf</code>文件，那些奇葩的网站对文件大小做了限制，所以需要对较大的<code>.pdf</code>文件进行压缩处理，而一般免费的阅读器都不能随意的压缩（要么需要你交很高的会员费），好在这些任务<code>python</code>都可以很好的处理。</p>
@@ -2185,30 +2150,38 @@ n_i&#39;=\frac{S_i*n_i-t_i}{S_i}
       </tags>
   </entry>
   <entry>
-    <title>Debian11系统走socks代理流量报错&#39;Socket type must be stream or datagram, not 524289&#39;问题</title>
-    <url>/2023/11/24/Debian11%E7%B3%BB%E7%BB%9F%E8%B5%B0socks%E4%BB%A3%E7%90%86%E6%B5%81%E9%87%8F%E6%8A%A5%E9%94%99-Socket-type-must-be-stream-or-datagram-not-524289-%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>我在<code>Debian11</code>系统上使用<code>PySocks</code>包代理<code>python</code>脚本流量时，遇到流量不能正常通过<code>socks</code>进行代理的问题，该问题报错提示为：<code>“Socket type must be stream or datagram, not 524289”</code>。</p>
-<p>而在<code>Mac</code>系统上，采用相同的方式，是可以正常代理流量的。</p>
-<p>本文介绍了解决该问题的办法。</p>
+    <title>怎么给pyecharts生成的表格增加滚动条</title>
+    <url>/2023/11/23/%E6%80%8E%E4%B9%88%E7%BB%99pyecharts%E7%94%9F%E6%88%90%E7%9A%84%E8%A1%A8%E6%A0%BC%E5%A2%9E%E5%8A%A0%E6%BB%9A%E5%8A%A8%E6%9D%A1/</url>
+    <content><![CDATA[<p>我在用<a href="https://pyecharts.org/#/"><code>pyecharts</code></a>制作网页表格时，面临如下问题：</p>
+<ul>
+<li><p>当表格的列数比较多时，会溢出页面右边框，十分不雅观。</p></li>
+<li><p>不想抛弃<code>pyecharts</code>带来的便捷。</p></li>
+</ul>
+<p>于是经过查询，找到了解决办法，见下文。</p>
 <span id="more"></span>
-<h2 id="问题产生的原因">问题产生的原因</h2>
-<p>我运行出错的代码为：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socks</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">socks.set_default_proxy(socks.SOCKS5, <span class="string">&quot;localhost&quot;</span>, <span class="number">1080</span>)</span><br><span class="line">socket.socket = socks.socksocket</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<p>如上描述的问题产生的原因是因为<code>Debian</code>系统的<code>socket.SocketKind</code>比<code>Mac</code>多出了<code>SocketKind.SOCK_NONBLOCK</code>和<code>SocketKind.SOCK_CLOEXEC</code>两类。</p>
-<p><code>PySocks</code>包是一个年久失修的包，并不能很好的兼容<code>Debian</code>系统。</p>
-<p>经过测试，不调用该包，是可以正确通过<code>socks</code>代理走流量，说明问题是由于该包引起的。</p>
+<h2 id="问题描述">问题描述</h2>
+<p>当我们使用<code>pyecharts</code>的<code>table</code>类来创建表格，嵌入到网页中时，发现表格数据会右溢出，滚动条出现在最下面，严重影响了页面的美观和整洁。</p>
+<p>我们希望滚动条出现在表格处、而不是页面底部，即希望表格可以滑动显示。</p>
 <h2 id="解决办法">解决办法</h2>
-<p>找到了原因之后，自然可以通过改用其他包走<code>python</code>程序流量。我找到了一个<code>PySocks</code>的修复包：<a href="https://pypi.org/project/PySocksipyChain/"><code>PySocksipyChain</code></a>，</p>
-<p>改用这个包后，代理代码如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sockschain <span class="keyword">as</span> socks</span><br><span class="line">socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, <span class="string">&quot;localhost&quot;</span>, <span class="number">1080</span>)</span><br><span class="line">socket.socket = socks.socksocket</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
-<p>如上代理，即可正确通过<code>socks</code>走流量了。</p>
+<p>在<a href="https://github.com/pyecharts/pyecharts"><code>pyecharts</code></a>的<code>github</code>上查找该问题，发现有人曾经提出过<a href="https://github.com/pyecharts/pyecharts/issues/1935">见此处</a>，该问题的回答没有详细说怎么解决，只是提到了需要修改<code>macro</code>模版。</p>
+<p>鉴于没有找到更好解决办法，于是动手修改了模块的宏文件。我安装的版本为<code>pyecharts==2.0.2</code>、<code>python==3.8.5</code>。具体修改如下：</p>
+<p>找到安装包所在路径：</p>
+<blockquote>
+<p><code>venv -&gt; lib -&gt; lib -&gt; python3.8 -&gt; site-packages -&gt; pyecharts -&gt; render -&gt; templates -&gt; macro</code></p>
+</blockquote>
+<p>打开<code>macro</code>文件，寻到<code>table</code>相关的<code>style</code>，在176行的<code>.fl-table</code>里增加两行：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="attribute">display</span>: block;</span><br><span class="line"><span class="attribute">overflow</span>: scroll;</span><br></pre></td></tr></table></figure>
+<p>即变为</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.fl-table</span> &#123;</span><br><span class="line">                <span class="attribute">margin</span>: <span class="number">20px</span>;</span><br><span class="line">                <span class="attribute">border-radius</span>: <span class="number">5px</span>;</span><br><span class="line">                <span class="attribute">font-size</span>: <span class="number">12px</span>;</span><br><span class="line">                <span class="attribute">border</span>: none;</span><br><span class="line">                <span class="attribute">border-collapse</span>: collapse;</span><br><span class="line">                <span class="attribute">max-width</span>: <span class="number">100%</span>;</span><br><span class="line">                <span class="attribute">white-space</span>: nowrap;</span><br><span class="line">                <span class="attribute">word-break</span>: keep-all;</span><br><span class="line">                <span class="attribute">display</span>: block;</span><br><span class="line">                <span class="attribute">overflow</span>: scroll;</span><br><span class="line">            &#125;</span><br></pre></td></tr></table></figure>
+<p>然后重启项目，再次生成html文件，新生成的表格页面就限定为页面的大小，可以通过滚动条来拖动观看后续表格了。</p>
+<p>如有服务器，在服务器上也进行相同操作。</p>
 ]]></content>
       <categories>
         <category>技术</category>
       </categories>
       <tags>
-        <tag>socks</tag>
-        <tag>Debian</tag>
+        <tag>python</tag>
+        <tag>pyecharts</tag>
       </tags>
   </entry>
   <entry>
@@ -2259,86 +2232,30 @@ net_T^e=\prod_{t=1}^T(1+r_t^e)
       </tags>
   </entry>
   <entry>
-    <title>比特币去中心化交易所Bisq在Mac上运行方法</title>
-    <url>/2023/11/27/%E6%AF%94%E7%89%B9%E5%B8%81%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E4%BA%A4%E6%98%93%E6%89%80Bisq%E5%9C%A8Mac%E4%B8%8A%E8%BF%90%E8%A1%8C%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p><a href="https://bisq.network">Bisq</a>作为最优秀的比特币去中心化交易平台，在中文圈的使用率很低，但是很值得推荐。</p>
-<p>该平台不需要任何认证、全匿名、利用买卖双方超额抵押解决交易信任问题，以点对点交易的方式护卫着比特币场外交易的安全。</p>
-<p>可以说，即便所有的中心化交易所都垮掉了，人们仍然可以利用<code>Bisq</code>将比特币置换成法币或其他资产。从某种意义上来说，它是比特币交易的压舱石，让人们不用过度顾虑无处交易比特币的问题。</p>
-<p>不过，鉴于其需要通过洋葱路由（<a href="https://en.wikipedia.org/wiki/Onion_routing">onion
-routing</a>）进行匿名交互，对于身处网络洼地的人们还是不太容易使用。可能正是因为上手的难度，导致了其在很多被需要的地方流行不起来。</p>
-<p>本文将介绍在Mac上运行<code>Bisq</code>交易软件的方法，主要聚焦在安装后不能打开的问题。</p>
+    <title>Debian11系统走socks代理流量报错&#39;Socket type must be stream or datagram, not 524289&#39;问题</title>
+    <url>/2023/11/24/Debian11%E7%B3%BB%E7%BB%9F%E8%B5%B0socks%E4%BB%A3%E7%90%86%E6%B5%81%E9%87%8F%E6%8A%A5%E9%94%99-Socket-type-must-be-stream-or-datagram-not-524289-%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>我在<code>Debian11</code>系统上使用<code>PySocks</code>包代理<code>python</code>脚本流量时，遇到流量不能正常通过<code>socks</code>进行代理的问题，该问题报错提示为：<code>“Socket type must be stream or datagram, not 524289”</code>。</p>
+<p>而在<code>Mac</code>系统上，采用相同的方式，是可以正常代理流量的。</p>
+<p>本文介绍了解决该问题的办法。</p>
 <span id="more"></span>
-<h2 id="问题描述">问题描述</h2>
-<p>本文主要介绍解决Mac用户安装好了<code>Bisq</code>（我安装的为最新版<code>Bisq-v1.9.14</code>），但是不能正常打开的问题。</p>
-<p>在进一步操作之前，你得确认自己能访问自由网络（或叫做科学上网），假定你本地代理<code>socks</code>流量的入口为1080端口。</p>
-<p>如果你不能访问自由网络，那么后面的解决办法暂时与你无关。</p>
-<p>安装<code>Bisq</code>完毕后，如果直接打开，提示文件破坏，则应执行：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> xattr -rd com.apple.quarantine /Applications/Bisq.app</span><br></pre></td></tr></table></figure>
-<p>执行后，你会发现程序一直卡在连接tor节点的环节。</p>
-<p>这意味着我们需要将流量通过代理之后才能正常使用该P2P交易软件。</p>
+<h2 id="问题产生的原因">问题产生的原因</h2>
+<p>我运行出错的代码为：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socks</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">socks.set_default_proxy(socks.SOCKS5, <span class="string">&quot;localhost&quot;</span>, <span class="number">1080</span>)</span><br><span class="line">socket.socket = socks.socksocket</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>如上描述的问题产生的原因是因为<code>Debian</code>系统的<code>socket.SocketKind</code>比<code>Mac</code>多出了<code>SocketKind.SOCK_NONBLOCK</code>和<code>SocketKind.SOCK_CLOEXEC</code>两类。</p>
+<p><code>PySocks</code>包是一个年久失修的包，并不能很好的兼容<code>Debian</code>系统。</p>
+<p>经过测试，不调用该包，是可以正确通过<code>socks</code>代理走流量，说明问题是由于该包引起的。</p>
 <h2 id="解决办法">解决办法</h2>
-<p>首先，你需要安装<code>java jdk</code>，用于操作<code>.jar</code>文件。</p>
-<p>下面的步骤先不打开<code>Bisq</code>。</p>
-<blockquote>
-<ol type="1">
-<li>找到<code>Bisq</code>应用的app路径，具体为：<code>/Applications/Bisq.app/Contents/app</code>；</li>
-<li>找到<code>tor-0.7.6.jar</code>文件，复制到其他本地文件夹。若为老版本，则为文件<code>desktop-version-all.jar</code>，其中<code>version</code>为版本号；</li>
-<li>终端切换到复制了<code>tor-0.7.6.jar</code>的文件夹下，执行：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar xf tor-0.7.6.jar torrc</span><br></pre></td></tr></table></figure>
-<ol start="4" type="1">
-<li><p>上述命令将<code>torrc</code>文件从<code>tor-0.7.6.jar</code>中提取出来，此时会得到两个文件<code>torrc</code>和<code>torrc.default</code>；</p></li>
-<li><p>编辑<code>torrc</code>（可用文本编辑器或<code>vi</code>命令进行操作），在文件的末尾添加一行、以进行流量转发：</p></li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Socks5Proxy 127.0.0.1:1080</span><br></pre></td></tr></table></figure>
-<ol start="6" type="1">
-<li>保存后，执行如下命令更新复制出来的<code>tor-0.7.6.jar</code>文件：</li>
-</ol>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar uf desktop-1.9.12-all.jar torrc</span><br></pre></td></tr></table></figure>
-<ol start="7" type="1">
-<li>将更新了的<code>tor-0.7.6.jar</code>文件复制回<code>/Applications/Bisq.app/Contents/app</code>，替换原文件。</li>
-<li>此时打开<code>Bisq</code>，等待更新本地节点数据及配置tor网络。如果是连接的本地节点，大概等待5分钟左右。</li>
-</ol>
-</blockquote>
-<p>如果你想连接本地的全节点，可以如下打开：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=local_ip:8333 -useTorForBtc=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
-<p>上述<code>local_ip</code>为你的全节点的局域网ip地址，<code>8333</code>为默认的端口。</p>
-<p>如果你想通过<code>tor</code>连接指定的<code>.onion</code>地址，则应如下开启：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=you_onion_address.onion:8333 -useTorForBtc=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
-<p>上述<code>you_onion_address</code>为你指定的洋葱地址。</p>
-<p>成功打开之后的使用方法，则可以参考<a href="https://bisq.network/getting-started/">官方教程</a>，或<a href="https://raspibolt.org/guide/bonus/bitcoin/bisq.html"><code>RaspiBolt</code>的教程</a>。</p>
+<p>找到了原因之后，自然可以通过改用其他包走<code>python</code>程序流量。我找到了一个<code>PySocks</code>的修复包：<a href="https://pypi.org/project/PySocksipyChain/"><code>PySocksipyChain</code></a>，</p>
+<p>改用这个包后，代理代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> sockschain <span class="keyword">as</span> socks</span><br><span class="line">socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, <span class="string">&quot;localhost&quot;</span>, <span class="number">1080</span>)</span><br><span class="line">socket.socket = socks.socksocket</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>如上代理，即可正确通过<code>socks</code>走流量了。</p>
 ]]></content>
       <categories>
         <category>技术</category>
       </categories>
       <tags>
-        <tag>bitcoin</tag>
-        <tag>Bisq</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>《致命的自负》读书札记</title>
-    <url>/2024/02/27/%E3%80%8A%E8%87%B4%E5%91%BD%E7%9A%84%E8%87%AA%E8%B4%9F%E3%80%8B%E8%AF%BB%E4%B9%A6%E6%9C%AD%E8%AE%B0/</url>
-    <content><![CDATA[<p>本文是对最近阅读《致命的自负》的札记，用来记录概述的核心思想，以供没有阅读该书的读者了解其梗概，且供未来回忆该书内容时参考。</p>
-<span id="more"></span>
-<h2 id="前言">前言</h2>
-<p>出于对比特币的信仰，一直对哈耶克很崇拜。</p>
-<p>可实事求是的说，我对哈耶克的书读的并不多。他是一个伟大的自由经济学家，人们普遍把他视为奥地利经济学派的代表。他的思想一直活跃在反思社会主义思潮的最前沿，对计划经济的谬误进行了鞭辟入里的分析。可以说，他是一位开启未来的伟大思想家。</p>
-<p>在推崇凯恩斯政府干预的地方，他其实是不受待见的。对于像我这样并非经济学出身、也没有想做一个职业经济学家的普通读者而言，阅读他最负盛名的代表作似乎可了解他的思想。</p>
-<p>他最有名的著作是《通往奴役之路》、《自由宪章》、《致命的自负》三本书。当然其他还有很多，比如间接催生出比特币的著作《货币的非国家化》等。</p>
-<p>《致命的自负》（1988年）一书是哈耶克生前发表的最后一部重要著作，我对它感兴趣是因为阅读了张维迎的文章<a href="https://www.bimba.pku.edu.cn/mba/mbaxw/272456.htm">《张维迎：知不知，小平也》</a>，虽然该文只对这本书进行了言简意赅的内容提炼，但其中透露出的说服力之强着实让没涉猎过哈耶克著作的我很震惊。从那以后，便决心工作闲暇时将这本书好好读一读。恰好最近策略上线并如预期运行，终于可以静下来阅读了。</p>
-<h2 id="内容梗概">内容梗概</h2>
-<p>首先，当然是需要理解题目，到底是谁有致命的自负？本书所分析的自负主体，是带有纯粹理性主义、构建主义倾向的知识分子，也即人类中有杰出理性能力的精英。他们对理性过分依赖并自负的认为理性万能、进而希望通过理性进行社会构建，是一个必然导致致命后果的谬误。</p>
-<p>那么哈耶克在这本书中是怎么论述这一结论的呢？</p>
-<p>[TODO]</p>
-]]></content>
-      <categories>
-        <category>札记</category>
-      </categories>
-      <tags>
-        <tag>哈耶克</tag>
-        <tag>经济</tag>
-        <tag>名著</tag>
+        <tag>socks</tag>
+        <tag>Debian</tag>
       </tags>
   </entry>
   <entry>
@@ -2490,6 +2407,89 @@ routing</a>）进行匿名交互，对于身处网络洼地的人们还是不太
       </categories>
       <tags>
         <tag>bitcoin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>《致命的自负》读书札记</title>
+    <url>/2024/02/27/%E3%80%8A%E8%87%B4%E5%91%BD%E7%9A%84%E8%87%AA%E8%B4%9F%E3%80%8B%E8%AF%BB%E4%B9%A6%E6%9C%AD%E8%AE%B0/</url>
+    <content><![CDATA[<p>本文是对最近阅读《致命的自负》的札记，用来记录概述的核心思想，以供没有阅读该书的读者了解其梗概，且供未来回忆该书内容时参考。</p>
+<span id="more"></span>
+<h2 id="前言">前言</h2>
+<p>出于对比特币的信仰，一直对哈耶克很崇拜。</p>
+<p>可实事求是的说，我对哈耶克的书读的并不多。他是一个伟大的自由经济学家，人们普遍把他视为奥地利经济学派的代表。他的思想一直活跃在反思社会主义思潮的最前沿，对计划经济的谬误进行了鞭辟入里的分析。可以说，他是一位开启未来的伟大思想家。</p>
+<p>在推崇凯恩斯政府干预的地方，他其实是不受待见的。对于像我这样并非经济学出身、也没有想做一个职业经济学家的普通读者而言，阅读他最负盛名的代表作似乎可了解他的思想。</p>
+<p>他最有名的著作是《通往奴役之路》、《自由宪章》、《致命的自负》三本书。当然其他还有很多，比如间接催生出比特币的著作《货币的非国家化》等。</p>
+<p>《致命的自负》（1988年）一书是哈耶克生前发表的最后一部重要著作，我对它感兴趣是因为阅读了张维迎的文章<a href="https://www.bimba.pku.edu.cn/mba/mbaxw/272456.htm">《张维迎：知不知，小平也》</a>，虽然该文只对这本书进行了言简意赅的内容提炼，但其中透露出的说服力之强着实让没涉猎过哈耶克著作的我很震惊。从那以后，便决心工作闲暇时将这本书好好读一读。恰好最近策略上线并如预期运行，终于可以静下来阅读了。</p>
+<h2 id="内容梗概">内容梗概</h2>
+<p>首先，当然是需要理解题目，到底是谁有致命的自负？本书所分析的自负主体，是带有纯粹理性主义、构建主义倾向的知识分子，也即人类中有杰出理性能力的精英。他们对理性过分依赖并自负的认为理性万能、进而希望通过理性进行社会构建，是一个必然导致致命后果的谬误。</p>
+<p>那么哈耶克在这本书中是怎么论述这一结论的呢？</p>
+<p>[TODO]</p>
+]]></content>
+      <categories>
+        <category>札记</category>
+      </categories>
+      <tags>
+        <tag>哈耶克</tag>
+        <tag>经济</tag>
+        <tag>名著</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>比特币去中心化交易所Bisq在Mac上运行方法</title>
+    <url>/2023/11/27/%E6%AF%94%E7%89%B9%E5%B8%81%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96%E4%BA%A4%E6%98%93%E6%89%80Bisq%E5%9C%A8Mac%E4%B8%8A%E8%BF%90%E8%A1%8C%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p><a href="https://bisq.network">Bisq</a>作为最优秀的比特币去中心化交易平台，在中文圈的使用率很低，但是很值得推荐。</p>
+<p>该平台不需要任何认证、全匿名、利用买卖双方超额抵押解决交易信任问题，以点对点交易的方式护卫着比特币场外交易的安全。</p>
+<p>可以说，即便所有的中心化交易所都垮掉了，人们仍然可以利用<code>Bisq</code>将比特币置换成法币或其他资产。从某种意义上来说，它是比特币交易的压舱石，让人们不用过度顾虑无处交易比特币的问题。</p>
+<p>不过，鉴于其需要通过洋葱路由（<a href="https://en.wikipedia.org/wiki/Onion_routing">onion
+routing</a>）进行匿名交互，对于身处网络洼地的人们还是不太容易使用。可能正是因为上手的难度，导致了其在很多被需要的地方流行不起来。</p>
+<p>本文将介绍在Mac上运行<code>Bisq</code>交易软件的方法，主要聚焦在安装后不能打开的问题。</p>
+<span id="more"></span>
+<h2 id="问题描述">问题描述</h2>
+<p>本文主要介绍解决Mac用户安装好了<code>Bisq</code>（我安装的为最新版<code>Bisq-v1.9.14</code>），但是不能正常打开的问题。</p>
+<p>在进一步操作之前，你得确认自己能访问自由网络（或叫做科学上网），假定你本地代理<code>socks</code>流量的入口为1080端口。</p>
+<p>如果你不能访问自由网络，那么后面的解决办法暂时与你无关。</p>
+<p>安装<code>Bisq</code>完毕后，如果直接打开，提示文件破坏，则应执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> xattr -rd com.apple.quarantine /Applications/Bisq.app</span><br></pre></td></tr></table></figure>
+<p>执行后，你会发现程序一直卡在连接tor节点的环节。</p>
+<p>这意味着我们需要将流量通过代理之后才能正常使用该P2P交易软件。</p>
+<h2 id="解决办法">解决办法</h2>
+<p>首先，你需要安装<code>java jdk</code>，用于操作<code>.jar</code>文件。</p>
+<p>下面的步骤先不打开<code>Bisq</code>。</p>
+<blockquote>
+<ol type="1">
+<li>找到<code>Bisq</code>应用的app路径，具体为：<code>/Applications/Bisq.app/Contents/app</code>；</li>
+<li>找到<code>tor-0.7.6.jar</code>文件，复制到其他本地文件夹。若为老版本，则为文件<code>desktop-version-all.jar</code>，其中<code>version</code>为版本号；</li>
+<li>终端切换到复制了<code>tor-0.7.6.jar</code>的文件夹下，执行：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar xf tor-0.7.6.jar torrc</span><br></pre></td></tr></table></figure>
+<ol start="4" type="1">
+<li><p>上述命令将<code>torrc</code>文件从<code>tor-0.7.6.jar</code>中提取出来，此时会得到两个文件<code>torrc</code>和<code>torrc.default</code>；</p></li>
+<li><p>编辑<code>torrc</code>（可用文本编辑器或<code>vi</code>命令进行操作），在文件的末尾添加一行、以进行流量转发：</p></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Socks5Proxy 127.0.0.1:1080</span><br></pre></td></tr></table></figure>
+<ol start="6" type="1">
+<li>保存后，执行如下命令更新复制出来的<code>tor-0.7.6.jar</code>文件：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jar uf desktop-1.9.12-all.jar torrc</span><br></pre></td></tr></table></figure>
+<ol start="7" type="1">
+<li>将更新了的<code>tor-0.7.6.jar</code>文件复制回<code>/Applications/Bisq.app/Contents/app</code>，替换原文件。</li>
+<li>此时打开<code>Bisq</code>，等待更新本地节点数据及配置tor网络。如果是连接的本地节点，大概等待5分钟左右。</li>
+</ol>
+</blockquote>
+<p>如果你想连接本地的全节点，可以如下打开：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=local_ip:8333 -useTorForBtc=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>上述<code>local_ip</code>为你的全节点的局域网ip地址，<code>8333</code>为默认的端口。</p>
+<p>如果你想通过<code>tor</code>连接指定的<code>.onion</code>地址，则应如下开启：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/Applications/Bisq.app/Contents/MacOS/Bisq -btcNodes=you_onion_address.onion:8333 -useTorForBtc=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>上述<code>you_onion_address</code>为你指定的洋葱地址。</p>
+<p>成功打开之后的使用方法，则可以参考<a href="https://bisq.network/getting-started/">官方教程</a>，或<a href="https://raspibolt.org/guide/bonus/bitcoin/bisq.html"><code>RaspiBolt</code>的教程</a>。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>bitcoin</tag>
+        <tag>Bisq</tag>
       </tags>
   </entry>
   <entry>
@@ -3510,10 +3510,10 @@ port07_{MB}=B4/M1\_3-B5/M1\_1
 <span id="more"></span>
 <h2 id="模型1月价格图">模型1月价格图</h2>
 <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
-<div id="echarts3917" style="width: 100%;height: 400px;margin: 0 auto"></div>
+<div id="echarts995" style="width: 100%;height: 400px;margin: 0 auto"></div>
 <script type="text/javascript">
         // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('echarts3917'));
+        var myChart = echarts.init(document.getElementById('echarts995'));
 
         // 指定图表的配置项和数据
         var option = {
@@ -7022,12 +7022,12 @@ P_t= &amp; \frac{N(A_t)S(A_t)A_t}{M} \cdot \\ &amp;\left(
 user
 adoption）条件下，代币价格的动态变化规律，强调用户行为与代币价格之间的相互作用；分析了区块链平台的扩展性（scalability）和去中心化（decentralization）特性如何影响代币经济和用户采用等问题。</p>
 <p>感兴趣的读者可以自行阅读。</p>
-<h3 id="未来价格期望与太阳黑子定价">未来价格期望与太阳黑子定价</h3>
+<h3 id="交易益处黑客市场成本与崩溃风险定价">交易益处、黑客、市场成本与崩溃风险定价</h3>
 <p>除开上面介绍过的可以给BTC定价的基本面因素（存活率与大众信念、公众采用率、交易收益（transaction
 benefits））之外，<span class="citation" data-cites="Biais-bruno-equilibrium-bitcoin-pricing-2023">Biais et al.
 (2023)</span>
-还从未来价格期望贴现与外生随机扰动（即所谓的太阳黑子事件）的角度，对比特币进行定价。该文章推导精妙，理论功底深厚，得出了一些很有意义的结论，但也凸显出这种定价方法对比特币定价的解释力不足。</p>
-<p>该论文篇幅较长，推导较繁复。我在此对其理论及实证进行概述，以方便后人研究阅读、节省精力。</p>
+还从未来价格期望贴现与外生随机扰动（即所谓的太阳黑子事件）的角度，对比特币进行定价。该论文得出了一些很有意义的结论。</p>
+<p>我在此对其理论及实证进行概述，以方便后人研究阅读、节省精力。</p>
 <h4 id="理论简介">理论简介</h4>
 <p>作者们考虑了4种参与者，即年轻一代投资者（young
 investors）、老一代投资者（old
@@ -7122,7 +7122,7 @@ B_{t+1} \\ &amp; + \beta_1 CF_t +\beta_2 CA_t
 \mu\)</span>，式中<span class="math inline">\(\lambda_t\)</span>为处于坏状态的概率（形如<span class="math inline">\(\eqref{eq11}\)</span>的形式），为<span class="math inline">\(\lambda_t=\frac{(1-\mu)^t\lambda_0}{(1-\mu)^t+(1-\lambda_0)}\)</span>、<span class="math inline">\(\mu\)</span>为“坏状态”崩盘的概率、<span class="math inline">\(\lambda_0\)</span>为处于“坏状态”的先验概率；</li>
 <li><span class="math inline">\(\bar{h}\)</span>为黑客事件盗窃走的比特币比例的时间序列（没有黑客事件时为0）平均值；</li>
 <li><span class="math inline">\(B_t\)</span>为使用比特币购买商品或服务的交易利益指数。作者们用正面事件（如商家开始接受比特币，如PayPal、MasterCard整合，或新商户采用）和负面事件（如商家停止接受）的计数或加权来构建这一指数；</li>
-<li><span class="math inline">\(\rho_t\)</span>为以美元计价的比特币价格的变化率，也即BTC的实际收益率，作者们将分叉币的收益率按后复权的方式叠加到这一时间序列中；</li>
+<li><span class="math inline">\(\rho_t\)</span>为以美元计价的比特币价格的变化率，也即BTC的收益率，作者们将分叉币的收益率按后复权的方式叠加到这一时间序列中；</li>
 <li><span class="math inline">\(CF_t\)</span>为比特币的链上交易手续费成本，通过链上数据可以直接获取；</li>
 <li><span class="math inline">\(CA_t\)</span>为市场进入成本，<span class="math inline">\(CA_t=\frac{1}{1+MA_t}\)</span>。其中<span class="math inline">\(MA_t\)</span>为MarketAccesst指数，反映的比特币兑换其他货币的难易程度，用正面事件（如新货币成为可兑换比特币，或新交易所开通）和负面事件（如大型平台关闭、国家禁令或监管限制）通过事件计数加权（正面事件增加指数，负面事件减少）得到。<span class="math inline">\(CA_t\)</span>在<span class="math inline">\(MA_t\)</span>无穷大时为0，反映了进入市场的成本。</li>
 </ul>
@@ -7168,26 +7168,31 @@ Rogoff (1983)</span> 的无预测力）。</li>
 (2023)</span> 的论文，是为了方便读者对我接下来的评论有更深入的理解。</p>
 <p>论文的模型有如下缺陷：</p>
 <ol type="1">
-<li><p>比特币作为货币和黄金作为货币的基础是相似的，均为商品货币，而并不是作者们设定的类似纸币一样的没有基本面（开采成本）的信用货币，商品货币本身就因为生产成本、而具有基本面价值<span class="math inline">\(f_t\)</span>，天然有价值背书。未来的基本面价值部分，不能用无风险利率进行贴现，<span class="math inline">\(f_t\)</span>的单期增长率与<span class="math inline">\(\eqref{eq19}\)</span>中<span class="math inline">\(r_t\)</span>不同；</p></li>
-<li><p>对于有基本面价值的商品货币，价格（或价格的对数）应该具有类似<span class="math inline">\(p_t=f_t+\epsilon_t\)</span>的形式，其中<span class="math inline">\(\epsilon_t\)</span>具有作者们在论文中讨论的受到随机太阳黑子事件影响的特征。不过，基本面价值虽然可能因为重大负面事件冲击而持续下跌、但不存在单期突然崩溃至0的问题。受单期负面影响显著的是<span class="math inline">\(\epsilon_t\)</span>部分；</p></li>
-<li><p>存在基本面的资产价格，其基本面<span class="math inline">\(f_t\)</span>与真实价格<span class="math inline">\(p_t\)</span>（或代表对数价格）之间、应该具有协整关系，从而随机残差项应该具有、自动对价格偏离进行修正的ECM机制，即具有形如：<span class="math inline">\(\Delta p_t = -a_0 \cdot \epsilon_{t-1}+a_1 \cdot
-x_t + \eta_t\)</span>的形式，其中<span class="math inline">\(\eta_t\)</span>为白噪声，<span class="math inline">\(x_t\)</span>为对价格变化有正影响的基本面因素；</p></li>
-<li><p>作者们假设的、单期价格突然崩溃至0的模型，实在太过简单粗暴，现实中很少出现类似2022年5月的LUNA单期（1周内）归零事件，崩盘时有发生、但是归零却很少见，我们对崩盘不能简单的假设直接归0，而应该是一系列绝对值较大的负<span class="math inline">\(\eta_t\)</span>事件；</p></li>
-<li><p>作者们在计算均衡时，利用的投资者最大化效用<span class="math inline">\(\eqref{eq18}\)</span>，没有考虑矿工成本对价格的约束条件。同样的，模型中没有对加密货币的采用率进行刻画，这在上面介绍的论文<span class="citation" data-cites="Susan-bitcoin-pricing-adoption-2016 Cong-tokenomics-adoption-2021">(Athey
+<li>比特币作为货币和黄金作为货币的基础是相似的，均为商品货币，而并不是作者们设定的类似纸币一样的没有基本面（开采成本）的信用货币，商品货币本身就因为生产成本、而具有基本面价值<span class="math inline">\(\sum_i^N\alpha_{i,t}f_t^i\)</span>（其中<span class="math inline">\(N\)</span>为基本面因子总个数，<span class="math inline">\(\alpha_{i,t}\)</span>为第<span class="math inline">\(i\)</span>个基本面因子对加密货币价格的贡献系数），天然有价值背书。未来的基本面价值部分，不能用无风险利率进行贴现，<span class="math inline">\(f_t^i\)</span>的单期增长率与<span class="math inline">\(\eqref{eq19}\)</span>中<span class="math inline">\(r_t\)</span>不同，且基本面因子单期突然崩盘为0的可能性、与论文讨论的<span class="math inline">\(\pi_t\)</span>不同（更小）；</li>
+<li>由于额外变量<span class="math inline">\(f_t^i\)</span>的影响很大，有基本面价值的效用函数不能用<span class="math inline">\(\eqref{eq18}\)</span>的方式取最大值。但是我们可以将加密货币价格作这样的变换：<span class="math inline">\(p_t\prime=p_t-\sum_i^N\alpha_{i,t}f_t^i\)</span>，以排除基本面影响、变换后的<span class="math inline">\(p_t^\prime\)</span>遵循论文后续流程定价；</li>
+<li>存在基本面的资产价格，其基本面<span class="math inline">\(f_t^i\)</span>（<span class="math inline">\((i=1,...,N)\)</span>）与真实价格<span class="math inline">\(p_t\)</span>（或代表对数价格）之间、应该具有协整关系，从而随机残差项应该具有、自动对价格偏离进行修正的ECM机制，即具有形如：<span class="math inline">\(\Delta p_t = -a_0 \cdot
+\epsilon_{t-1}+\sum_i^Na_{t,i} \cdot \Delta f_t^i +
+\eta_t\)</span>的形式，其中<span class="math inline">\(\eta_t\)</span>为白噪声，<span class="math inline">\(\epsilon_t\)</span>为具有协整关系长期均衡的回归残差，<span class="math inline">\(\Delta
+f_t^i\)</span>为对价格变化有影响的基本面因子（或其对数）变化，论文没有涉及这样的讨论；</li>
+<li>作者们假设的、单期价格突然崩溃至0的模型，实在太过简单粗暴，现实中很少出现单期归零事件，崩盘时有发生、但是归零却很少见，我们对崩盘不能简单的假设直接归0，而应该是一系列绝对值较大的负<span class="math inline">\(\eta_t\)</span>事件；</li>
+<li>作者们明明在用未来价格期望对现在价格定价，最后得到的校准模型必要收益率<span class="math inline">\(\eqref{eq22}\)</span>却没有无风险利率<span class="math inline">\(r_t\)</span>，这是由于、作者们得到标准货币的期望价格、也按照无风险利率增长（参见论文（48）式），从而，以标准货币计价的加密货币价格的无风险利率、被抵消掉了。这一点很让人怀疑，购买力不断缩水的标准货币（如美元），怎么还具有无风险利率的期望收益？它的未来期望值应以其M2的增长率指数衰减才符合实情；</li>
+<li>作者们假定标准货币的总量不变，这与事实违背。全球总广义货币供给量，正在不间断的快速（高于无风险利率）增长，可以参见<span class="citation" data-cites="Ren-bitcoin-epm-2025">(Ren,
+2025b)</span>的M2数据走势图。这正是比特币诞生之初时希望解决的问题，不断超发的货币、反映着比特币的宏观基本面；</li>
+<li>作者们在计算均衡时，利用投资者最大化效用<span class="math inline">\(\eqref{eq18}\)</span>来确定变量间关系。如果不进行上面所述的剔除基本面变换、则不应该忽略矿工成本对价格的约束条件。同样的，模型中没有对加密货币的采用率进行刻画，这在上面介绍的论文<span class="citation" data-cites="Susan-bitcoin-pricing-adoption-2016 Cong-tokenomics-adoption-2021">(Athey
 et al., 2016; Cong et al.,
-2021)</span>中被证明是一个显著的基本面因素。因而没有能够在后续推导中考虑挖矿成本及采用率等基本面因素；</p></li>
-<li><p>论文最后得出的结论，说明模型与实际的偏差较大，这很可能并不是像作者们宣称的、偏差来自没有考虑更高的崩盘风险等问题，而很可能正是因为忽略了比特币基本面价值导致的；</p></li>
-<li><p>论文中的交易收益<span class="math inline">\(\theta_t\)</span>实在是过于抽象、不自然，现实中基本没有可量化的对应收益，照着作者们的解释，这一项应该直接体现在了价格<span class="math inline">\(p_t\)</span>上，即可以被吸收进价格变量中。作者们在校准部分的代理变量<span class="math inline">\(B_t\)</span>，其实是比特币基本面的一部分反映，而不是虚无缥缈的交易收益；</p></li>
-<li><p>效用函数是一种抽象概念，其具体形式无从得知，因而在论文中作者们不得不引入关于效用函数形式的各种假设，即便讨论了很多种情况，终究还是会与真实的效用函数迥异。这反映出，基于效用函数对比特币进行定价的方法，无法得到准确的、真实的、可观测的价格模型，这与
+2021)</span>中被证明是一个显著的基本面因素。因而最终的模型没能包含挖矿成本及采用率等基本面因素；</li>
+<li>论文最后的结论，表明模型与实际偏差较大，这很可能并不是像作者们宣称的、偏差来自没有考虑更高的崩盘风险等问题，而很可能正是因为忽略了比特币基本面价值导致的；</li>
+<li>论文中的交易收益<span class="math inline">\(\theta_t\)</span>实在是过于抽象、不自然，现实中基本没有可量化的对应收益，照着作者们的解释，这一项应该直接体现在了价格<span class="math inline">\(p_t\)</span>上，即可以被吸收进价格变量中。作者们在校准部分的代理变量<span class="math inline">\(B_t\)</span>，其实是比特币基本面的一部分反映，而不是虚无缥缈的交易收益；</li>
+<li>论文在数据校准部分，将交易成本<span class="math inline">\(\phi_t\)</span>分解为链上交易手续费<span class="math inline">\(CF_t\)</span>和市场准入成本<span class="math inline">\(CA_t\)</span>两部分：<span class="math inline">\(\phi_t=\beta_1\cdot CF_t+\beta_2\cdot
+CA_t\)</span>，其中<span class="math inline">\(CF_t\)</span>部分会导致年轻一代<span class="math inline">\(\eqref{eq17}\)</span>持有加密资产的数量变少，但是<span class="math inline">\(CA_t\)</span>并不直接对年轻一代的加密资产数量产生作用、也不能被矿工得到，直接将其叠加到交易手续费的处理交易方式不自然。它应该是其他基本面因素的一个反映，被吸纳进<span class="math inline">\(f_t^i\)</span>中才更合理；</li>
+<li>效用函数是一种抽象概念，其具体形式无从得知，因而在论文中作者们不得不引入关于效用函数形式的各种假设，即便讨论了很多种情况，终究还是会与真实的效用函数迥异。这反映出，基于效用函数对比特币进行定价的方法，无法得到准确的、真实的、可观测的价格模型，这与
 <span class="citation" data-cites="Susan-bitcoin-pricing-adoption-2016">Athey et al.
 (2016)</span> 和 <span class="citation" data-cites="Cong-tokenomics-adoption-2021">Cong et al. (2021)</span>
 所具有的不足点相同。纵然得出了基于效用函数的定价公式，也因没有现实依据而不可用。值得一提的是，我所提出的EPM模型<span class="citation" data-cites="Ren-bitcoin-epm-2025">(Ren,
-2025b)</span>，并没有采用效用函数对均衡价格进行推理，避免了不可真实观测的问题；</p></li>
-<li><p>作者们假定标准货币的总量不变，这与事实违背。全球总广义货币供给量，正在不间断的快速（高于无风险利率）增长，可以参见<span class="citation" data-cites="Ren-bitcoin-epm-2025">(Ren,
-2025b)</span>的M2数据走势图。这正是比特币诞生之初时希望解决的问题，不断超发的货币、反映着比特币的宏观基本面；</p></li>
-<li><p>作者们的模型，并不像他们所宣称的：与股票定价机制存在很大的差异。对于没有分红的股票，他们采用的基于未来价格预期和太阳黑子的定价逻辑，同样也适用。在第二部分的结尾，作者们引用
+2025b)</span>，并没有采用效用函数对均衡价格进行推理，避免了不可真实观测的问题；</li>
+<li>作者们的模型，并不像他们所宣称的：与股票定价机制存在很大的差异。对于没有分红的股票，他们采用的基于未来价格预期和太阳黑子的定价逻辑，同样也适用。在第二部分的结尾，作者们引用
 <span class="citation" data-cites="Shiller-stock-prices-dividends-1981">Shiller (1981)</span>
-来说明股票定价与加密货币定价的差异，说道：</p></li>
+来说明股票定价与加密货币定价的差异，说道：</li>
 </ol>
 <blockquote>
 <p>In contrast with perfect-markets equilibrium stock prices, which
@@ -7197,9 +7202,23 @@ volatility, unrelated to fundamentals.</p>
 </blockquote>
 <p>而 <span class="citation" data-cites="Shiller-stock-prices-dividends-1981">Shiller (1981)</span>
 这篇论文，最终恰好证明的是股票市场的真实波动率远大于其基本面波动率，基本面在很大程度上、不能解释股票收益率波动。由Biais等的理论，股票价格中显然也具有大量太阳黑子定价的成分，在这一点上，股票市场并不显著区别于加密货币。</p>
-<p>单纯用未来价格预期和太阳黑子事件，来对比特币定价，正好是很多学者抨击比特币时所持有的——比特币价格纯粹是由投机驱动——这类观点的反映。试图单纯用未来价格、给当前的比特币定价，就像是想通过左脚踩右脚、飞上天一样，也好像是所谓的“层层琥珀包裹的苍蝇”一样（这一比喻参见《<a href="https://mises.org/mises-wire/why-cryptocurrencies-will-never-be-safe-havens">Why
-cryptocurrencies will never be safe
-havens</a>》一文）。作者们用逻辑推导和数据实证，证明了用这种方法来给比特币定价的解释力是不足的。</p>
+<p>如仅仅考虑基本面因素、无风险收益率等的影响，可以将<span class="math inline">\(\eqref{eq22}\)</span>变换为：</p>
+<p><span class="math display">\[\begin{equation} \label{eq21}
+\begin{aligned}
+\overline{\text{rtn}}_t^{NC} \approx &amp; \sum_i^N \alpha_{i,t}\cdot
+\text{rtn}_{i,t}^f + \pi_{t-1}+ \\
+&amp; a_0 \cdot r_{t-1} + \bar{h} + \beta_1 CF_{t-1}
+\end{aligned}
+\end{equation}\]</span></p>
+<p>其中：</p>
+<ul>
+<li><span class="math inline">\(\overline{\text{rtn}}_t^{NC}\)</span>为<span class="math inline">\(t\)</span>时刻在不崩盘（no
+crash）前提下，期望的加密货币收益率；</li>
+<li><span class="math inline">\(\text{rtn}_{i,t}^f\)</span>为<span class="math inline">\(t\)</span>时刻第<span class="math inline">\(i\)</span>个基本面因子的收益率，其对<span class="math inline">\(\overline{\text{rtn}}_t^{NC}\)</span>的贡献系数为<span class="math inline">\(\alpha_{i,t}\)</span>；</li>
+<li><span class="math inline">\(r_t\)</span>为无风险利率，其系数不为1或0、而用参数<span class="math inline">\(a_0\)</span>表示的原因，参见上面的讨论，是法币贬值与加密货币未来价格贴现的综合效果；</li>
+<li>其余变量和参数含义与<span class="math inline">\(\eqref{eq22}\)</span>一致。</li>
+</ul>
+<p>上式将<span class="math inline">\(B_t\)</span>、<span class="math inline">\(CA_t\)</span>项吸收进了基本面因素之内，不再显式包含。如果考虑了崩盘可能性，则期望收益率<span class="math inline">\(\overline{\text{rtn}}_t\)</span>将没有<span class="math inline">\(\pi_{t-1}\)</span>项。</p>
 <h3 id="泡沫检测与基本面">泡沫检测与基本面</h3>
 <p>比特币市场中存在着大量的泡沫，这一点无需辩驳，但是怎么来测量这些泡沫呢？<span class="citation" data-cites="Corbet-datestamping-bubbles-2018">Corbet et
 al. (2018)</span> 对此进行了实证研究。</p>
